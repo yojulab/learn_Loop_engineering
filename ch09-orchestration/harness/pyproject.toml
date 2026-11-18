@@ -1,0 +1,8 @@
+[project]
+name = "harness"
+version = "0.1.0"
+description = "3-Agent File-Mediated Orchestration Harness (Chapter 9)"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

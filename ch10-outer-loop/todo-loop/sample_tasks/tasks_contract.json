@@ -1,0 +1,29 @@
+[
+  {
+    "task_id": "CALC-001",
+    "title": "WELCOME10 10% 할인 구현",
+    "depends_on": [],
+    "requires_human_decision": false
+  },
+  {
+    "task_id": "CALC-002",
+    "title": "50,000원 이상 무료 배송 로직",
+    "depends_on": [],
+    "requires_human_decision": false
+  },
+  {
+    "task_id": "CALC-003",
+    "title": "승인된 USD 환율 적용 (운영팀 확인 필요)",
+    "depends_on": [],
+    "requires_human_decision": true
+  },
+  {
+    "task_id": "CALC-004",
+    "title": "할인+배송비 합산 견적",
+    "depends_on": [
+      "CALC-001",
+      "CALC-002"
+    ],
+    "requires_human_decision": false
+  }
+]

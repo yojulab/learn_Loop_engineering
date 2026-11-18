@@ -1,0 +1,31 @@
+[
+  {
+    "ticket_id": "T-101",
+    "product": "ProPlan",
+    "subject": "환불 문의",
+    "message": "결제 후 3일 이내 환불 요청",
+    "expected_keywords": [
+      "환불",
+      "다음 단계"
+    ]
+  },
+  {
+    "ticket_id": "T-102",
+    "product": "TeamPlan",
+    "subject": "계정 잠금",
+    "message": "로그인 실패로 계정 잠금 해제 필요",
+    "expected_keywords": [
+      "계정",
+      "다음 단계"
+    ]
+  },
+  {
+    "ticket_id": "T-103",
+    "product": "ProPlan",
+    "subject": "영수증 재발급",
+    "message": "법인카드 영수증 재발급 요청",
+    "expected_keywords": [
+      "다음 단계"
+    ]
+  }
+]
