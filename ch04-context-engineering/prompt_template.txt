@@ -1,0 +1,25 @@
+[목표]
+기존 quote-cli 서비스에 태그별 통계 조회 API 엔드포인트(`GET /api/v1/quotes/stats`)를 추가한다.
+
+[맥락]
+- 현재 저장소는 Python 3.13 표준 라이브러리 우선 원칙으로 동작한다.
+- 데이터 소스는 `quotes.json`이며 각 레코드는 `id`, `text`, `author`, `tags` 필드를 가진다.
+
+[참고 패턴]
+- `few_shot_reference.txt`의 입력 검증 -> 서비스 집계 -> 표준 JSON 응답 구조를 따른다.
+
+[제약과 범위]
+- 수정 허용 파일은 `src/api/quotes.py`와 `tests/test_quotes_api.py`로 제한한다.
+- 외부 네트워크 호출이나 신규 패키지 설치는 금지한다.
+
+[도구/절차]
+1. `quotes.json` 스키마와 기존 핸들러 시그니처를 먼저 읽는다.
+2. 태그 빈도 집계 순수 함수를 작성한 뒤 라우터에 연결한다.
+3. 정상 케이스와 빈 태그 케이스 단위 테스트를 추가한다.
+
+[완료 기준]
+- `python3 -m unittest discover -s tests -p "test_*.py"` 종료 코드 0 통과
+- `GET /api/v1/quotes/stats` 응답에 `total_quotes`와 `tag_counts` 포함
+
+[보고 형식]
+- 수정 파일 경로 목록, 실행한 테스트 명령과 결과, 남은 리스크를 5줄 이내로 요약한다.

@@ -1,0 +1,26 @@
+# Few-shot Reference Pattern: 순수 집계 함수 + JSON 응답 어댑터
+
+## Example Input (요청/데이터)
+quotes = [
+    {"id": 1, "author": "A", "tags": ["engineering", "testing"]},
+    {"id": 2, "author": "B", "tags": ["engineering"]},
+]
+
+## Reference Implementation (참조 패턴)
+def build_quote_stats(quotes: list[dict]) -> dict:
+    tag_counts: dict[str, int] = {}
+    for item in quotes:
+        for tag in item.get("tags", []):
+            key = str(tag).strip().lower()
+            if key:
+                tag_counts[key] = tag_counts.get(key, 0) + 1
+    return {
+        "total_quotes": len(quotes),
+        "tag_counts": dict(sorted(tag_counts.items())),
+    }
+
+## Expected Output
+{
+  "total_quotes": 2,
+  "tag_counts": {"engineering": 2, "testing": 1}
+}

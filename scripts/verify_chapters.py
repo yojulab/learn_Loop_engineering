@@ -151,7 +151,10 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "tests/test_context_engineering.py",
         ),
         test_dirs=("ch04-context-engineering/tests",),
-        cli_commands=(("ch04-context-engineering/context_budget.py",),),
+        cli_commands=(
+            ("ch04-context-engineering/context_budget.py",),
+            ("ch04-context-engineering/context_budget.py", "--json"),
+        ),
         symlinks=(
             ("ch04/prompt_template.txt", "ch04-context-engineering/prompt_template.txt"),
             ("ch04/few_shot_reference.txt", "ch04-context-engineering/few_shot_reference.txt"),
@@ -169,6 +172,9 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "memory_pattern/agentic_rag.py",
             "memory_pattern/TASKS.md",
             "memory_pattern/JOURNAL.md",
+            "memory_pattern/corpus/01_context_budget.md",
+            "memory_pattern/corpus/02_agentic_rag.md",
+            "memory_pattern/corpus/03_durable_memory.md",
             "memory_pattern/tests/test_memory_pattern.py",
         ),
         test_dirs=("ch05-rag-and-memory/memory_pattern/tests",),
