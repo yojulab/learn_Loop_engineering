@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "text": "Good software architecture makes change cheap and verification automatic.",
+    "author": "Hermes Lab",
+    "tags": [
+      "engineering",
+      "architecture"
+    ]
+  },
+  {
+    "id": 2,
+    "text": "Isolate subagents so context pollution never crosses task boundaries.",
+    "author": "Workflow Notes",
+    "tags": [
+      "subagents",
+      "context"
+    ]
+  },
+  {
+    "id": 3,
+    "text": "Constraints are guardrails that keep autonomous loops safe.",
+    "author": "Harness Principles",
+    "tags": [
+      "harness",
+      "safety"
+    ]
+  },
+  {
+    "id": 4,
+    "text": "Read-only reviewers verify faster because they cannot mutate state.",
+    "author": "Hermes Lab",
+    "tags": [
+      "review",
+      "agents"
+    ]
+  },
+  {
+    "id": 5,
+    "text": "Put durable state in files, not inside ephemeral chat turns.",
+    "author": "Loop Handbook",
+    "tags": [
+      "memory",
+      "engineering"
+    ]
+  }
+]
