@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 hooks/block_dangerous_bash.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__quote__add_quote|add_quote",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 hooks/audit_logger.py"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "text": "Good software architecture is the art of making change cheap and verification automatic.",
+    "author": "Hermes Lab",
+    "tags": [
+      "engineering",
+      "architecture"
+    ]
+  },
+  {
+    "id": 2,
+    "text": "An agent without deterministic tests is only guessing in a bigger loop.",
+    "author": "Stack Engineering Notes",
+    "tags": [
+      "engineering",
+      "testing",
+      "agents"
+    ]
+  },
+  {
+    "id": 3,
+    "text": "Put durable state in files, not inside ephemeral conversation memory.",
+    "author": "Loop Handbook",
+    "tags": [
+      "memory",
+      "context"
+    ]
+  },
+  {
+    "id": 4,
+    "text": "Constraints are not walls; they are guardrails that keep autonomous loops safe.",
+    "author": "Harness Principles",
+    "tags": [
+      "harness",
+      "safety"
+    ]
+  },
+  {
+    "id": 5,
+    "text": "Small, verifiable steps beat giant, unreviewed leaps every time.",
+    "author": "Iterative Craft",
+    "tags": [
+      "engineering",
+      "workflow"
+    ]
+  },
+  {
+    "id": 6,
+    "text": "Standard tool protocols turn isolated models into reliable collaborators.",
+    "author": "Agentic Patterns",
+    "tags": [
+      "agents",
+      "tools"
+    ]
+  }
+]

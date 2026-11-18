@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "quote-mcp": {
+      "command": "python3",
+      "args": [
+        "main.py"
+      ],
+      "env": {
+        "QUOTE_DATA_PATH": "${QUOTE_DATA_PATH:-./quotes.json}",
+        "QUOTE_API_KEY": "${QUOTE_API_KEY:-demo}"
+      }
+    }
+  }
+}
