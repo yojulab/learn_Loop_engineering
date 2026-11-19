@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>발표자 창 | Hermes Engineering 5시간 웹 PPT</title>
+  <style>
+    :root { --bg:#0A1020; --card:#131B33; --fg:#EEF1F8; --muted:#9AA6C6; --mint:#4BE3A6; --line:rgba(255,255,255,.12); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--bg); color:var(--fg); font-family:"Pretendard","Apple SD Gothic Neo",sans-serif; padding:24px; }
+    header { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:20px; }
+    h1 { font-size:20px; font-weight:800; }
+    .meta { font-family:"JetBrains Mono",monospace; font-size:15px; color:var(--mint); }
+    .grid { display:grid; grid-template-columns:1fr 340px; gap:20px; }
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px; }
+    .label { font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px; }
+    #p-title { font-size:26px; font-weight:800; margin-bottom:14px; }
+    #p-notes { font-size:18px; line-height:1.65; color:#DCE3F5; white-space:pre-line; }
+    #p-next { font-size:16px; color:var(--muted); margin-top:8px; }
+    .controls { display:flex; gap:10px; margin-top:16px; }
+    button { background:#1D294D; color:#fff; border:1px solid var(--line); border-radius:10px; padding:10px 18px; font-size:15px; font-weight:700; cursor:pointer; }
+    button:hover { background:#273766; }
+    #p-timer { font-family:"JetBrains Mono",monospace; font-size:40px; font-weight:700; color:var(--mint); margin:8px 0 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hermes Engineering — 발표자 대시보드 (5시간 과정)</h1>
+    <div class="meta" id="p-pos">- / -</div>
+  </header>
+  <main class="grid">
+    <section class="panel" aria-label="현재 슬라이드 발표자 메모">
+      <div class="label">현재 슬라이드</div>
+      <div id="p-title">메인 슬라이드 창 연결 대기 중...</div>
+      <div class="label">발표자 메모 &amp; 진행 포인트</div>
+      <div id="p-notes">메인 창에서 P 키를 누르거나 슬라이드를 이동하면 실시간 동기화됩니다.</div>
+    </section>
+    <aside class="panel" aria-label="타이머 및 제어">
+      <div class="label">경과 시간 (5시간 = 05:00:00)</div>
+      <div id="p-timer">00:00:00</div>
+      <div class="controls">
+        <button type="button" id="btn-prev">← 이전</button>
+        <button type="button" id="btn-next">다음 →</button>
+      </div>
+      <div style="margin-top:20px">
+        <div class="label">다음 슬라이드</div>
+        <div id="p-next">-</div>
+      </div>
+    </aside>
+  </main>
+  <script>
+    const bc = ('BroadcastChannel' in window) ? new BroadcastChannel('hermes-ppt-sync') : null;
+    const t0 = Date.now();
+    setInterval(() => {
+      const sec = Math.floor((Date.now() - t0) / 1000);
+      const hh = String(Math.floor(sec / 3600)).padStart(2, '0');
+      const mm = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+      const ss = String(sec % 60).padStart(2, '0');
+      document.getElementById('p-timer').textContent = `${hh}:${mm}:${ss}`;
+    }, 1000);
+    if (bc) {
+      bc.onmessage = (e) => {
+        const d = e.data || {};
+        if (d.type !== 'state') return;
+        document.getElementById('p-pos').textContent = `${d.i + 1} / ${d.n} (step ${d.step}/${d.steps})`;
+        document.getElementById('p-title').textContent = d.title || '';
+        document.getElementById('p-notes').textContent = d.notes || '(메모 없음)';
+        document.getElementById('p-next').textContent = d.next || '(마지막 슬라이드)';
+      };
+      bc.postMessage({ type: 'cmd', cmd: 'hello' });
+    }
+    document.getElementById('btn-prev').addEventListener('click', () => bc && bc.postMessage({ type: 'cmd', cmd: 'back' }));
+    document.getElementById('btn-next').addEventListener('click', () => bc && bc.postMessage({ type: 'cmd', cmd: 'next' }));
+  </script>
+</body>
+</html>

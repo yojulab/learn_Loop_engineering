@@ -93,6 +93,13 @@ python3 scripts/verify_chapters.py --all
 | **ChatGPT / Codex** | `AGENTS.md`, `CHATGPT.md` | `platforms/adapter_chatgpt.py`, `*_chatgpt.*` | `AGENT_PLATFORM=chatgpt python3 ch10/todo-loop/loop.py --platform chatgpt` |
 | **Gemini / Antigravity** | `GEMINI.md` | `platforms/adapter_gemini.py`, `*_gemini.*` | `AGENT_PLATFORM=gemini python3 ch10/todo-loop/loop.py --platform gemini` |
 
+### 5시간 과정 Web PPT (GitHub Pages: `docs/`)
+
+- **경로**: [`docs/index.html`](docs/index.html) (발표자 대시보드: [`docs/presenter.html`](docs/presenter.html))
+- **구성**: `ch00`~`ch12` 전 단원(총 300분) 이론 슬라이드 + **단원별 실습 미션과 클릭 토글(`<details>`) 모범 답안(Tree + 코드/CLI) 한 페이지 배치**
+- **GitHub Pages 배포**: 저장소 `Settings → Pages → Source`에서 `main` 또는 `develop` 브랜치의 `/docs` 폴더 선택 (`.nojekyll` 포함, 100% 상대 경로)
+- **로컬 미리보기**: `python3 -m http.server 8080 --directory docs` 후 브라우저에서 `http://localhost:8080` 접속 (단축키 `A`: 모범답안 토글, `O`: 목차, `N`: 메모, `P`: 발표자 창, `?print`: PDF 인쇄)
+
 ## 5. 핵심 체크리스트
 
 - [ ] `AGENTS.md`는 제7장 원칙에 따라 100줄 이하 목차형 규칙서로 유지되는가?

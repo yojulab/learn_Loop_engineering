@@ -45,6 +45,28 @@ class CheckResult:
 
 CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
     ChapterSpec(
+        chapter_id="webppt",
+        phase=1,
+        canonical_dir="docs",
+        title="5시간 과정 GitHub Pages 웹 PPT (ch00~ch12 실습·모범답안)",
+        required_files=(
+            "ARCHITECTURE.md",
+            ".nojekyll",
+            "index.html",
+            "presenter.html",
+            "deck.css",
+            "engine.js",
+            "ui.js",
+            "slides/00_manifest.js",
+            "slides/s0_opening.js",
+            "slides/s1_part1.js",
+            "slides/s2_part2.js",
+            "slides/s3_part3.js",
+            "slides/s4_part4_a.js",
+            "slides/s5_part4_b.js",
+        ),
+    ),
+    ChapterSpec(
         chapter_id="platforms",
         phase=1,
         canonical_dir="platforms",
