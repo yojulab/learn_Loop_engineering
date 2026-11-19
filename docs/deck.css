@@ -164,7 +164,7 @@ table.tbl th, table.tbl td { padding: 14px 18px; border-bottom: 1.5px solid var(
 table.tbl th { font-weight: 800; color: var(--fg); background: rgba(15,27,61,.04); }
 .theme-ink table.tbl th, .theme-night table.tbl th { background: rgba(255,255,255,.06); }
 
-/* 하단 진행 표시(Chrome) & 목차 & 메모 */
+/* 하단 진행 표시(Chrome) & 목차 */
 .chrome { position: absolute; left: 0; right: 0; bottom: 0; height: 76px; z-index: 50; pointer-events: none; }
 .chrome .rail { position: absolute; left: 0; top: 4px; }
 .rail-main { stroke: var(--c-rail, rgba(15,27,61,.18)); stroke-width: 2; }
@@ -188,10 +188,6 @@ table.tbl th { font-weight: 800; color: var(--fg); background: rgba(15,27,61,.04
 
 .blackout { position: absolute; inset: 0; background: #000; z-index: 90; display: none; }
 .blackout.show { display: block; }
-.notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; background: rgba(8,12,24,.95); color: #E6EAF5; padding: 20px 32px; font-size: 18px; line-height: 1.6; z-index: 100; display: none; border-top: 2px solid var(--mint); }
-.notes.show { display: block; }
-.notes .nt-h { font-weight: 800; font-size: 20px; margin-bottom: 6px; }
-.notes .nt-h span { color: var(--mint); margin-left: 10px; font-size: 15px; }
 
 .overview { position: fixed; inset: 0; background: rgba(8,12,24,.97); z-index: 120; overflow: auto; padding: 48px 64px; display: none; columns: 3 360px; column-gap: 40px; }
 .overview.show { display: block; }

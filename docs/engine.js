@@ -1,6 +1,6 @@
 /* DECK 모션 슬라이드 엔진 — 1920×1080 순수 함수 렌더러 (revfactory/oss-lecture 패턴 기반)
  * 키보드: → Space PageDown Enter = 다음, ← PageUp Backspace = 이전,
- *         O = 목차, N = 발표자 메모, P = 발표자 창, F = 전체 화면, B = 블랙아웃, H = 하단 숨김, A = 현재 슬라이드 모범답안 토글
+ *         O = 목차, P = 발표자 창, F = 전체 화면, B = 블랙아웃, H = 하단 숨김, A = 현재 슬라이드 모범답안 토글
  * URL: #12 (12번 슬라이드), ?print (PDF 인쇄 모드, 모범 답안 전체 펼침)
  */
 (function () {
@@ -59,7 +59,7 @@
   function part(key, label, color) { parts.push({ key, label, color }); }
   function slide(def) { slides.push(def); }
 
-  let root, stage, chromeEl, railSvg, railPartEl, railNumEl, blackEl, notesEl, ovEl;
+  let root, stage, chromeEl, railSvg, railPartEl, railNumEl, blackEl, ovEl;
   let cur = 0, step = 0, enterAt = 0, stepAt = [0], rafId = 0;
   let jumpBuf = '', jumpTimer = 0;
   const bc = ('BroadcastChannel' in window) ? new BroadcastChannel('hermes-ppt-sync') : null;
@@ -149,12 +149,6 @@
     }
   }
 
-  function updateNotes() {
-    if (!notesEl || !notesEl.classList.contains('show')) return;
-    const d = slides[cur];
-    notesEl.innerHTML = `<div class="nt-h">${cur + 1}. ${d.title} <span>${d.chap || ''}</span></div><div>${d.notes || ''}</div>`;
-  }
-
   function sync() {
     if (!bc || !slides[cur]) return;
     bc.postMessage({
@@ -182,7 +176,6 @@
     stepAt = [enterAt];
     if (location.hash !== '#' + (cur + 1)) history.replaceState(null, '', '#' + (cur + 1));
     updateChrome();
-    updateNotes();
     sync();
   }
 
@@ -222,41 +215,96 @@
     if (det) det.open = !det.open;
   }
 
+  function toggleFullscreen() {
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fsEl) {
+      const exitFn = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exitFn) Promise.resolve(exitFn.call(document)).catch(() => {});
+    } else {
+      const el = document.documentElement;
+      const reqFn = el.requestFullscreen || el.webkitRequestFullscreen;
+      if (reqFn) Promise.resolve(reqFn.call(el)).catch(() => {});
+    }
+  }
+
+  function openPresenter() {
+    window.open('presenter.html', 'deck-presenter', 'width=1200,height=780');
+    setTimeout(sync, 600);
+  }
+
+  function readDigit(k, code) {
+    if (/^[0-9]$/.test(k)) return k;
+    const m = /^(?:Digit|Numpad)([0-9])$/.exec(code || '');
+    return m ? m[1] : null;
+  }
+
   function keys(e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.target && e.target.closest('summary, details, input, textarea, select')) {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { /* allow slide nav unless inside text input */ }
-      else return;
+    const target = e.target && e.target.nodeType === 1 ? e.target : null;
+    if (target && target.closest('input, textarea, select, [contenteditable="true"], [contenteditable=""]')) return;
+
+    const k = e.key || '';
+    const kl = k.toLowerCase();
+    const code = e.code || '';
+    const interactiveEl = target && target.closest('summary, button, a[href]');
+    const isSpace = code === 'Space' || k === ' ' || k === 'Spacebar';
+    const isEnter = code === 'Enter' || code === 'NumpadEnter' || k === 'Enter';
+
+    const digit = readDigit(k, code);
+    if (digit !== null) {
+      jumpBuf += digit;
+      clearTimeout(jumpTimer);
+      jumpTimer = setTimeout(() => { jumpBuf = ''; }, 1500);
+      return;
     }
-    const k = e.key;
-    if (/^[0-9]$/.test(k)) { jumpBuf += k; clearTimeout(jumpTimer); jumpTimer = setTimeout(() => { jumpBuf = ''; }, 1500); return; }
-    if (k === 'Enter' && jumpBuf) { go(parseInt(jumpBuf, 10) - 1, { instant: true }); jumpBuf = ''; e.preventDefault(); return; }
-    if (['ArrowRight', ' ', 'PageDown', 'Enter', 'ArrowDown'].includes(k)) { e.preventDefault(); next(); }
-    else if (['ArrowLeft', 'PageUp', 'ArrowUp', 'Backspace'].includes(k)) { e.preventDefault(); back(); }
-    else if (k === 'Home') go(0, { instant: true });
-    else if (k === 'End') go(slides.length - 1, { instant: true });
-    else if (k === 'f' || k === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
-    else if (k === 'o' || k === 'O' || k === 'Escape') toggleOverview(k === 'Escape' ? false : undefined);
-    else if (k === 'n' || k === 'N') { notesEl.classList.toggle('show'); updateNotes(); }
-    else if (k === 'a' || k === 'A') toggleCurrentAnswer();
-    else if (k === 'b' || k === 'B' || k === '.') blackEl.classList.toggle('show');
-    else if (k === 'h' || k === 'H') root.classList.toggle('nochrome');
-    else if (k === 'p' || k === 'P') { window.open('presenter.html', 'deck-presenter', 'width=1200,height=780'); setTimeout(sync, 600); }
+
+    if (isEnter && jumpBuf) {
+      e.preventDefault();
+      go(parseInt(jumpBuf, 10) - 1, { instant: true });
+      jumpBuf = '';
+      return;
+    }
+
+    // <summary> / <button> 포커스 상태에서도 Enter·Space만 기본 동작에 위임하고 나머지 단축키는 유지
+    if (interactiveEl && (isEnter || isSpace)) return;
+
+    if (isSpace && e.shiftKey) { e.preventDefault(); back(); }
+    else if (code === 'ArrowRight' || code === 'PageDown' || code === 'ArrowDown' || isSpace || isEnter || ['ArrowRight', 'PageDown', 'ArrowDown'].includes(k)) {
+      e.preventDefault();
+      next();
+    }
+    else if (code === 'ArrowLeft' || code === 'PageUp' || code === 'ArrowUp' || code === 'Backspace' || ['ArrowLeft', 'PageUp', 'ArrowUp', 'Backspace'].includes(k)) {
+      e.preventDefault();
+      back();
+    }
+    else if (code === 'Home' || k === 'Home') { e.preventDefault(); go(0, { instant: true }); }
+    else if (code === 'End' || k === 'End') { e.preventDefault(); go(slides.length - 1, { instant: true }); }
+    else if (code === 'KeyF' || kl === 'f') { e.preventDefault(); toggleFullscreen(); }
+    else if (code === 'KeyO' || kl === 'o' || code === 'Escape' || k === 'Escape') {
+      e.preventDefault();
+      toggleOverview((code === 'Escape' || k === 'Escape') ? false : undefined);
+    }
+    else if (code === 'KeyA' || kl === 'a') { e.preventDefault(); toggleCurrentAnswer(); }
+    else if (code === 'KeyB' || code === 'Period' || kl === 'b' || k === '.') { e.preventDefault(); blackEl.classList.toggle('show'); }
+    else if (code === 'KeyH' || kl === 'h') { e.preventDefault(); root.classList.toggle('nochrome'); }
+    else if (code === 'KeyP' || kl === 'p') { e.preventDefault(); openPresenter(); }
   }
 
   function buildHud() {
     const hud = h('div', 'hud-actions', document.body);
     const items = [
       ['목차 (O)', () => toggleOverview()],
-      ['메모 (N)', () => { notesEl.classList.toggle('show'); updateNotes(); }],
       ['모범답안 (A)', () => toggleCurrentAnswer()],
-      ['발표자 창 (P)', () => { window.open('presenter.html', 'deck-presenter', 'width=1200,height=780'); setTimeout(sync, 600); }],
+      ['발표자 창 (P)', () => openPresenter()],
       ['PDF 인쇄', () => { window.open('?print', '_blank'); }],
     ];
     items.forEach(([label, fn]) => {
       const btn = h('button', 'hud-btn', hud, label);
       btn.type = 'button';
-      btn.addEventListener('click', fn);
+      btn.addEventListener('click', (e) => {
+        fn();
+        if (e.detail > 0) btn.blur();
+      });
     });
   }
 
@@ -281,12 +329,11 @@
     slides.forEach(buildSlideDom);
     buildChrome();
     blackEl = h('div', 'blackout', stage);
-    notesEl = h('div', 'notes', document.body);
     buildOverview();
     buildHud();
     fit();
     window.addEventListener('resize', fit);
-    document.addEventListener('keydown', keys);
+    window.addEventListener('keydown', keys);
     stage.addEventListener('click', e => {
       if (e.target.closest('a, button, summary, details, pre, .lab-answer, .no-advance')) return;
       next();

@@ -91,5 +91,13 @@ class WebPptDocsTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, f"JS 문법 오류 ({js}): {proc.stderr}")
 
 
+    def test_keyboard_shortcuts_use_physical_codes_and_exclude_n(self) -> None:
+        engine_js = (DOCS_DIR / "engine.js").read_text(encoding="utf-8")
+        for code_name in ("KeyA", "KeyO", "KeyF", "KeyB", "KeyH", "KeyP", "Space", "NumpadEnter"):
+            self.assertIn(code_name, engine_js, f"한글 IME/다양한 키보드 대응용 e.code 누락: {code_name}")
+        self.assertNotIn("KeyN", engine_js)
+        self.assertNotIn("메모 (N)", engine_js)
+        self.assertNotIn("k === 'n'", engine_js)
+
 if __name__ == "__main__":
     unittest.main()
