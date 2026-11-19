@@ -71,5 +71,11 @@ class TestRssWikiAndRalphLoop(unittest.TestCase):
         self.assertEqual(report["status"], "MET")
 
 
+    def test_multi_platform_worker_scripts_and_ralph_dispatch(self) -> None:
+        for script in ("worker_claude.sh", "worker_chatgpt.sh", "worker_gemini.sh"):
+            res = subprocess.run(["bash", str(APP_DIR / script), str(APP_DIR / "PROMPT.md")], capture_output=True, text=True, check=False)
+            self.assertEqual(res.returncode, 0, res.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()

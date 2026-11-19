@@ -66,13 +66,40 @@ def _parse_agent_markdown(md_path: Path) -> AgentDefinition:
     )
 
 
+def _load_platform_json_agents(json_path: Path) -> list[AgentDefinition]:
+    data = json.loads(json_path.read_text(encoding="utf-8"))
+    out: list[AgentDefinition] = []
+    for item in data.get("agents", []):
+        tools = tuple(item.get("tools", []))
+        read_only = not any(t in ("Write", "Edit", "Bash") for t in tools)
+        out.append(
+            AgentDefinition(
+                name=item["name"],
+                description=item.get("description", ""),
+                tools=tools,
+                model=item.get("model", "auto"),
+                prompt_body=item.get("description", ""),
+                read_only=read_only,
+            )
+        )
+    return out
+
+
 class AgentRegistry:
     """`.claude/agents/*.md` 정의를 로드하고 작업 유형별 서브에이전트를 동적 선택한다."""
 
-    def __init__(self, agents_dir: Path | str = DEFAULT_AGENTS_DIR) -> None:
+    def __init__(self, agents_dir: Path | str = DEFAULT_AGENTS_DIR, platform: str = "claude") -> None:
         self.agents_dir = Path(agents_dir)
+        self.platform = platform
         self._agents: dict[str, AgentDefinition] = {}
-        if self.agents_dir.is_dir():
+        ch06_root = Path(__file__).resolve().parent
+        if platform == "chatgpt" and (ch06_root / "agents_chatgpt.json").is_file():
+            for defn in _load_platform_json_agents(ch06_root / "agents_chatgpt.json"):
+                self._agents[defn.name] = defn
+        elif platform == "gemini" and (ch06_root / "agents_gemini.json").is_file():
+            for defn in _load_platform_json_agents(ch06_root / "agents_gemini.json"):
+                self._agents[defn.name] = defn
+        elif self.agents_dir.is_dir():
             for md in sorted(self.agents_dir.glob("*.md")):
                 defn = _parse_agent_markdown(md)
                 self._agents[defn.name] = defn
@@ -161,10 +188,11 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="제6장 동적 병렬 서브에이전트 워크플로 시뮬레이터")
     parser.add_argument("--task-type", default="api_change", choices=sorted(TASK_AGENT_MATRIX.keys()))
     parser.add_argument("--target", default="quote-cli search extension")
+    parser.add_argument("--platform", default="claude", choices=["claude", "chatgpt", "gemini"])
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
 
-    orch = WorkflowOrchestrator()
+    orch = WorkflowOrchestrator(registry=AgentRegistry(platform=args.platform))
     report = orch.run_workflow(task_type=args.task_type, target_summary=args.target)
     if args.json:
         print(json.dumps(report, ensure_ascii=False, indent=2))

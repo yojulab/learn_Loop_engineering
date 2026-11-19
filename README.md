@@ -48,7 +48,7 @@ flowchart TB
 
 | 단원 / 경로 | 도서 호환 경로 (`💻 Git 예제`) | 핵심 내용 | 상태 |
 | :--- | :--- | :--- | :--- |
-| `README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/ARCHITECTURE.md` | 루트 | 범용 규칙서, 에이전트별 포인터, 4계층 설계서 | Phase 1 |
+| `README.md`, `AGENTS.md`, `CLAUDE.md`, `CHATGPT.md`, `GEMINI.md`, `platforms/`, `docs/ARCHITECTURE.md` | 루트 | 범용 규칙서, 에이전트별 포인터, 4계층 설계서 | Phase 1 |
 | `scripts/verify_chapters.py`, `tests/test_repo_root.py` | 루트 | 전 단원 통합 검증 러너 및 루트 무결성 테스트 | Phase 1 |
 | `ch00-prologue/` | `ch00-prologue/` | `stack_check.py` (4계층 12대 스택 런타임·저장소 진단) | Phase 1 |
 | `ch01-agentic-coding/quote-cli/` | `ch01/quote-cli/` | `quote_cli.py`, `interactive_demo.py`, `quotes.json` | Phase 2 |
@@ -84,6 +84,14 @@ python3 -m unittest discover -s ch00-prologue/tests -p "test_*.py"
 # 전 단원 통합 검증 (전체 Phase 구현 완료 시)
 python3 scripts/verify_chapters.py --all
 ```
+
+### Any-Platform 실행 지원 (Claude · ChatGPT · Gemini)
+
+| 플랫폼 | 진입 지침 파일 | 어댑터 & 단원별 호환 파일 (`*_[플랫폼].*`) | 비대화형 실행 예시 |
+| :--- | :--- | :--- | :--- |
+| **Claude** | `CLAUDE.md` | `platforms/adapter_claude.py`, `*_claude.*` | `AGENT_PLATFORM=claude python3 ch10/todo-loop/loop.py --platform claude` |
+| **ChatGPT / Codex** | `AGENTS.md`, `CHATGPT.md` | `platforms/adapter_chatgpt.py`, `*_chatgpt.*` | `AGENT_PLATFORM=chatgpt python3 ch10/todo-loop/loop.py --platform chatgpt` |
+| **Gemini / Antigravity** | `GEMINI.md` | `platforms/adapter_gemini.py`, `*_gemini.*` | `AGENT_PLATFORM=gemini python3 ch10/todo-loop/loop.py --platform gemini` |
 
 ## 5. 핵심 체크리스트
 

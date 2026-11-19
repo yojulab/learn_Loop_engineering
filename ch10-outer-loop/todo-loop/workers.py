@@ -1,9 +1,16 @@
 from __future__ import annotations
 
-import os
+import sys
 from dataclasses import dataclass
+from pathlib import Path
 
 from models import TaskContract
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from platforms.base import resolve_platform, run_with_any_platform
 
 
 @dataclass
@@ -30,14 +37,25 @@ class DeterministicTestWorker(BaseWorker):
 
     def run_task(self, task: TaskContract, attempt: int) -> WorkerOutput:
         if task.task_id == "CALC-002" and attempt == 1:
-            # 1차 시도는 실패(거짓 완료 방지 검증용), 2차 시도에서 성공
             return WorkerOutput(declared_completed=True, impl_note="calc-002-first-buggy", passed_override=False)
         return WorkerOutput(declared_completed=True, impl_note=f"ok:{task.task_id}:attempt={attempt}", passed_override=True)
 
 
 class LLMWorker(BaseWorker):
+    """Claude / ChatGPT / Gemini / Auto 플랫폼 어댑터를 통해 실행하는 범용 워커."""
+
+    def __init__(self, platform: str = "auto") -> None:
+        self.platform = platform
+
     def run_task(self, task: TaskContract, attempt: int) -> WorkerOutput:
-        if not os.getenv("OPENAI_API_KEY"):
-            # 오프라인 환경 안전 폴백
-            return DeterministicTestWorker().run_task(task, attempt)
-        return DeterministicTestWorker().run_task(task, attempt)
+        resolved = resolve_platform(self.platform)
+        resp = run_with_any_platform(f"Execute {task.task_id}: {task.title}", platform=self.platform)
+        if resp.mode == "offline-fallback":
+            det = DeterministicTestWorker().run_task(task, attempt)
+            det.impl_note = f"{resolved}:{resp.mode}:{det.impl_note}"
+            return det
+        return WorkerOutput(
+            declared_completed=True,
+            impl_note=f"{resp.platform}:{resp.mode}:{resp.text[:80]}",
+            passed_override=True,
+        )

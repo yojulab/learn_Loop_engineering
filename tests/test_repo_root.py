@@ -1,4 +1,4 @@
-"""저장소 루트 4종 문서, AGENTS.md 100줄 제한, 레거시 완전 삭제 및 README 5단 구성 검증."""
+"""저장소 루트 5종 문서, platforms/ 어댑터, AGENTS.md 100줄 제한, 레거시 완전 삭제 및 README 5단 구성 검증."""
 
 from __future__ import annotations
 
@@ -12,13 +12,18 @@ SKIP_DIRS = {".git", "__pycache__", ".pytest_cache"}
 
 
 class TestRepoRoot(unittest.TestCase):
-    def test_root_four_docs_and_architecture_exist(self) -> None:
+    def test_root_docs_and_platforms_exist(self) -> None:
         required = [
             "README.md",
             "AGENTS.md",
             "CLAUDE.md",
+            "CHATGPT.md",
             "GEMINI.md",
             "docs/ARCHITECTURE.md",
+            "platforms/base.py",
+            "platforms/adapter_claude.py",
+            "platforms/adapter_chatgpt.py",
+            "platforms/adapter_gemini.py",
         ]
         for rel in required:
             with self.subTest(path=rel):

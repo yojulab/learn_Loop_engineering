@@ -20,7 +20,7 @@ LEGACY_DOCS_PATHS: tuple[str, ...] = (
     "docs/PRD_TEMPLATE.md",
     "docs/user_prompt_history.md",
 )
-ROOT_DOCS: tuple[str, ...] = ("README.md", "AGENTS.md", "CLAUDE.md", "GEMINI.md")
+ROOT_DOCS: tuple[str, ...] = ("README.md", "AGENTS.md", "CLAUDE.md", "CHATGPT.md", "GEMINI.md")
 TEXT_SCAN_SKIP_DIRS: frozenset[str] = frozenset({".git", "__pycache__", ".pytest_cache"})
 
 
@@ -44,6 +44,14 @@ class CheckResult:
 
 
 CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
+    ChapterSpec(
+        chapter_id="platforms",
+        phase=1,
+        canonical_dir="platforms",
+        title="공용 멀티 플랫폼 어댑터 (claude / chatgpt / gemini)",
+        required_files=("__init__.py", "base.py", "adapter_claude.py", "adapter_chatgpt.py", "adapter_gemini.py", "tests/test_platforms.py"),
+        test_dirs=("platforms/tests",),
+    ),
     ChapterSpec(
         chapter_id="ch00",
         phase=1,
@@ -89,6 +97,10 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "quote-mcp/hooks/block_dangerous_bash.py",
             "quote-mcp/hooks/audit_logger.py",
             "quote-mcp/tests/test_quote_mcp_and_hooks.py",
+            "quote-mcp/mcp_config_claude.json",
+            "quote-mcp/mcp_config_chatgpt.json",
+            "quote-mcp/mcp_config_gemini.json",
+            "quote-mcp/hooks/platform_hook_bridge.py",
             "../ch04/quote-cli/README.md",
         ),
         test_dirs=("ch02-mcp-and-hooks/quote-mcp/tests",),
@@ -129,6 +141,9 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "github-workflow-skills/gh-address-review/examples/sample_address_review.md",
             "github-workflow-skills/gh-address-review/scripts/validate_address_review.py",
             "github-workflow-skills/tests/test_github_workflow_skills.py",
+            "github-workflow-skills/skills_claude.md",
+            "github-workflow-skills/skills_chatgpt.md",
+            "github-workflow-skills/skills_gemini.md",
         ),
         test_dirs=("ch03-skills/github-workflow-skills/tests",),
         symlinks=(("ch03/github-workflow-skills", "ch03-skills/github-workflow-skills"),),
@@ -148,6 +163,9 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "AGENTS.md",
             "GEMINI.md",
             "context_budget.py",
+            "guidelines_claude.md",
+            "guidelines_chatgpt.md",
+            "guidelines_gemini.md",
             "tests/test_context_engineering.py",
         ),
         test_dirs=("ch04-context-engineering/tests",),
@@ -189,6 +207,8 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "README.md",
             "quote-cli/quote_cli.py",
             "dynamic_workflow.py",
+            "agents_chatgpt.json",
+            "agents_gemini.json",
             "tests/test_dynamic_workflow.py",
         ),
         test_dirs=(
@@ -227,6 +247,9 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "rss-wiki/collector.py",
             "rss-wiki/app.py",
             "rss-wiki/ralph_loop.sh",
+            "rss-wiki/worker_claude.sh",
+            "rss-wiki/worker_chatgpt.sh",
+            "rss-wiki/worker_gemini.sh",
             "rss-wiki/goal_evaluator.py",
             "rss-wiki/tests/test_rss_wiki.py",
         ),
@@ -282,6 +305,9 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "support-assistant/litellm_proxy/docker-compose.litellm.yml",
             "support-assistant/litellm_proxy/.env.example",
             "support-assistant/litellm_proxy/zero_code_proxy_demo.py",
+            "support-assistant/litellm_proxy/client_claude.py",
+            "support-assistant/litellm_proxy/client_chatgpt.py",
+            "support-assistant/litellm_proxy/client_gemini.py",
             "support-assistant/tests/test_support_assistant.py",
         ),
         test_dirs=("ch11-eval-and-llmops/support-assistant/tests",),

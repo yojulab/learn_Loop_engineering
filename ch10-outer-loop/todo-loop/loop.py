@@ -82,10 +82,16 @@ def load_sample_tasks() -> list[TaskContract]:
     return [TaskContract(**item) for item in raw]
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+    parser = argparse.ArgumentParser(description="Chapter 10 Any-Platform Outer Loop Controller")
+    parser.add_argument("--platform", choices=["auto", "claude", "chatgpt", "gemini", "offline"], default="offline")
+    args = parser.parse_args(argv)
+    from workers import LLMWorker
+    worker = DeterministicTestWorker() if args.platform == "offline" else LLMWorker(platform=args.platform)
     with tempfile.TemporaryDirectory() as tmp:
         logger = CostLogger(Path(tmp) / "cost.jsonl")
-        ctrl = OuterLoopController(load_sample_tasks(), DeterministicTestWorker(), LoopBudget(), logger)
+        ctrl = OuterLoopController(load_sample_tasks(), worker, LoopBudget(), logger)
         res = ctrl.run(halt_on_human=True)
         print(json.dumps({
             "stop_reason": res.stop_reason.value,

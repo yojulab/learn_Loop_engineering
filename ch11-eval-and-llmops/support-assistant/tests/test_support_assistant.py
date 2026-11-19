@@ -24,6 +24,9 @@ from prompting import compile_prompt
 from regression_compare import compare_prompt_versions
 from seed_prompts import seed_default_prompts
 from trace_to_prompt import promote_trace_as_prompt
+from client_chatgpt import call_chatgpt_via_proxy
+from client_claude import call_claude_via_proxy
+from client_gemini import call_gemini_via_proxy
 from zero_code_proxy_demo import existing_app_call_llm, start_mock_litellm_proxy
 
 
@@ -199,6 +202,23 @@ class TestSupportAssistant(unittest.TestCase):
             self.assertEqual(fetched["source"], "langfuse-remote")
             self.assertIn("T-888", fetched["compiled_text"])
             self.assertIn("TeamPlan", fetched["compiled_text"])
+
+
+    def test_three_platform_litellm_clients_zero_code(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            ops = LangfuseOpsClient(Path(tmp), host="", public_key="", secret_key="")
+            proxy_srv, proxy_url = start_mock_litellm_proxy(ops)
+            try:
+                r1 = call_claude_via_proxy("claude hello", base_url=proxy_url)
+                r2 = call_chatgpt_via_proxy("chatgpt hello", base_url=proxy_url)
+                r3 = call_gemini_via_proxy("gemini hello", base_url=proxy_url)
+                self.assertIn("choices", r1)
+                self.assertIn("choices", r2)
+                self.assertIn("choices", r3)
+            finally:
+                proxy_srv.shutdown()
+                proxy_srv.server_close()
+            self.assertEqual(len(ops.list_traces()), 3)
 
 
 if __name__ == "__main__":

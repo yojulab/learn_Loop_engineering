@@ -46,5 +46,12 @@ class TestDynamicWorkflow(unittest.TestCase):
         self.assertEqual(data["selected_agents"], ["security-scanner", "code-quality"])
 
 
+    def test_multi_platform_agent_registries(self) -> None:
+        for plat in ("claude", "chatgpt", "gemini"):
+            reg = dynamic_workflow.AgentRegistry(platform=plat)
+            self.assertEqual(len(reg.list_agents()), 5, f"{plat} must load 5 agents")
+            self.assertTrue(reg.get("api-reviewer").read_only)
+
+
 if __name__ == "__main__":
     unittest.main()

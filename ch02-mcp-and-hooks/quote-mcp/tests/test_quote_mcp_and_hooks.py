@@ -20,6 +20,7 @@ if str(QMCP_DIR / "hooks") not in sys.path:
 import audit_logger  # noqa: E402
 import block_dangerous_bash  # noqa: E402
 import main as mcp_main  # noqa: E402
+import platform_hook_bridge  # noqa: E402
 
 
 class TestQuoteMcpAndHooks(unittest.TestCase):
@@ -136,6 +137,19 @@ class TestQuoteMcpAndHooks(unittest.TestCase):
         lines = [json.loads(line) for line in log_file.read_text(encoding="utf-8").splitlines()]
         self.assertEqual(len(lines), 2)
         self.assertEqual(lines[1]["tool_name"], "mcp__quote__add_quote")
+
+
+    def test_multi_platform_hook_bridge_and_configs(self) -> None:
+        for fname in ("mcp_config_claude.json", "mcp_config_chatgpt.json", "mcp_config_gemini.json"):
+            cfg = json.loads((QMCP_DIR / fname).read_text(encoding="utf-8"))
+            self.assertIn("mcpServers", cfg)
+
+        code_c, out_c = platform_hook_bridge.dispatch_hook("claude", "pre", {"tool_name": "Bash", "tool_input": {"command": "rm -rf /"}})
+        code_g, out_g = platform_hook_bridge.dispatch_hook("gemini", "pre", {"tool": "run_shell_command", "args": {"command": "git push --force"}})
+        code_o, out_o = platform_hook_bridge.dispatch_hook("chatgpt", "pre", {"function": {"name": "shell", "arguments": {"command": "git status"}}})
+        self.assertEqual((code_c, out_c["decision"]), (2, "block"))
+        self.assertEqual((code_g, out_g["decision"]), (2, "block"))
+        self.assertEqual((code_o, out_o["decision"]), (0, "allow"))
 
 
 if __name__ == "__main__":

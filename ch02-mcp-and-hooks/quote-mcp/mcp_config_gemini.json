@@ -1,0 +1,30 @@
+{
+  "_comment": "Google Gemini CLI / Antigravity (.gemini/settings.json) MCP 및 BeforeTool/AfterTool 훅 매핑",
+  "platform": "gemini",
+  "config_location": ".gemini/settings.json",
+  "mcpServers": {
+    "quote-mcp": {
+      "command": "python3",
+      "args": [
+        "main.py"
+      ],
+      "env": {
+        "QUOTE_DATA_PATH": "${QUOTE_DATA_PATH:-./quotes.json}"
+      }
+    }
+  },
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "run_shell_command|Bash",
+        "command": "python3 hooks/platform_hook_bridge.py --platform gemini --phase pre"
+      }
+    ],
+    "AfterTool": [
+      {
+        "matcher": "add_quote",
+        "command": "python3 hooks/platform_hook_bridge.py --platform gemini --phase post"
+      }
+    ]
+  }
+}

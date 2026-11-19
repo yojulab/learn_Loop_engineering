@@ -1,0 +1,21 @@
+{
+  "_comment": "OpenAI ChatGPT / Codex CLI (~/.codex/config.toml 호환) 및 Responses API MCP 매핑",
+  "platform": "chatgpt",
+  "config_location": "~/.codex/config.toml (mcp_servers.quote-mcp)",
+  "mcpServers": {
+    "quote-mcp": {
+      "transport": "stdio",
+      "command": "python3",
+      "args": [
+        "main.py"
+      ],
+      "env": {
+        "QUOTE_DATA_PATH": "${QUOTE_DATA_PATH:-./quotes.json}"
+      }
+    }
+  },
+  "tool_guard": {
+    "pre_tool_call": "python3 hooks/platform_hook_bridge.py --platform chatgpt --phase pre",
+    "post_tool_call": "python3 hooks/platform_hook_bridge.py --platform chatgpt --phase post"
+  }
+}

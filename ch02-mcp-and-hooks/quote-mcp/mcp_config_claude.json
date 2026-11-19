@@ -1,0 +1,30 @@
+{
+  "_comment": "Claude Code 전용 MCP(.mcp.json) 및 PreToolUse/PostToolUse 훅 매핑 설정",
+  "platform": "claude",
+  "config_location": ".mcp.json & .claude/settings.json",
+  "mcpServers": {
+    "quote-mcp": {
+      "command": "python3",
+      "args": [
+        "main.py"
+      ],
+      "env": {
+        "QUOTE_DATA_PATH": "${QUOTE_DATA_PATH:-./quotes.json}"
+      }
+    }
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "command": "python3 hooks/platform_hook_bridge.py --platform claude --phase pre"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "add_quote",
+        "command": "python3 hooks/platform_hook_bridge.py --platform claude --phase post"
+      }
+    ]
+  }
+}

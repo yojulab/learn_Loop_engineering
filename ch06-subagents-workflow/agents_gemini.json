@@ -1,0 +1,54 @@
+{
+  "_comment": "Google Gemini / Antigravity invoke_subagent & swarm 역할 매핑 (5종 서브에이전트)",
+  "platform": "gemini",
+  "agents": [
+    {
+      "name": "api-reviewer",
+      "model": "gemini-2.5-flash",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "description": "API 설계 및 하위 호환성 검토"
+    },
+    {
+      "name": "test-runner",
+      "model": "gemini-2.5-flash",
+      "tools": [
+        "Read",
+        "Bash"
+      ],
+      "description": "단위·통합 테스트 실행"
+    },
+    {
+      "name": "security-scanner",
+      "model": "gemini-2.5-flash",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "description": "시크릿 및 파괴적 명령 스캔"
+    },
+    {
+      "name": "code-quality",
+      "model": "gemini-2.5-flash",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "description": "코드 복잡도 및 경계 검토"
+    },
+    {
+      "name": "doc-writer",
+      "model": "gemini-2.5-flash",
+      "tools": [
+        "Read",
+        "Write"
+      ],
+      "description": "단원 README 및 문서 동기화"
+    }
+  ]
+}
