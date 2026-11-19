@@ -2,3 +2,4 @@ docs/prompt_histories/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+*.pyc
