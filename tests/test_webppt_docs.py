@@ -117,5 +117,14 @@ class WebPptDocsTests(unittest.TestCase):
                 self.assertIn("<br>", item, f"명령줄과 설명글 사이 <br> 줄바꿈 누락: {item}")
                 self.assertFalse(item.endswith("한다.") or item.endswith("본다."), f"명령형 종결 미준수: {item}")
 
+    def test_no_2026_in_webppt_and_timetable_nowrap(self) -> None:
+        for rel in ("index.html", "presenter.html", "engine.js", "ui.js", "deck.css"):
+            self.assertNotIn("2026", (DOCS_DIR / rel).read_text(encoding="utf-8"), f"Web PPT 내 2026 문구 잔존: {rel}")
+        for js in (DOCS_DIR / "slides").glob("*.js"):
+            self.assertNotIn("2026", js.read_text(encoding="utf-8"), f"슬라이드 내 2026 문구 잔존: {js.name}")
+        css = (DOCS_DIR / "deck.css").read_text(encoding="utf-8")
+        self.assertIn("tbl-timetable", css)
+        self.assertIn("white-space: nowrap;", css)
+
 if __name__ == "__main__":
     unittest.main()

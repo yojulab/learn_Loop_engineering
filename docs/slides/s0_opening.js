@@ -10,7 +10,7 @@
     theme: 'night',
     dots: true,
     noChrome: true,
-    title: '2026 모던 AI 에이전트 스택 & Hermes Engineering (5시간 과정)',
+    title: '모던 AI 에이전트 스택 & Hermes Engineering (5시간 과정)',
     notes: '총 300분(5시간) 실전 강의. 각 단원(ch00~ch12)의 이론을 익힌 뒤, 바로 다음 한 페이지에서 실습 미션과 클릭 토글 모범 답안을 확인합니다.',
     build(el, A) {
       const tag = h('div', 'row abs', el);
@@ -22,7 +22,7 @@
 
       const hero = h('div', 'abs', el);
       hero.style.cssText = 'left:110px;top:210px;width:1280px';
-      h('div', 'h1', hero, '2026 모던 AI 에이전트 스택<br><span class="hl">Hermes Engineering</span>');
+      h('div', 'h1', hero, '모던 AI 에이전트 스택<br><span class="hl">Hermes Engineering</span>');
       h('div', 'b1', hero, '프롤로그(ch00)부터 LLMOps·로드맵(ch12)까지 —<br>이론 · 단원별 실습 · 클릭형 모범 답안을 <b>한 화면에서</b> 완주하는 5시간 웹 PPT').style.cssText = 'margin-top:32px;color:#AEB8D3';
       A(hero, 'up', 0.12, { dur: 0.55 });
 
@@ -48,7 +48,7 @@
 
       const c1 = card(el, { x: 100, y: 225, w: 940, h: 740, pad: 30 });
       c1.innerHTML = `<div class="h4" style="margin-bottom:16px">시간 배분 타임테이블 (총 300분)</div>
-      <table class="tbl">
+      <table class="tbl tbl-timetable">
         <thead><tr><th>시간 블록</th><th>단원 범위</th><th>핵심 주제 & 실습</th><th>배분</th></tr></thead>
         <tbody>
           <tr><td><b>Intro</b></td><td><code>ch00</code></td><td>4계층 12대 스택 &amp; Any-Platform 환경 진단</td><td><b>30분</b></td></tr>

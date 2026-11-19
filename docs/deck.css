@@ -164,6 +164,10 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 23px; }
 table.tbl th, table.tbl td { padding: 14px 18px; border-bottom: 1.5px solid var(--ln); text-align: left; vertical-align: top; }
 table.tbl th { font-weight: 800; color: var(--fg); background: rgba(15,27,61,.04); }
 .theme-ink table.tbl th, .theme-night table.tbl th { background: rgba(255,255,255,.06); }
+table.tbl-timetable th, table.tbl-timetable td { padding: 14px; }
+table.tbl-timetable th:nth-child(1), table.tbl-timetable td:nth-child(1),
+table.tbl-timetable th:nth-child(2), table.tbl-timetable td:nth-child(2),
+table.tbl-timetable th:nth-child(4), table.tbl-timetable td:nth-child(4) { white-space: nowrap; }
 
 /* 하단 진행 표시(Chrome) & 목차 */
 .chrome { position: absolute; left: 0; right: 0; bottom: 0; height: 76px; z-index: 50; pointer-events: none; }
