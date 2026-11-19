@@ -48,11 +48,11 @@
 
       const c2 = card(el, { x: 970, y: 230, w: 850, h: 720, pad: 34 });
       c2.innerHTML = `<div class="h3">Quote CLI 4대 실습 기능</div>
-      <ul class="lab-steps" style="margin-top:24px">
-        <li><code>--all</code> / <code>--tag &lt;태그&gt;</code> : <code>quotes.json</code> 기반 필터링 출력</li>
-        <li><code>--author &lt;저자&gt;</code> / <code>--json</code> : 구조화 출력 지원</li>
-        <li><code>--random</code> : 시드 기반 또는 결정론적 랜덤 명언 추출</li>
-        <li><code>interactive_demo.py</code> : REPL 대화형 루프 데모</li>
+      <ul class="lab-steps" style="margin-top:20px">
+        <li><code>--all</code> / <code>--tag &lt;태그&gt;</code><br><code>quotes.json</code> 기반 전체·태그 필터링 결과를 출력.</li>
+        <li><code>--author &lt;저자&gt;</code> / <code>--json</code><br>저자별 필터링과 구조화 JSON 출력 포맷을 확인.</li>
+        <li><code>--random --seed &lt;숫자&gt;</code><br>결정론적 시드 기반 랜덤 명언을 추출.</li>
+        <li><code>interactive_demo.py</code><br>REPL 대화형 루프 데모를 실행해 입력 흐름을 점검.</li>
       </ul>
       <div class="answer-hint" style="margin-top:28px">호환 경로: <code>ch01/quote-cli/</code> → <code>ch01-agentic-coding/quote-cli/</code> (동일 코드)</div>`;
       A(c2, 'up', 0.2, { dur: 0.45 });
@@ -75,9 +75,9 @@
         duration: '20분',
         missionTitle: '태그·저자 검색 및 JSON 출력을 지원하는 Quote CLI 검증',
         steps: [
-          '<code>ch01/quote-cli/quote_cli.py --tag engineering --json</code> 실행 결과를 확인한다.',
-          '<code>--author "Kent Beck"</code> 또는 <code>--random --seed 42</code> 동작을 테스트한다.',
-          '<code>test_quote_cli.py</code> 단위 테스트를 실행해 전 케이스 통과를 확인한다.',
+          '<code>ch01/quote-cli/quote_cli.py --tag engineering --json</code><br>태그 필터링과 JSON 구조화 출력 결과를 확인.',
+          '<code>--author "Kent Beck"</code> / <code>--random --seed 42</code><br>저자 검색과 결정론적 랜덤 추출 동작을 검증.',
+          '<code>test_quote_cli.py</code><br>단위 테스트 스위트를 실행해 전 케이스 통과를 확인.',
         ],
         runCmd: 'python3 ch01/quote-cli/quote_cli.py --tag engineering --json\npython3 -m unittest discover -s ch01-agentic-coding/quote-cli/tests -p "test_*.py" -v',
         answerLabel: 'ch01 모범 답안 열기 (Tree + 구현 코드)',
@@ -131,11 +131,11 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
 
       const c2 = card(el, { x: 980, y: 225, w: 840, h: 720, pad: 34 });
       c2.innerHTML = `<div class="h3">플랫폼별 MCP·훅 브리지 + 제2장 오타 호환</div>
-      <ul class="lab-steps" style="margin-top:20px">
-        <li><code>mcp_config_claude.json</code> · <code>mcp_config_chatgpt.json</code> · <code>mcp_config_gemini.json</code> 3종 설정 제공</li>
-        <li><code>hooks/platform_bridge.py</code> : 플랫폼별 페이로드를 표준 포맷으로 정규화</li>
-        <li><code>audit_logger.py</code> : PostToolUse 도구 실행 감사 로그 기록</li>
-        <li>도서 제2장 오타 호환: <code>ch04/quote-cli</code> → <code>ch02-mcp-and-hooks/quote-mcp</code> 심볼릭 링크 제공</li>
+      <ul class="lab-steps" style="margin-top:18px">
+        <li><code>mcp_config_claude.json</code> · <code>chatgpt</code> · <code>gemini</code><br>3대 플랫폼 전용 MCP/Tool 설정 파일을 분리 제공.</li>
+        <li><code>hooks/platform_bridge.py</code><br>플랫폼별 훅 페이로드를 표준 내부 포맷으로 정규화.</li>
+        <li><code>audit_logger.py</code><br>PostToolUse 단계에서 도구 실행 감사 로그를 기록.</li>
+        <li><code>ch04/quote-cli</code> → <code>ch02-mcp-and-hooks/quote-mcp</code><br>도서 제2장 오타 경로 호환용 심볼릭 링크를 유지.</li>
       </ul>`;
       A(c2, 'up', 0.22, { dur: 0.45 });
     },
@@ -157,9 +157,9 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
         duration: '25분',
         missionTitle: 'Quote MCP 도구 실행과 위험 Bash 차단 훅 동작 검증',
         steps: [
-          '<code>ch02/quote-mcp/main.py --self-test</code>로 MCP 도구 목록과 응답을 확인한다.',
-          '<code>block_dangerous_bash.py</code>에 <code>rm -rf</code>와 안전 명령을 파이프로 전달해 exit code 2 vs 0을 확인한다.',
-          '<code>mcp_config_claude.json</code> / <code>chatgpt</code> / <code>gemini</code> 설정 차이를 비교한다.',
+          '<code>ch02/quote-mcp/main.py --self-test</code><br>실행 후 MCP 도구 목록과 정상 응답을 확인.',
+          '<code>block_dangerous_bash.py</code><br><code>rm -rf</code>와 안전 명령을 전달해 exit code <code>2</code> vs <code>0</code>을 검증.',
+          '<code>mcp_config_claude.json</code> · <code>chatgpt</code> · <code>gemini</code><br>3대 플랫폼 설정 스키마 차이를 비교.',
         ],
         runCmd: 'python3 ch02/quote-mcp/main.py --self-test\npython3 -m unittest discover -s ch02-mcp-and-hooks/quote-mcp/tests -p "test_*.py" -v',
         answerLabel: 'ch02 모범 답안 열기 (Tree + 훅·MCP 코드)',
@@ -239,9 +239,9 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
         duration: '30분',
         missionTitle: '3단계 Progressive Disclosure 스킬 구조 검증 및 플랫폼 변환',
         steps: [
-          '<code>ch03/github-workflow-skills/validate_skills.py</code>로 5종 스킬의 <code>name</code>·<code>description</code>·<code>SKILL.md</code> 규격을 검사한다.',
-          '<code>export_platform_skills.py --platform chatgpt --output /tmp/skills_out</code> 등으로 3개 플랫폼 포맷 생성을 확인한다.',
-          '<code>tests/test_skills.py</code> 단위 테스트를 실행한다.',
+          '<code>ch03/github-workflow-skills/validate_skills.py --all</code><br>5종 스킬의 Frontmatter(<code>name</code>·<code>description</code>) 규격을 검사.',
+          '<code>export_platform_skills.py --platform chatgpt --output /tmp/skills_out</code><br>실행 후 3개 플랫폼 전용 스킬 번들 생성을 확인.',
+          '<code>tests/test_skills.py</code><br>단위 테스트를 실행해 로더 및 검증 결과를 확인.',
         ],
         runCmd: 'python3 ch03/github-workflow-skills/validate_skills.py --all\npython3 -m unittest discover -s ch03-skills/github-workflow-skills/tests -p "test_*.py" -v',
         answerLabel: 'ch03 모범 답안 열기 (Tree + SKILL.md 구조)',

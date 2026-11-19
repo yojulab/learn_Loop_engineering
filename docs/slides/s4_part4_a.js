@@ -68,9 +68,9 @@
         duration: '20분',
         missionTitle: 'Planner-Generator-Evaluator 분리 실행 및 블라인드 합의 확인',
         steps: [
-          '<code>ch09/harness/orchestrator.py --platform claude</code>(또는 <code>chatgpt</code>/<code>gemini</code>)를 실행한다.',
-          '<code>ch09/harness/blind_consensus.py</code>의 1줄 비교 로직과 3회 불일치 <code>HALT</code> 생성 조건을 확인한다.',
-          '<code>ch09-orchestration/harness/tests/</code> 단위 테스트로 채점표 컷오프 판정을 검증한다.',
+          '<code>ch09/harness/orchestrator.py --platform claude|chatgpt|gemini --demo</code><br>3-Agent 오케스트레이션을 실행해 단계별 산출물을 확인.',
+          '<code>ch09/harness/blind_consensus.py</code><br>첫 줄(<code>선택: X</code>) 비교 로직과 3회 불일치 시 <code>HALT</code> 생성을 검증.',
+          '<code>ch09-orchestration/harness/tests/</code><br>0~3점 채점표(Rubric) 컷오프 판정 테스트를 실행.',
         ],
         runCmd: 'python3 ch09/harness/orchestrator.py --platform chatgpt --demo\npython3 -m unittest discover -s ch09-orchestration/harness/tests -p "test_*.py" -v',
         answerLabel: 'ch09 모범 답안 열기 (Tree + 합의·채점표)',
@@ -107,19 +107,19 @@
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
       c1.innerHTML = `<div class="h3">5단계 &amp; 선택적 되돌림 (Selective Rollback)</div>
       <div class="b2" style="margin-top:16px"><b>DISCOVER → PLAN → EXECUTE → VERIFY → ITERATE</b></div>
-      <ul class="lab-steps" style="margin-top:20px">
-        <li><b>구현/테스트 오류</b> → 처음부터 재시작 X, 즉시 <code>EXECUTE</code>로 되돌림</li>
-        <li><b>범위/설계 모호성</b> → <code>PLAN</code>으로 되돌림</li>
-        <li><b>전제/요구사항 오류</b> → <code>DISCOVER</code>로 되돌림</li>
+      <ul class="lab-steps" style="margin-top:18px">
+        <li><b>구현/테스트 오류</b><br>처음부터 재시작하지 않고 즉시 <code>EXECUTE</code> 단계로 되돌림.</li>
+        <li><b>범위/설계 모호성</b><br><code>PLAN</code> 단계로 돌아가 작업 분해와 <code>touch</code>를 보완.</li>
+        <li><b>전제/요구사항 오류</b><br><code>DISCOVER</code> 단계로 되돌아가 의뢰 사양을 재확인.</li>
       </ul>`;
       A(c1, 'up', 0.1, { dur: 0.45 });
 
       const c2 = card(el, { x: 980, y: 230, w: 840, h: 720, pad: 34 });
       c2.innerHTML = `<div class="h3">완료 3기준 + 중단 4기준 (7대 조건)</div>
-      <ul class="lab-steps" style="margin-top:20px">
-        <li><b>완료 조건 (3)</b> : 성공(exit=0) · 품질(린트/커버리지) · 안정성(N회 연속 통과)</li>
-        <li><b>중단 조건 (4)</b> : 반복 한도 · 시간·비용 한도 · <b>Stall(동일 오류 반복/상태 불변)</b> · 비가역 작업 인간 이관(HALT)</li>
-        <li><b>CALC-001~004</b> : <code>loop.py</code>로 4대 목표 계산 및 리포트 자동 생성</li>
+      <ul class="lab-steps" style="margin-top:18px">
+        <li><b>완료 조건 (3가지)</b><br>종료 코드 0(성공) · 린트/커버리지(품질) · N회 연속 통과(안정성).</li>
+        <li><b>중단 조건 (4가지)</b><br>반복·비용 한도 초과, Stall(상태 불변·동일 오류), 비가역 작업 <code>HALT</code>.</li>
+        <li><code>CALC-001</code> ~ <code>CALC-004</code><br><code>loop.py</code>로 4대 목표 상태 전이와 완료 리포트를 생성.</li>
       </ul>`;
       A(c2, 'up', 0.2, { dur: 0.45 });
     },
@@ -141,9 +141,9 @@
         duration: '25분',
         missionTitle: 'CALC-001~004 아우터 루프 완주 및 7대 완료/중단 조건 테스트',
         steps: [
-          '<code>AGENT_PLATFORM=gemini python3 ch10/todo-loop/loop.py --platform gemini</code>를 실행해 5단계 전이를 확인한다.',
-          '<code>test_outer_loop.py</code>에서 동일 오류 시그니처 반복(Stall) 시 자동 중단 및 선택적 되돌림 케이스를 확인한다.',
-          '<code>docs/ARCHITECTURE.md</code> 내의 아우터 루프 사양과 비교해 본다.',
+          '<code>AGENT_PLATFORM=gemini python3 ch10/todo-loop/loop.py --platform gemini</code><br>실행 후 5단계 상태 전이와 <code>CALC-001~004</code> 결과를 확인.',
+          '<code>test_outer_loop.py</code><br>동일 오류 반복(Stall) 시 자동 중단과 선택적 되돌림 케이스를 검증.',
+          '<code>docs/ARCHITECTURE.md</code><br>아우터 루프 설계 사양과 실제 구현 흐름을 비교.',
         ],
         runCmd: 'python3 ch10/todo-loop/loop.py --platform claude\npython3 -m unittest discover -s ch10-outer-loop/todo-loop/tests -p "test_*.py" -v',
         answerLabel: 'ch10 모범 답안 열기 (Tree + 7대 조건)',

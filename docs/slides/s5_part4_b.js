@@ -49,10 +49,10 @@ litellm_settings:
 
       const c2 = card(el, { x: 1050, y: 225, w: 770, h: 720, pad: 34 });
       c2.innerHTML = `<div class="h3">왜 LiteLLM 프록시인가?</div>
-      <ul class="lab-steps" style="margin-top:22px">
-        <li><b>코드 침투 Zero</b> : 앱은 <code>OPENAI_BASE_URL</code>만 <code>http://localhost:4000</code>으로 변경</li>
-        <li><b>Any-Platform 단일 게이트웨이</b> : Claude·ChatGPT·Gemini 트래픽이 모두 하나의 Trace 스트림에 기록됨</li>
-        <li><b>프롬프트 자산 업로드</b> : <code>seed_prompts.py</code> 직접 업서트 + Trace에서 바로 승격하는 두 경로 모두 지원</li>
+      <ul class="lab-steps" style="margin-top:18px">
+        <li><code>OPENAI_BASE_URL=http://localhost:4000</code><br>앱 코드 수정 없이 엔드포인트만 변경해 무코드 관측을 연결.</li>
+        <li><b>Any-Platform 단일 게이트웨이</b><br>Claude · ChatGPT · Gemini 호출 로그를 하나의 Trace 스트림으로 통합 수집.</li>
+        <li><code>seed_prompts.py</code> · <code>trace_to_prompt.py</code><br>직접 업서트와 Trace 기반 프롬프트 승격 두 경로를 모두 지원.</li>
       </ul>`;
       A(c2, 'up', 0.22, { dur: 0.45 });
     },
@@ -105,9 +105,9 @@ litellm_settings:
         duration: '25분',
         missionTitle: 'LiteLLM 트레이스 기반 프롬프트 등록, Fetch 및 회귀 평가 완주',
         steps: [
-          '<code>ch11/support-assistant/trace_to_prompt.py --demo</code>로 Trace 입력에서 프롬프트를 추출·등록한다.',
-          '<code>ch11/support-assistant/fetch_prompt.py --name support-reply --label production</code>으로 Mustache <code>{{customer_query}}</code> 렌더링을 확인한다.',
-          '<code>run_evals.py --platform claude</code>(및 <code>chatgpt</code>/<code>gemini</code>)와 <code>test_support_assistant.py</code>를 실행한다.',
+          '<code>ch11/support-assistant/trace_to_prompt.py --demo</code><br>Trace 입력 페이로드에서 프롬프트를 추출해 Langfuse 자산으로 등록.',
+          '<code>ch11/support-assistant/fetch_prompt.py --name support-reply --label production</code><br><code>production</code> 라벨 버전을 조회해 Mustache <code>{{customer_query}}</code> 렌더링을 확인.',
+          '<code>run_evals.py --platform gemini</code> · <code>test_support_assistant.py</code><br>3종 Eval 게이트와 Mock HTTP v2 통합 테스트를 실행.',
         ],
         runCmd: 'python3 ch11/support-assistant/run_evals.py --platform gemini\npython3 -m unittest discover -s ch11-eval-and-llmops/support-assistant/tests -p "test_*.py" -v',
         answerLabel: 'ch11 모범 답안 열기 (Tree + Mock API/Eval)',
@@ -174,9 +174,9 @@ rendered = render_mustache(fetched["prompt"], {"customer_query": "환불 문의"
         duration: '15분',
         missionTitle: '도입 성숙도 진단(stage_readiness_check.py) 및 전 단원 100% 검증 완주',
         steps: [
-          '<code>ch12-epilogue/stage_readiness_check.py --json</code>을 실행해 현재 저장소의 Stage 1~4 달성도를 점검한다.',
-          '<code>python3 scripts/verify_chapters.py --all</code>로 루트, 플랫폼, ch00~ch12 및 웹 PPT 통합 검증을 실행한다.',
-          '<code>git status</code> 및 <code>docs/index.html</code>(GitHub Pages)를 최종 확인한다.',
+          '<code>ch12-epilogue/stage_readiness_check.py --json</code><br>실행 후 현재 저장소의 Stage 1~4 도입 성숙도를 점검.',
+          '<code>python3 scripts/verify_chapters.py --all</code><br>루트·플랫폼·ch00~ch12·웹 PPT 통합 검증 게이트를 실행.',
+          '<code>git status</code> · <code>docs/index.html</code><br>워킹트리 클린 상태와 GitHub Pages 웹 PPT 렌더링을 최종 확인.',
         ],
         runCmd: 'python3 ch12-epilogue/stage_readiness_check.py --json\npython3 scripts/verify_chapters.py --all',
         answerLabel: 'ch12 모범 답안 열기 (Tree + 최종 검증 결과)',

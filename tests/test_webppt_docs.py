@@ -99,5 +99,23 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertNotIn("메모 (N)", engine_js)
         self.assertNotIn("k === 'n'", engine_js)
 
+    def test_lab_steps_linebreak_imperative_and_block_layout(self) -> None:
+        css = (DOCS_DIR / "deck.css").read_text(encoding="utf-8")
+        self.assertIn(".lab-steps li { position: relative; display: block;", css)
+        self.assertIn("white-space: pre-wrap;", css)
+        slides_text = "\n".join(
+            (DOCS_DIR / f"slides/{name}").read_text(encoding="utf-8")
+            for name in ("s0_opening.js", "s1_part1.js", "s2_part2.js", "s3_part3.js", "s4_part4_a.js", "s5_part4_b.js")
+        )
+        # 모든 실습 스텝 문자열이 <br> 줄바꿈을 포함하고 ~한다./본다. 대신 명령형 종결을 사용
+        step_blocks = re.findall(r"steps:\s*\[(.*?)\]", slides_text, re.DOTALL)
+        self.assertGreaterEqual(len(step_blocks), 13)
+        for block in step_blocks:
+            items = re.findall(r"'([^']+)'", block)
+            self.assertGreaterEqual(len(items), 3)
+            for item in items:
+                self.assertIn("<br>", item, f"명령줄과 설명글 사이 <br> 줄바꿈 누락: {item}")
+                self.assertFalse(item.endswith("한다.") or item.endswith("본다."), f"명령형 종결 미준수: {item}")
+
 if __name__ == "__main__":
     unittest.main()

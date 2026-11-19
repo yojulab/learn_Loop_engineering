@@ -34,12 +34,10 @@
 
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
       c1.innerHTML = `<div class="h3">5종 전문 서브에이전트 (<code>.claude/agents/</code>)</div>
-      <ul class="lab-steps" style="margin-top:20px">
-        <li><b>code-reviewer</b> : 읽기 전용 품질·보안 감사</li>
-        <li><b>test-writer</b> : 단위/엣지 케이스 테스트 생성</li>
-        <li><b>debugger</b> : 실패 트레이스 원인 추적</li>
-        <li><b>doc-updater</b> : README 및 API 문서 동기화</li>
-        <li><b>feature-builder</b> : 지정 스코프 내 기능 구현</li>
+      <ul class="lab-steps" style="margin-top:16px">
+        <li><code>code-reviewer</code> · <code>test-writer</code><br>읽기 전용 품질·보안 감사 및 단위·엣지 케이스 테스트 작성.</li>
+        <li><code>debugger</code> · <code>doc-updater</code><br>실패 트레이스 원인 추적 및 README·API 문서 동기화.</li>
+        <li><code>feature-builder</code><br>지정된 <code>touch</code> 스코프 내부 기능만 구현.</li>
       </ul>
       <div class="answer-hint" style="margin-top:20px">멀티 플랫폼 포팅: <code>agent_definitions_chatgpt.yaml</code> &amp; <code>agent_definitions_gemini.json</code> 동시 제공</div>`;
       A(c1, 'up', 0.1, { dur: 0.45 });
@@ -74,9 +72,9 @@ workflow.phase("verify", pipeline([
         duration: '20분',
         missionTitle: '5종 에이전트 역할 정의 검증 및 동적 워크플로 오케스트레이션',
         steps: [
-          '<code>ch06/dynamic_workflow.py --platform claude</code> 와 <code>--platform chatgpt</code> / <code>gemini</code>를 실행해 단계별 실행 로그를 비교한다.',
-          '<code>ch06/quote-cli/quote_agent.py --query "테스트"</code>로 검색 확장 에이전트를 테스트한다.',
-          '<code>ch06-subagents-workflow/tests/</code> 단위 테스트 전체 통과를 확인한다.',
+          '<code>ch06/dynamic_workflow.py --platform claude|chatgpt|gemini</code><br>플랫폼 옵션을 바꿔 실행하고 단계별 파이프라인 로그를 비교.',
+          '<code>ch06/quote-cli/quote_agent.py --query "테스트"</code><br>검색 확장 에이전트 응답을 테스트.',
+          '<code>ch06-subagents-workflow/tests/</code><br>단위 테스트를 실행해 전 케이스 통과를 확인.',
         ],
         runCmd: 'python3 ch06/dynamic_workflow.py --platform gemini\npython3 -m unittest discover -s ch06-subagents-workflow/tests -p "test_*.py" -v',
         answerLabel: 'ch06 모범 답안 열기 (Tree + 워크플로 결과)',
@@ -140,9 +138,9 @@ workflow.phase("verify", pipeline([
         duration: '20분',
         missionTitle: '100줄 AGENTS.md 검증과 아키텍처·보안·문서 3종 하네스 실행',
         steps: [
-          '<code>ch07/harness-templates/arch_linter.py</code>로 모듈 의존성 방향과 라인 상한 위반 여부를 점검한다.',
-          '<code>guardrails.py</code>와 <code>doc_gardening.py</code>를 실행해 깨진 링크와 시크릿 패턴을 검사한다.',
-          '<code>harness-templates/tests/</code> 단위 테스트로 의도적 위반 탐지(Negative Test)를 확인한다.',
+          '<code>ch07/harness-templates/arch_linter.py --target .</code><br>모듈 의존성 방향과 <code>AGENTS.md</code> 100줄 상한 준수를 점검.',
+          '<code>guardrails.py</code> · <code>doc_gardening.py</code><br>시크릿 노출 패턴과 깨진 문서 링크를 검사.',
+          '<code>harness-templates/tests/</code><br>의도적 위반 탐지(Negative Test) 통과 여부를 확인.',
         ],
         runCmd: 'python3 ch07/harness-templates/arch_linter.py --target .\npython3 -m unittest discover -s ch07-harness-engineering/harness-templates/tests -p "test_*.py" -v',
         answerLabel: 'ch07 모범 답안 열기 (Tree + 린터 규칙)',
@@ -178,19 +176,19 @@ tree = ast.parse(path.read_text(encoding="utf-8"))
 
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
       c1.innerHTML = `<div class="h3">RSS Wiki 앱 (<code>ch08/rss-wiki/</code>)</div>
-      <ul class="lab-steps" style="margin-top:20px">
-        <li><code>db.py</code> : SQLite <code>FTS5</code> 가상 테이블 기반 전문 검색 인덱스</li>
-        <li><code>collector.py</code> : 로컬 샘플 피드 파싱 &amp; 중복 제거 저장</li>
-        <li><code>app.py</code> : Python 내장 <code>http.server</code> 웹 UI + JSON 검색 API</li>
+      <ul class="lab-steps" style="margin-top:18px">
+        <li><code>db.py</code><br>SQLite <code>FTS5</code> 가상 테이블 기반 전문 검색 인덱스를 구축.</li>
+        <li><code>collector.py</code><br>로컬 샘플 피드를 파싱하고 중복을 제거해 저장.</li>
+        <li><code>app.py</code><br>Python 내장 <code>http.server</code> 웹 UI와 JSON 검색 API를 제공.</li>
       </ul>`;
       A(c1, 'up', 0.1, { dur: 0.45 });
 
       const c2 = card(el, { x: 980, y: 230, w: 840, h: 720, pad: 34 });
       c2.innerHTML = `<div class="h3">Ralph Loop &amp; <code>/goal</code> 3종 셸 스크립트</div>
-      <ul class="lab-steps" style="margin-top:20px">
-        <li><b>핵심 아이디어</b> : 이터레이션마다 컨텍스트 창을 비우고 파일 상태만 읽어 새로 시작 → 컨텍스트 부패 차단</li>
-        <li><b>무한 루프 방지</b> : <code>MAX_ITERS</code> 상한 + 테스트 종료 코드 확인 + 연속 동일 에러 시 중단</li>
-        <li><b>3대 플랫폼 지원</b> : <code>ralph_loop.sh</code>(Claude) · <code>ralph_loop_chatgpt.sh</code> · <code>ralph_loop_gemini.sh</code> + <code>goal_evaluator.py</code></li>
+      <ul class="lab-steps" style="margin-top:18px">
+        <li><b>컨텍스트 초기화 원칙</b><br>반복마다 세션을 비우고 파일 상태만 다시 읽어 컨텍스트 부패를 차단.</li>
+        <li><b>무한 루프 가드</b><br><code>MAX_ITERS</code> 상한, 종료 코드 확인, 연속 동일 에러 시 즉시 중단.</li>
+        <li><code>ralph_loop.sh</code> · <code>chatgpt.sh</code> · <code>gemini.sh</code><br>3대 플랫폼용 셸 루프와 <code>goal_evaluator.py</code>를 함께 제공.</li>
       </ul>`;
       A(c2, 'up', 0.2, { dur: 0.45 });
     },
@@ -212,9 +210,9 @@ tree = ast.parse(path.read_text(encoding="utf-8"))
         duration: '25분',
         missionTitle: 'SQLite FTS5 전문 검색과 Ralph Loop 목표 달성 판정기 검증',
         steps: [
-          '<code>ch08/rss-wiki/db.py</code>와 <code>collector.py</code>를 초기화하는 테스트를 실행해 FTS5 검색을 검증한다.',
-          '<code>ch08/rss-wiki/goal_evaluator.py --self-test</code>로 목표 달성(<code>GOAL_MET</code>) vs 미달(<code>CONTINUE</code>) 판정을 확인한다.',
-          '<code>ralph_loop.sh</code>, <code>ralph_loop_chatgpt.sh</code>, <code>ralph_loop_gemini.sh</code>의 CLI 플래그 차이를 비교한다.',
+          '<code>ch08/rss-wiki/db.py</code>, <code>collector.py</code><br>초기화 테스트를 실행해 FTS5 전문 검색 동작을 검증.',
+          '<code>ch08/rss-wiki/goal_evaluator.py --self-test</code><br>실행 후 목표 달성(<code>GOAL_MET</code>) vs 미달(<code>CONTINUE</code>) 판정을 확인.',
+          '<code>ralph_loop.sh</code> · <code>ralph_loop_chatgpt.sh</code> · <code>ralph_loop_gemini.sh</code><br>3대 플랫폼 스크립트의 비대화형 CLI 플래그 차이를 비교.',
         ],
         runCmd: 'python3 ch08/rss-wiki/goal_evaluator.py --self-test\npython3 -m unittest discover -s ch08-inner-ralph-loop/rss-wiki/tests -p "test_*.py" -v',
         answerLabel: 'ch08 모범 답안 열기 (Tree + FTS5/Goal)',

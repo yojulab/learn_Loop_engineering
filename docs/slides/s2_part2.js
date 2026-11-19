@@ -35,10 +35,10 @@
 
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
       c1.innerHTML = `<div class="h3">7항목 구조화 프롬프트 &amp; 4대 지침 층위</div>
-      <ul class="lab-steps" style="margin-top:20px">
-        <li><b>7항목 템플릿</b>: 역할(Role) · 목표(Goal) · 맥락(Context) · 제약(Constraints) · 예시(Few-shot) · 출력형식(Format) · 검증(Self-Check)</li>
-        <li><b>4대 층위 우선순위</b>: System Global → Project Root(<code>AGENTS.md</code>) → Subdir Scoped → On-Demand Skill</li>
-        <li><b>멀티 플랫폼 변환</b>: <code>prompt_adapter.py</code>로 Claude XML · ChatGPT JSON Schema · Gemini System Instruction 변환</li>
+      <ul class="lab-steps" style="margin-top:18px">
+        <li><b>7항목 프롬프트 템플릿</b><br>Role · Goal · Context · Constraints · Few-shot · Format · Self-Check로 구성.</li>
+        <li><b>4대 지침 층위 우선순위</b><br>System Global → Project Root(<code>AGENTS.md</code>) → Subdir → Skill 순으로 적용.</li>
+        <li><code>prompt_adapter.py</code><br>Claude XML · ChatGPT JSON Schema · Gemini Instruction 포맷으로 변환.</li>
       </ul>`;
       A(c1, 'up', 0.1, { dur: 0.45 });
 
@@ -70,9 +70,9 @@
         duration: '20분',
         missionTitle: '토큰 예산 80% 경보 시뮬레이션과 3대 플랫폼 프롬프트 포맷 변환',
         steps: [
-          '<code>ch04/context_budget.py --demo</code>로 시스템·도구·히스토리별 토큰 점유율과 <code>compaction_needed</code> 경고를 확인한다.',
-          '<code>ch04/prompt_adapter.py --platform claude</code> / <code>chatgpt</code> / <code>gemini</code>로 <code>prompt_template.txt</code>를 변환해 비교한다.',
-          '<code>tests/test_context_engineering.py</code>를 실행해 전체 테스트 통과를 확인한다.',
+          '<code>ch04/context_budget.py --demo</code><br>시스템·도구·히스토리별 토큰 점유율과 압축 경고를 확인.',
+          '<code>ch04/prompt_adapter.py --platform claude|chatgpt|gemini</code><br><code>prompt_template.txt</code>를 각 플랫폼 형식으로 변환해 비교.',
+          '<code>tests/test_context_engineering.py</code><br>단위 테스트를 실행해 전 케이스 통과를 확인.',
         ],
         runCmd: 'python3 ch04/context_budget.py --demo\npython3 -m unittest discover -s ch04-context-engineering/tests -p "test_*.py" -v',
         answerLabel: 'ch04 모범 답안 열기 (Tree + 예산·어댑터)',
@@ -112,10 +112,10 @@
 
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
       c1.innerHTML = `<div class="h3">Agentic RAG 파이프라인 (<code>agentic_rag.py</code>)</div>
-      <ul class="lab-steps" style="margin-top:20px">
-        <li><b>Query Rewrite</b> : 모호한 사용자 질의를 검색용 키워드로 확장</li>
-        <li><b>Hybrid + RRF</b> : TF-IDF 코사인 유사도 + BM25/키워드 결합 후 Reciprocal Rank Fusion 재순위화</li>
-        <li><b>Self-Critique</b> : 검색 결과 신뢰도가 낮으면 재검색 루프 실행</li>
+      <ul class="lab-steps" style="margin-top:18px">
+        <li><b>Query Rewrite</b><br>모호한 사용자 질의를 핵심 검색 키워드로 확장.</li>
+        <li><b>Hybrid + RRF</b><br>TF-IDF 코사인 유사도와 키워드 점수를 Reciprocal Rank Fusion으로 결합.</li>
+        <li><b>Self-Critique</b><br>근거 신뢰도가 기준 미달이면 재검색 루프를 실행.</li>
       </ul>`;
       A(c1, 'up', 0.1, { dur: 0.45 });
 
@@ -146,9 +146,9 @@
         duration: '25분',
         missionTitle: '하이브리드 RRF 검색과 TASKS.md / JOURNAL.md 상태 전이 검증',
         steps: [
-          '<code>ch05/memory_pattern/agentic_rag.py --query "토큰 예산 초과 시 압축 전략"</code>을 실행해 RRF 점수와 자기비평 결과를 본다.',
-          '<code>ch05/memory_pattern/memory_manager.py --self-test</code>로 <code>TASKS.md</code> 완료 마킹 및 <code>JOURNAL.md</code> 기록을 검증한다.',
-          '<code>tests/test_rag_and_memory.py</code> 단위 테스트 전체 통과를 확인한다.',
+          '<code>ch05/memory_pattern/agentic_rag.py --query "토큰 예산 초과 시 압축 전략"</code><br>실행 후 RRF 순위 점수와 자기비평 결과를 확인.',
+          '<code>ch05/memory_pattern/memory_manager.py --self-test</code><br><code>TASKS.md</code> 완료 마킹과 <code>JOURNAL.md</code> 기록을 검증.',
+          '<code>tests/test_rag_and_memory.py</code><br>단위 테스트를 실행해 메모리·RAG 동작을 확인.',
         ],
         runCmd: 'python3 ch05/memory_pattern/agentic_rag.py --query "컨텍스트 오염 방지"\npython3 -m unittest discover -s ch05-rag-and-memory/memory_pattern/tests -p "test_*.py" -v',
         answerLabel: 'ch05 모범 답안 열기 (Tree + RRF 코드)',

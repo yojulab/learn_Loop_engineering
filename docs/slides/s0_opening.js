@@ -185,9 +185,9 @@
         duration: '15분',
         missionTitle: '컨테이너 런타임, SQLite FTS5, 3대 플랫폼 어댑터 상태 점검',
         steps: [
-          '<code>ch00-prologue/stack_check.py</code>를 일반 모드와 <code>--json</code> 모드로 실행해 12대 스택 준비 상태를 확인한다.',
-          '<code>AGENT_PLATFORM</code> 환경 변수를 <code>claude</code>, <code>chatgpt</code>, <code>gemini</code>로 바꿔 어댑터 로드를 검증한다.',
-          '<code>tests/test_repo_root.py</code>를 실행해 <code>AGENTS.md</code> 100줄 제한 및 레거시 부재를 확인한다.',
+          '<code>ch00-prologue/stack_check.py</code> · <code>--json</code><br>일반 모드와 JSON 모드로 실행해 12대 스택 준비 상태를 확인.',
+          '<code>AGENT_PLATFORM=claude|chatgpt|gemini</code><br>환경 변수를 전환해 3대 플랫폼 어댑터 로드를 검증.',
+          '<code>tests/test_repo_root.py</code><br>테스트를 실행해 <code>AGENTS.md</code> 100줄 제한 및 레거시 부재를 확인.',
         ],
         runCmd: 'python3 ch00-prologue/stack_check.py --json\npython3 -m unittest discover -s platforms/tests -p "test_*.py" -v',
         answerLabel: 'ch00 모범 답안 열기 (Tree + 실행 결과)',
