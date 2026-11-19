@@ -206,21 +206,17 @@ rendered = render_mustache(fetched["prompt"], {"customer_query": "환불 문의"
   DECK.slide({
     id: 'closing',
     part: 'p4b',
-    chap: '수료 & 배포 안내',
+    chap: '수료 & 마무리',
     theme: 'night',
     dots: true,
     noChrome: true,
-    title: '5시간 과정 완주! GitHub Pages 배포 & 실무 적용 체크리스트',
-    notes: '수고하셨습니다! GitHub Pages에서 docs/ 폴더를 활성화하면 팀 내 사내 세미나 자료로 바로 공유할 수 있습니다.',
+    title: '5시간 과정 완주! 신뢰할 수 있는 에이전트 설계 마무리',
+    notes: '수고하셨습니다! 각 단원의 실습 미션과 모범 답안을 팀 프로젝트에 바로 적용해 보세요.',
     build(el, A) {
       const box = h('div', 'abs', el);
-      box.style.cssText = 'left:120px;top:240px;width:1680px';
+      box.style.cssText = 'left:120px;top:360px;width:1680px';
       chip(box, 'COMPLETED · 5-HOUR WORKSHOP', { bg: 'rgba(75,227,166,.18)', fg: '#4BE3A6' });
       h('div', 'h1', box, '이제 <span class="hl">신뢰할 수 있는 에이전트</span>를<br>직접 설계할 준비가 끝났습니다').style.cssText = 'margin-top:28px';
-      const w = win(el, { x: 0, y: 360, w: 1680, h: 260, dark: true, title: 'GitHub Pages 활성화 3단계' });
-      w.body.innerHTML = `<div class="term"><span class="ok">1.</span> GitHub Repository → Settings → Pages → Build and deployment: Deploy from a branch
-<span class="ok">2.</span> Branch: <span class="hl">main</span> (또는 <span class="hl">develop</span>) / Folder: <span class="hl">/docs</span> 선택 후 Save
-<span class="ok">3.</span> 접속: https://&lt;username&gt;.github.io/&lt;repo&gt;/  (단축키 <span class="hl">A</span>로 모범답안 토글, <span class="hl">?print</span>로 PDF 인쇄)</div>`;
       A(box, 'up', 0, { dur: 0.55 });
     },
   });
