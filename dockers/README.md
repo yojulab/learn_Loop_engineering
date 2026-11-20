@@ -1,6 +1,6 @@
 # `dockers/` — Loop Engineering 실습 환경 (Docker Compose)
 
-Langfuse(LLM 관측·프롬프트 관리) + PostgreSQL + 앱 컨테이너(Python 3.13 · Claude Code CLI · langfuse SDK)를 한 번에 올립니다.
+Langfuse(LLM 관측·프롬프트 관리) + PostgreSQL + 앱 컨테이너(Python 3.13 · Claude Code CLI · Antigravity CLI(`agy`) · langfuse SDK)를 한 번에 올립니다.
 호스트 포트는 게시하지 않으며, 볼륨 경로와 주요 환경 변수는 모두 `.env`에서 설정합니다.
 
 ## 1. 구성
@@ -9,7 +9,7 @@ Langfuse(LLM 관측·프롬프트 관리) + PostgreSQL + 앱 컨테이너(Python
 | :--- | :--- | :--- |
 | `db_postgres` | `postgres:16` | Langfuse 전용 DB (`POSTGRES_DATA_DIR`에 영속화) |
 | `langfuse` | `langfuse/langfuse:2` (Docker Hub) | Trace 수집 · 프롬프트 관리 (조직·프로젝트·API Key 자동 생성) |
-| `app` | `Dockerfile` (Python 3.13 + Node.js) | `claude` CLI, `langfuse` SDK, 저장소 코드 실행 환경 |
+| `app` | `Dockerfile` (Python 3.13 + Node.js) | `claude` · `agy` CLI, `langfuse` SDK, 저장소 코드 실행 환경 |
 
 `app`에서 Langfuse 접속 주소는 `http://langfuse:3000`(내부 네트워크)입니다.
 
@@ -27,6 +27,7 @@ docker compose exec app bash  # 앱 컨테이너 진입 (작업 디렉터리: /a
 
 ```bash
 claude --version                                  # Claude Code CLI
+agy --version                                     # Antigravity CLI
 claude                                            # 최초 1회 로그인 (또는 .env 의 ANTHROPIC_API_KEY)
 python3 scripts/verify_chapters.py --all          # 전 단원 통합 검증
 python3 ch11/support-assistant/trace_to_prompt.py --demo --json

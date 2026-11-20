@@ -26,9 +26,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN npm install -g @anthropic-ai/claude-code \
     && npm cache clean --force
 
+# Antigravity CLI 네이티브 바이너리 설치
+RUN curl -fsSL https://antigravity.google/cli/install.sh | bash
+
+# PATH 등록
+ENV PATH="/root/.local/bin:${PATH}"
+
 # Python 패키지 (langfuse SDK 등)
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r /tmp/requirements.txt
 
-WORKDIR /apps/learn_Loop_engineering
+WORKDIR /apps

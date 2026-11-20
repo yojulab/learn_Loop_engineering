@@ -94,7 +94,7 @@ def resolve_platform(platform: str = "auto") -> str:
         return "claude"
     if shutil.which("codex"):
         return "chatgpt"
-    if shutil.which("gemini"):
+    if shutil.which("agy"):
         return "gemini"
 
     # 3) 무중단 오프라인 폴백

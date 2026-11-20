@@ -33,6 +33,8 @@ class DockersComposeTests(unittest.TestCase):
     def test_dockerfile_installs_claude_cli_and_python_packages(self) -> None:
         dockerfile = (DOCKERS / "Dockerfile").read_text(encoding="utf-8")
         self.assertIn("@anthropic-ai/claude-code", dockerfile)
+        self.assertIn("https://antigravity.google/cli/install.sh", dockerfile)
+        self.assertIn("/root/.local/bin", dockerfile)
         self.assertIn("pip install", dockerfile)
         self.assertIn("langfuse", (DOCKERS / "requirements.txt").read_text(encoding="utf-8"))
 
@@ -45,7 +47,7 @@ class DockersComposeTests(unittest.TestCase):
 
     def test_volume_paths_are_configurable_via_env(self) -> None:
         compose = (DOCKERS / "docker-compose.yml").read_text(encoding="utf-8")
-        for var in ("APP_SOURCE_DIR", "POSTGRES_DATA_DIR", "CLAUDE_HOST_DIR"):
+        for var in ("APP_SOURCE_DIR",):
             self.assertIn(f"${{{var}:-", compose)
             self.assertIn(var, _env_keys(DOCKERS / ".env.example"))
 

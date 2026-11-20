@@ -3,7 +3,7 @@ platforms/adapter_gemini.py — Google Gemini / Antigravity CLI 플랫폼 어댑
 
 동작 우선순위:
 1) `GEMINI_API_KEY` 또는 `GOOGLE_API_KEY` 설정 시 Gemini `generateContent` REST API 호출
-2) `gemini` CLI가 설치된 경우 `gemini -p <prompt>` 호출
+2) `agy` (Antigravity CLI)가 설치된 경우 `agy -p <prompt>` 호출
 3) 키 미설정·인증 오류·오프라인 환경에서도 `offline-fallback`으로 무중단 응답 반환
 """
 
@@ -24,7 +24,7 @@ class GeminiPlatformAdapter(BasePlatformAdapter):
     config = PlatformConfig(
         platform="gemini",
         model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
-        cli_binary="gemini",
+        cli_binary="agy",
         api_key_env="GEMINI_API_KEY",
         base_url_env="GEMINI_BASE_URL",
     )
@@ -41,7 +41,7 @@ class GeminiPlatformAdapter(BasePlatformAdapter):
         model = str(kwargs.get("model") or self.config.model)
         force_offline = bool(kwargs.get("force_offline", False))
         strict = bool(kwargs.get("strict", False))
-        fallback_reason = "GEMINI_API_KEY 및 gemini CLI 미설정"
+        fallback_reason = "GEMINI_API_KEY 및 agy CLI 미설정"
 
         if api_key and not force_offline:
             try:
@@ -69,8 +69,7 @@ class GeminiPlatformAdapter(BasePlatformAdapter):
                 fallback_reason = f"http-api fallback ({exc})"
 
         if self.is_cli_available() and not force_offline:
-            cli_env = {**os.environ, "GEMINI_CLI_TRUST_WORKSPACE": "true"}
-            proc = subprocess.run([self.config.cli_binary, "-p", prompt], capture_output=True, text=True, env=cli_env, check=False)
+            proc = subprocess.run([self.config.cli_binary, "-p", prompt], stdin=subprocess.DEVNULL, capture_output=True, text=True, check=False)
             if proc.returncode == 0:
                 return PlatformResponse(platform="gemini", mode="cli", model=model, text=proc.stdout.strip())
             fallback_reason = f"cli fallback (exit={proc.returncode})"

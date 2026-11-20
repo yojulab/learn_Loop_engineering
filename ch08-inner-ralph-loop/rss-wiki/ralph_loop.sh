@@ -19,7 +19,7 @@ if [ -z "${WORKER_CMD:-}" ]; then
         WORKER_CMD="bash ${SCRIPT_DIR}/worker_claude.sh ${SCRIPT_DIR}/PROMPT.md"
       elif command -v codex >/dev/null 2>&1; then
         WORKER_CMD="bash ${SCRIPT_DIR}/worker_chatgpt.sh ${SCRIPT_DIR}/PROMPT.md"
-      elif command -v gemini >/dev/null 2>&1; then
+      elif command -v agy >/dev/null 2>&1; then
         WORKER_CMD="bash ${SCRIPT_DIR}/worker_gemini.sh ${SCRIPT_DIR}/PROMPT.md"
       else
         WORKER_CMD="true"
