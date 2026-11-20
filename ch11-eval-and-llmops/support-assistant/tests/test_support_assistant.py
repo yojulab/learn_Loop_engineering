@@ -221,5 +221,26 @@ class TestSupportAssistant(unittest.TestCase):
             self.assertEqual(len(ops.list_traces()), 3)
 
 
+    def test_seed_langfuse_dashboard_defaults_and_custom_options(self) -> None:
+        import subprocess, sys
+        script = str(APP_DIR / "seed_langfuse_dashboard.py")
+        p_def = subprocess.run([sys.executable, script, "--dry-run", "--json"], capture_output=True, text=True, check=False)
+        self.assertEqual(p_def.returncode, 0, p_def.stderr)
+        data_def = json.loads(p_def.stdout)
+        self.assertEqual(data_def["traces_count"], 72)
+        self.assertEqual(len(data_def["models"]), 3)
+
+        p_cus = subprocess.run(
+            [sys.executable, script, "--hours", "4", "--per-hour", "2", "--models", "gpt-4o-mini,gemini-2.5-flash", "--topic", "결제장애", "--dry-run", "--json"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(p_cus.returncode, 0, p_cus.stderr)
+        data_cus = json.loads(p_cus.stdout)
+        self.assertEqual(data_cus["traces_count"], 8)
+        self.assertEqual(data_cus["topic"], "결제장애")
+        self.assertEqual(data_cus["models"], ["gemini-2.5-flash", "gpt-4o-mini"])
+
 if __name__ == "__main__":
     unittest.main()

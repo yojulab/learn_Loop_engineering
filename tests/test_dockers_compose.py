@@ -28,7 +28,7 @@ class DockersComposeTests(unittest.TestCase):
         compose = (DOCKERS / "docker-compose.yml").read_text(encoding="utf-8")
         for service in ("db_postgres:", "langfuse:", "app:"):
             self.assertIn(f"\n  {service}", compose, f"서비스 누락: {service}")
-        self.assertIn("${LANGFUSE_PORT:-3000}:3000", compose)
+        self.assertIn("${LANGFUSE_PORT:-30000}:3000", compose)
         self.assertEqual(len(re.findall(r"(?m)^\s*ports:\s*$", compose)), 1)
 
     def test_dockerfile_installs_claude_cli_and_python_packages(self) -> None:

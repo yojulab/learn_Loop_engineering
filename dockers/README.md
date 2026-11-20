@@ -1,7 +1,7 @@
 # `dockers/` — Loop Engineering 실습 환경 (Docker Compose)
 
 Langfuse(LLM 관측·프롬프트 관리) + PostgreSQL + 앱 컨테이너(Python 3.13 · Claude Code CLI · Antigravity CLI(`agy`) · langfuse SDK)를 한 번에 올립니다.
-Langfuse 웹 대시보드(`LANGFUSE_PORT=3000`)만 호스트에 게시하며, 볼륨 경로와 주요 환경 변수는 모두 `.env`에서 설정합니다.
+Langfuse 웹 대시보드(`LANGFUSE_PORT=30000`)만 호스트에 게시하며, 볼륨 경로와 주요 환경 변수는 모두 `.env`에서 설정합니다.
 
 ## 1. 구성
 
@@ -31,6 +31,7 @@ agy --version                                     # Antigravity CLI
 claude                                            # 최초 1회 로그인 (또는 .env 의 ANTHROPIC_API_KEY)
 python3 scripts/verify_chapters.py --all          # 전 단원 통합 검증
 python3 ch11/support-assistant/trace_to_prompt.py --demo --json
+python3 ch11/support-assistant/seed_langfuse_dashboard.py      # 대시보드 전체 항목 AI 폴백 초기화
 ```
 
 종료/정리:
@@ -58,7 +59,7 @@ docker compose down -v         # 동일 + 익명 볼륨 제거 (bind 경로 데�
 
 ## 4. Langfuse 웹 대시보드 접속
 
-- **주소**: [http://localhost:3000](http://localhost:3000) (포트 변경은 `.env`의 `LANGFUSE_PORT`)
+- **주소**: [http://localhost:30000](http://localhost:30000) (포트 변경은 `.env`의 `LANGFUSE_PORT`)
 - **기본 관리자 계정**: `admin@example.com` / `admin123456`
 
 ## 5. 참고
