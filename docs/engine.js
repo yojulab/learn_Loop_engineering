@@ -62,7 +62,7 @@
   let root, stage, chromeEl, railSvg, railPartEl, railNumEl, blackEl, ovEl;
   let cur = 0, step = 0, enterAt = 0, stepAt = [0], rafId = 0;
   let jumpBuf = '', jumpTimer = 0;
-  const bc = ('BroadcastChannel' in window) ? new BroadcastChannel('hermes-ppt-sync') : null;
+  const bc = ('BroadcastChannel' in window) ? new BroadcastChannel('loop-ppt-sync') : null;
 
   function buildSlideDom(d, idx) {
     d.index = idx;

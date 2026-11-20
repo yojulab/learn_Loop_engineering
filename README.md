@@ -1,4 +1,4 @@
-# Hermes Engineering — 『2026 모던 AI 에이전트 스택』 전 단원 실습 저장소
+# Loop Engineering — 『2026 모던 AI 에이전트 스택』 전 단원 실습 저장소
 
 ## 1. 단원 학습 목표 & 12대 스택 4계층 맵
 
@@ -66,7 +66,7 @@ flowchart TB
 
 ## 4. 컨테이너 실행 & 테스트 명령어
 
-컨테이너 작업 디렉터리: `graphrag_agent_app_fullstack:/apps/learn_hermes_engineering`
+컨테이너 작업 디렉터리: `graphrag_agent_app_fullstack:/apps/learn_Loop_engineering`
 
 ```bash
 # 프롤로그 4계층 12대 스택 진단
@@ -96,6 +96,7 @@ python3 scripts/verify_chapters.py --all
 ### 5시간 과정 Web PPT (GitHub Pages: `docs/`)
 
 - **경로**: [`docs/index.html`](docs/index.html) (발표자 대시보드: [`docs/presenter.html`](docs/presenter.html))
+- **최종 목적 아키텍처**: `LangGraph`(상태 기반 에이전트 오케스트레이션) + `LiteLLM Proxy` + `Langfuse`(Trace 모니터링 · Eval · Save as Prompt 버전 개선 루프)
 - **구성**: `ch00`~`ch12` 전 단원(총 300분) 이론 슬라이드 + **단원별 실습 미션과 클릭 토글(`<details>`) 모범 답안(Tree + 코드/CLI) 한 페이지 배치**
 - **GitHub Pages 배포**: 저장소 `Settings → Pages → Source`에서 `main` 또는 `develop` 브랜치의 `/docs` 폴더 선택 (`.nojekyll` 포함, 100% 상대 경로)
 - **로컬 미리보기**: `python3 -m http.server 8080 --directory docs` 후 브라우저에서 `http://localhost:8080` 접속 (단축키 `A`: 모범답안 토글, `O`: 목차, `P`: 발표자 창, `F`: 전체 화면, `?print`: PDF 인쇄)

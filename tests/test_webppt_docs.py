@@ -126,5 +126,24 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertIn("tbl-timetable", css)
         self.assertIn("white-space: nowrap;", css)
 
+    def test_loop_rebranding_and_target_architecture_between_p1_and_p2(self) -> None:
+        for rel in ("index.html", "presenter.html", "engine.js", "ui.js", "deck.css", "README.md"):
+            txt = (DOCS_DIR / rel).read_text(encoding="utf-8")
+            self.assertNotIn("hermes", txt.lower(), f"Hermes 잔존 문구 발견: {rel}")
+        for js in (DOCS_DIR / "slides").glob("*.js"):
+            txt = js.read_text(encoding="utf-8")
+            self.assertNotIn("hermes", txt.lower(), f"슬라이드 내 Hermes 잔존 문구 발견: {js.name}")
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("# Loop Engineering", readme)
+        self.assertNotIn("Hermes", readme)
+
+        s0 = (DOCS_DIR / "slides/s0_opening.js").read_text(encoding="utf-8")
+        idx_cover = s0.find("id: 'cover'")
+        idx_arch = s0.find("id: 'target-architecture'")
+        idx_time = s0.find("id: 'timetable'")
+        self.assertTrue(0 <= idx_cover < idx_arch < idx_time, "p.1과 p.2 사이 target-architecture 배치 오류")
+        self.assertIn("LangGraph", s0[idx_arch:idx_time])
+        self.assertIn("Langfuse", s0[idx_arch:idx_time])
+
 if __name__ == "__main__":
     unittest.main()

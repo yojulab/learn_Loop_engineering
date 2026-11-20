@@ -182,7 +182,7 @@ rendered = render_mustache(fetched["prompt"], {"customer_query": "환불 문의"
         answerLabel: 'ch12 모범 답안 열기 (Tree + 최종 검증 결과)',
         answerType: 'Tree + Final Gate',
         answerSummary: 'Stage 1~4 체크리스트가 모두 충족되면 <code>verify_chapters.py --all</code>이 전 단원·플랫폼·웹 PPT 검사를 한 번에 PASS로 마칩니다.',
-        tree: `learn_hermes_engineering/
+        tree: `learn_Loop_engineering/
 ├── docs/                  # GitHub Pages 5시간 웹 PPT + ARCHITECTURE.md
 ├── platforms/             # claude / chatgpt / gemini 어댑터
 ├── scripts/verify_chapters.py

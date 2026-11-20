@@ -13,7 +13,7 @@ flowchart LR
     IDX["docs/index.html (상대 경로 100%)"] --> ENG["engine.js (1920x1080 DECK 엔진)"]
     IDX --> UI["ui.js (buildLabSlide + details 토글)"]
     IDX --> CSS["deck.css (6대 테마 + ::details-content)"]
-    ENG --> SL["slides/00_manifest.js & s0..s5 (총 36장)"]
+    ENG --> SL["slides/00_manifest.js & s0..s5 (총 37장)"]
     ENG <-->|"BroadcastChannel"| PRS["docs/presenter.html (발표자 창)"]
 ```
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>발표자 창 | Hermes Engineering 5시간 웹 PPT</title>
+  <title>발표자 창 | Loop Engineering 5시간 웹 PPT</title>
   <style>
     :root { --bg:#0A1020; --card:#131B33; --fg:#EEF1F8; --muted:#9AA6C6; --mint:#4BE3A6; --line:rgba(255,255,255,.12); }
     * { box-sizing:border-box; margin:0; padding:0; }
@@ -25,7 +25,7 @@
 </head>
 <body>
   <header>
-    <h1>Hermes Engineering — 발표자 대시보드 (5시간 과정)</h1>
+    <h1>Loop Engineering — 발표자 대시보드 (5시간 과정)</h1>
     <div class="meta" id="p-pos">- / -</div>
   </header>
   <main class="grid">
@@ -49,7 +49,7 @@
     </aside>
   </main>
   <script>
-    const bc = ('BroadcastChannel' in window) ? new BroadcastChannel('hermes-ppt-sync') : null;
+    const bc = ('BroadcastChannel' in window) ? new BroadcastChannel('loop-ppt-sync') : null;
     const t0 = Date.now();
     setInterval(() => {
       const sec = Math.floor((Date.now() - t0) / 1000);

@@ -10,7 +10,7 @@
     theme: 'night',
     dots: true,
     noChrome: true,
-    title: '모던 AI 에이전트 스택 & Hermes Engineering (5시간 과정)',
+    title: '모던 AI 에이전트 스택 & Loop Engineering (5시간 과정)',
     notes: '총 300분(5시간) 실전 강의. 각 단원(ch00~ch12)의 이론을 익힌 뒤, 바로 다음 한 페이지에서 실습 미션과 클릭 토글 모범 답안을 확인합니다.',
     build(el, A) {
       const tag = h('div', 'row abs', el);
@@ -22,19 +22,93 @@
 
       const hero = h('div', 'abs', el);
       hero.style.cssText = 'left:110px;top:210px;width:1280px';
-      h('div', 'h1', hero, '모던 AI 에이전트 스택<br><span class="hl">Hermes Engineering</span>');
+      h('div', 'h1', hero, '모던 AI 에이전트 스택<br><span class="hl">Loop Engineering</span>');
       h('div', 'b1', hero, '프롤로그(ch00)부터 LLMOps·로드맵(ch12)까지 —<br>이론 · 단원별 실습 · 클릭형 모범 답안을 <b>한 화면에서</b> 완주하는 5시간 웹 PPT').style.cssText = 'margin-top:32px;color:#AEB8D3';
       A(hero, 'up', 0.12, { dur: 0.55 });
 
       const w = win(el, { x: 110, y: 635, w: 1700, h: 280, dark: true, title: 'quickstart.sh — 키보드 조작 & 컨테이너 환경' });
       w.body.innerHTML = `<div class="term"><span class="p">$</span><span class="ok">docker exec -it graphrag_agent_app_fullstack bash</span>
-<span class="p">$</span>cd /apps/learn_hermes_engineering && python3 scripts/verify_chapters.py --all
+<span class="p">$</span>cd /apps/learn_Loop_engineering && python3 scripts/verify_chapters.py --all
 <span class="o"># 웹 PPT 단축키: → / Space(다음) · ←(이전) · A(모범답안 열기/닫기) · O(전체 목차) · P(발표자 창) · F(전체 화면) · ?print(PDF)</span></div>`;
       A(w.el, 'up', 0.28, { dur: 0.5 });
     },
   });
 
-  // 2. 5시간 (300분) 커리큘럼 타임테이블 + 4계층 12대 스택
+
+  // 2. 최종 목적 아키텍처 (LangGraph + Langfuse 프롬프트 모니터링 & 개선 루프)
+  DECK.slide({
+    id: 'target-architecture',
+    part: 'opening',
+    chap: '최종 목적 아키텍처',
+    theme: 'white',
+    title: '최종 목적 아키텍처: LangGraph + Langfuse 프롬프트 모니터링과 개선',
+    notes: '이 5시간 과정이 도달하는 최종 목표는 LangGraph 상태 그래프 실행, LiteLLM 무코드 관측, Langfuse 모니터링·Eval·Save as Prompt로 이어지는 폐쇄형 프롬프트 개선 루프입니다.',
+    build(el, A) {
+      const T = title(
+        el,
+        'TARGET ARCHITECTURE · END-TO-END LOOP',
+        '최종 목적 아키텍처: <span class="hb">LangGraph</span> + <span class="hl">Langfuse</span> 프롬프트 모니터링 &amp; 개선',
+        { y: 60 },
+      );
+      A(T.t, 'up', 0, { dur: 0.4 });
+
+      const stages = [
+        [
+          '01 · LangGraph 실행',
+          'StateGraph &amp; 멀티 에이전트',
+          '노드·조건부 엣지·체크포인트로 에이전트 워크플로를 실행하고 상태 전이를 제어.',
+          '#DCE6FF',
+          '#1E4FD0',
+        ],
+        [
+          '02 · 무코드 관측',
+          'LiteLLM Proxy → Trace 수집',
+          '앱 코드 수정 없이 Claude·ChatGPT·Gemini 호출의 입출력·지연·비용을 자동 스트리밍.',
+          '#E6E0FF',
+          '#4D2FD0',
+        ],
+        [
+          '03 · 모니터링 &amp; Eval',
+          'Langfuse 대시보드 · 3종 평가',
+          '실패 트레이스와 환각 패턴을 추적하고 코드 기반·LLM-Judge·사람 점수를 Trace에 연결.',
+          '#FDEFD3',
+          '#9A5B00',
+        ],
+        [
+          '04 · 프롬프트 개선',
+          'Save as Prompt → production',
+          '검증된 Trace를 프롬프트 자산으로 승격하고 <code>fetch_prompt</code>로 재배포 없이 즉시 반영.',
+          '#D5F2E6',
+          '#0B8A5F',
+        ],
+      ];
+
+      stages.forEach(([stepTag, hd, desc, bg, fg], i) => {
+        const c = card(el, { x: 100 + i * 438, y: 225, w: 412, h: 420, pad: 28 });
+        c.innerHTML = `<span class="chip" style="background:${bg};color:${fg}">${stepTag}</span>
+          <div class="h4" style="margin-top:20px">${hd}</div>
+          <div class="b3" style="margin-top:16px;color:var(--fg2)">${desc}</div>`;
+        A(c, 'up', 0.1 + i * 0.08, { dur: 0.45 });
+      });
+
+      const w = win(el, {
+        x: 100,
+        y: 680,
+        w: 1720,
+        h: 280,
+        dark: true,
+        title: 'Closed-Loop Prompt Engineering — 실행에서 개선까지 끊기지 않는 피드백 사이클',
+      });
+      w.body.innerHTML = `<div class="term"><span class="ok">[실행]</span> LangGraph Node (<code>fetch_prompt("support-reply", label="production")</code>)
+  <span class="o">↓ LiteLLM Proxy (OPENAI_BASE_URL=http://localhost:4000, 무코드 트레이싱)</span>
+<span class="ok">[관측]</span> Langfuse Traces · Latency · Cost · Token · Error Monitoring
+  <span class="o">↓ 3-Tier Evals (Code Check + LLM-as-Judge + Human Review)</span>
+<span class="ok">[개선]</span> Traces → "Save as Prompt" 승격 → 회귀 테스트 PASS → <code>production</code> 라벨 갱신 ↻</div>`;
+      A(w.el, 'up', 0.42, { dur: 0.45 });
+    },
+  });
+
+  // 3. 5시간 (300분) 커리큘럼 타임테이블 + 4계층 12대 스택
   DECK.slide({
     id: 'timetable',
     part: 'opening',
@@ -85,7 +159,7 @@
     },
   });
 
-  // 3. Any-Platform 아키텍처 (Claude · ChatGPT · Gemini)
+  // 4. Any-Platform 아키텍처 (Claude · ChatGPT · Gemini)
   DECK.slide({
     id: 'any-platform',
     part: 'opening',
@@ -121,7 +195,7 @@
     },
   });
 
-  // 4. 저장소 & GitHub Pages 구조
+  // 5. 저장소 & GitHub Pages 구조
   DECK.slide({
     id: 'repo-tree',
     part: 'opening',
@@ -134,8 +208,8 @@
       const T = title(el, 'REPOSITORY MAP', '저장소 구조 & <span class="hl">GitHub Pages</span> 정적 번들', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
-      const w1 = win(el, { x: 100, y: 225, w: 840, h: 735, dark: true, title: '/apps/learn_hermes_engineering (Tree)' });
-      w1.body.innerHTML = `<pre class="tree" style="background:transparent;border:0;padding:0;font-size:21px"><code>learn_hermes_engineering/
+      const w1 = win(el, { x: 100, y: 225, w: 840, h: 735, dark: true, title: '/apps/learn_Loop_engineering (Tree)' });
+      w1.body.innerHTML = `<pre class="tree" style="background:transparent;border:0;padding:0;font-size:21px"><code>learn_Loop_engineering/
 ├── AGENTS.md / CLAUDE.md / CHATGPT.md / GEMINI.md
 ├── platforms/                  # Claude · ChatGPT · Gemini 공용 어댑터
 ├── scripts/verify_chapters.py  # 전 단원 &amp; 웹 PPT 통합 검증
@@ -169,7 +243,7 @@
     },
   });
 
-  // 5. ch00 실습 + 모범 답안
+  // 6. ch00 실습 + 모범 답안
   DECK.slide({
     id: 'ch00-lab',
     part: 'opening',
@@ -193,7 +267,7 @@
         answerLabel: 'ch00 모범 답안 열기 (Tree + 실행 결과)',
         answerType: 'Tree + JSON',
         answerSummary: '<code>stack_check.py</code>는 Python 3.13+, SQLite FTS5, Git, Node 런타임 및 4계층 디렉터리 존재 여부를 점검하고 <code>overall_ready: true</code>를 반환합니다.',
-        tree: `learn_hermes_engineering/
+        tree: `learn_Loop_engineering/
 ├── AGENTS.md (<= 100줄) · CLAUDE.md · CHATGPT.md · GEMINI.md
 ├── platforms/
 │   ├── base.py (get_adapter)
