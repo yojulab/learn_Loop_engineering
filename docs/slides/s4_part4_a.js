@@ -47,7 +47,7 @@
 
       const c4 = card(el, { x: 100, y: 610, w: 1720, h: 340, pad: 32 });
       c4.innerHTML = `<div class="h3">블라인드 합의 &amp; 3회 불일치 인간 에스컬레이션 (HALT)</div>
-      <div class="b2" style="margin-top:16px">Planner와 Evaluator가 서로의 근거를 보지 않고 각각 <code>선택: A</code> / <code>선택: B</code>를 파일 첫 줄에 기록합니다. 오케스트레이터(<code>orchestrator.py</code>)가 첫 줄만 비교해 일치 시 자동 확정, 3회 불일치 시 <code>docs/HALT</code>를 생성합니다.</div>`;
+      <div class="b2" style="margin-top:16px">Planner와 Evaluator가 서로의 근거를 보지 않고 각각 <code>선택: A</code> / <code>선택: B</code>를 파일 첫 줄에 기록합니다. 오케스트레이터(<code>run.py</code> / <code>orchestrator.py</code>)가 첫 줄만 비교해 일치 시 자동 확정, 3회 불일치 시 <code>docs/HALT</code>를 생성합니다.</div>`;
       A(c4, 'up', 0.34, { dur: 0.45 });
     },
   });
@@ -68,19 +68,18 @@
         duration: '20분',
         missionTitle: 'Planner-Generator-Evaluator 분리 실행 및 블라인드 합의 확인',
         steps: [
-          '<code>ch09/harness/orchestrator.py --platform claude|chatgpt|gemini --demo</code><br>3-Agent 오케스트레이션을 실행해 단계별 산출물을 확인.',
-          '<code>ch09/harness/blind_consensus.py</code><br>첫 줄(<code>선택: X</code>) 비교 로직과 3회 불일치 시 <code>HALT</code> 생성을 검증.',
-          '<code>ch09-orchestration/harness/tests/</code><br>0~3점 채점표(Rubric) 컷오프 판정 테스트를 실행.',
+          '<code>ch09/harness/run.py --mode sim --platform chatgpt</code><br>3-Agent 오케스트레이션 시뮬레이터를 <code>claude|chatgpt|gemini</code> 모드로 실행.',
+          '<code>ch09/harness/src/harness/consensus.py</code><br>첫 줄(<code>선택: X</code>) 비교 로직과 3회 불일치 시 <code>HALT</code> 생성을 검증.',
+          '<code>ch09-orchestration/harness/tests/test_orchestration_harness.py</code><br>0~3점 채점표(Rubric) 컷오프 판정 테스트를 실행.',
         ],
-        runCmd: 'python3 ch09/harness/orchestrator.py --platform chatgpt --demo\npython3 -m unittest discover -s ch09-orchestration/harness/tests -p "test_*.py" -v',
+        runCmd: 'python3 ch09/harness/run.py --mode sim --platform chatgpt\npython3 -m unittest discover -s ch09-orchestration/harness/tests -p "test_*.py" -v',
         answerLabel: 'ch09 모범 답안 열기 (Tree + 합의·채점표)',
         answerType: 'Tree + Python',
-        answerSummary: '오케스트레이터는 Planner의 선택안과 Evaluator의 선택안 첫 줄(<code>선택: X</code>)만 파싱해 일치 시 PASS, 불일치 누적 시 HALT를 트리거합니다.',
+        answerSummary: '오케스트레이터(<code>run.py</code>)는 Planner의 선택안과 Evaluator의 선택안 첫 줄(<code>선택: X</code>)만 파싱해 일치 시 PASS, 불일치 누적 시 HALT를 트리거합니다.',
         tree: `ch09-orchestration/harness/  (# ch09/harness)
-├── orchestrator.py     # --platform claude|chatgpt|gemini
-├── blind_consensus.py  # 블라인드 선택 비교 & 3회 HALT
-├── rubric.py           # 0~3점 채점표 판정기
-└── tests/test_orchestration.py`,
+├── run.py              # --mode sim|dry-run --platform claude|chatgpt|gemini
+├── src/harness/ (orchestrator.py, consensus.py, rubric.py, permissions.py, prompts/)
+└── tests/test_orchestration_harness.py`,
         codeCaption: '블라인드 합의 & 0~3점 채점표 요약',
         answerCode: `{
   "consensus": {"planner": "A", "evaluator": "A", "agreed": true},
@@ -142,7 +141,7 @@
         missionTitle: 'CALC-001~004 아우터 루프 완주 및 7대 완료/중단 조건 테스트',
         steps: [
           '<code>AGENT_PLATFORM=gemini python3 ch10/todo-loop/loop.py --platform gemini</code><br>실행 후 5단계 상태 전이와 <code>CALC-001~004</code> 결과를 확인.',
-          '<code>test_outer_loop.py</code><br>동일 오류 반복(Stall) 시 자동 중단과 선택적 되돌림 케이스를 검증.',
+          '<code>tests/test_todo_loop.py</code><br>동일 오류 반복(Stall) 시 자동 중단과 선택적 되돌림 케이스를 검증.',
           '<code>docs/ARCHITECTURE.md</code><br>아우터 루프 설계 사양과 실제 구현 흐름을 비교.',
         ],
         runCmd: 'python3 ch10/todo-loop/loop.py --platform claude\npython3 -m unittest discover -s ch10-outer-loop/todo-loop/tests -p "test_*.py" -v',
@@ -150,10 +149,9 @@
         answerType: 'Tree + Output',
         answerSummary: '<code>loop.py</code>는 상태 불변 또는 동일 에러 시그니처가 2회 연속 발생하면 즉시 <code>STALL_HALT</code>로 전환해 무한 토큰 소모를 차단합니다.',
         tree: `ch10-outer-loop/todo-loop/  (# ch10/todo-loop)
-├── loop.py          # 5단계 아우터 루프 + Any-Platform
-├── conditions.py    # 7대 완료/중단 판정 + Selective Rollback
-├── calc_tasks.py    # CALC-001 ~ CALC-004
-└── tests/test_outer_loop.py`,
+├── loop.py · workers.py · cost_logger.py · models.py
+├── sample_tasks/ (calc_verifier.py, tasks_contract.json)
+└── tests/test_todo_loop.py`,
         codeCaption: 'loop.py 실행 및 7대 조건 출력 요약',
         answerCode: `[DISCOVER -> PLAN -> EXECUTE -> VERIFY -> COMPLETE]
 Tasks done: CALC-001, CALC-002, CALC-003, CALC-004 (4/4)

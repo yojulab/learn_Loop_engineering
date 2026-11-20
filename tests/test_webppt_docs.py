@@ -146,5 +146,33 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertIn("Langfuse", s0[idx_arch:idx_time])
         self.assertIn("<svg viewBox=", s0[idx_arch:idx_time])
 
+    def test_all_slide_referenced_paths_and_runcmds_are_valid(self) -> None:
+        import shlex
+        slides_text = "\n".join(
+            (DOCS_DIR / f"slides/{name}").read_text(encoding="utf-8")
+            for name in ("s0_opening.js", "s1_part1.js", "s2_part2.js", "s3_part3.js", "s4_part4_a.js", "s5_part4_b.js")
+        )
+        # 1) 모든 chXX.../*.py|sh|json|yaml|md|txt 참조 파일 실존 확인
+        for m in re.finditer(r"(ch\d{2}[^\s<'\`\"]+\.(?:py|sh|json|yaml|md|txt))", slides_text):
+            rel_path = m.group(1)
+            self.assertTrue((REPO_ROOT / rel_path).exists(), f"슬라이드에 없는 파일 경로 참조됨: {rel_path}")
+
+        # 2) 모든 runCmd 내 python3 단원 CLI(단위테스트 제외, 단위테스트 디렉터리 실존) 검증
+        for m in re.finditer(r"runCmd:\s*'([^']+)'", slides_text):
+            raw_cmd = m.group(1).replace("\\n", "\n")
+            for line in raw_cmd.splitlines():
+                line = line.strip()
+                if not line:
+                    continue
+                if " -m unittest discover -s " in line:
+                    tdir = line.split(" -s ", 1)[1].split()[0]
+                    self.assertTrue((REPO_ROOT / tdir).is_dir(), f"없는 테스트 디렉터리 참조: {tdir}")
+                elif "scripts/verify_chapters.py" in line:
+                    self.assertTrue((REPO_ROOT / "scripts/verify_chapters.py").is_file())
+                elif line.startswith("python3 "):
+                    parts = shlex.split(line)
+                    proc = subprocess.run(parts, cwd=REPO_ROOT, capture_output=True, text=True, check=False)
+                    self.assertEqual(proc.returncode, 0, f"runCmd 실행 실패 ({line}): {proc.stderr}")
+
 if __name__ == "__main__":
     unittest.main()

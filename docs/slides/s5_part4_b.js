@@ -73,7 +73,7 @@ litellm_settings:
       const flow = [
         ['Step 1 · Trace 추출', 'Traces 탭 입력 페이로드를 "Save as Prompt"로 승격 (<code>trace_to_prompt.py</code>로 로컬 재현)', '#DCE6FF', '#1E4FD0'],
         ['Step 2 · 버전 Fetch', '앱이 <code>fetch_prompt.py</code>로 <code>production</code> 라벨 프롬프트를 가져와 <code>{{var}}</code> 렌더링', '#D5F2E6', '#0B8A5F'],
-        ['Step 3 · 3종 Eval 게이트', '코드 기반(형식/금지어) · LLM-as-Judge · 사람 평가 비교 후 배포(<code>compare_runs.py</code>)', '#FDE1E1', '#B42323'],
+        ['Step 3 · 3종 Eval 게이트', '코드 기반(형식/금지어) · LLM-as-Judge · 사람 평가 비교 후 배포(<code>regression_compare.py</code>)', '#FDE1E1', '#B42323'],
       ];
       flow.forEach(([hd, bd, bg, fg], i) => {
         const c = card(el, { x: 100 + i * 585, y: 230, w: 550, h: 350, pad: 30 });
@@ -105,20 +105,20 @@ litellm_settings:
         duration: '25분',
         missionTitle: 'LiteLLM 트레이스 기반 프롬프트 등록, Fetch 및 회귀 평가 완주',
         steps: [
-          '<code>ch11/support-assistant/trace_to_prompt.py --demo</code><br>Trace 입력 페이로드에서 프롬프트를 추출해 Langfuse 자산으로 등록.',
-          '<code>ch11/support-assistant/fetch_prompt.py --name support-reply --label production</code><br><code>production</code> 라벨 버전을 조회해 Mustache <code>{{customer_query}}</code> 렌더링을 확인.',
-          '<code>run_evals.py --platform gemini</code> · <code>test_support_assistant.py</code><br>3종 Eval 게이트와 Mock HTTP v2 통합 테스트를 실행.',
+          '<code>ch11/support-assistant/trace_to_prompt.py --demo --json</code><br>Trace 입력 페이로드에서 프롬프트를 추출해 Langfuse 자산으로 등록.',
+          '<code>ch11/support-assistant/fetch_prompt.py --demo --json</code><br><code>production</code> 라벨 버전을 조회해 Mustache 변수 렌더링을 확인.',
+          '<code>litellm_proxy/zero_code_proxy_demo.py</code> · <code>test_support_assistant.py</code><br>무코드 프록시 데모와 Mock HTTP v2 · 3종 Eval 통합 테스트를 실행.',
         ],
-        runCmd: 'python3 ch11/support-assistant/run_evals.py --platform gemini\npython3 -m unittest discover -s ch11-eval-and-llmops/support-assistant/tests -p "test_*.py" -v',
+        runCmd: 'python3 ch11/support-assistant/trace_to_prompt.py --demo --json\npython3 ch11/support-assistant/fetch_prompt.py --demo --json\npython3 -m unittest discover -s ch11-eval-and-llmops/support-assistant/tests -p "test_*.py" -v',
         answerLabel: 'ch11 모범 답안 열기 (Tree + Mock API/Eval)',
         answerType: 'Tree + Python',
         answerSummary: '실제 Langfuse 서버가 없어도 로컬 Mock v2 API + JSONL 폴백으로 Trace 추출 → Prompt 승격 → Fetch → 3종 Eval 회귀 비교까지 끝까지 검증됩니다.',
         tree: `ch11-eval-and-llmops/support-assistant/  (# ch11/support-assistant)
-├── litellm_proxy/litellm_config.yaml  # 무코드 관측 프록시 설정
+├── litellm_proxy/ (litellm_config.yaml, zero_code_proxy_demo.py, client_*.py)
 ├── trace_to_prompt.py                 # Save as Prompt CLI/모듈
 ├── fetch_prompt.py                    # 라벨 기반 Prompt Fetch + {{var}}
-├── seed_prompts.py · prompting.py
-├── run_evals.py · compare_runs.py     # 3종 Eval & 회귀 비교
+├── seed_prompts.py · prompting.py · langfuse_ops.py
+├── evaluator.py · regression_compare.py  # 3종 Eval & 회귀 비교
 └── tests/test_support_assistant.py    # Mock HTTP v2 통합 테스트`,
         codeCaption: 'trace_to_prompt -> fetch_prompt -> run_evals 핵심 흐름',
         answerCode: `# 1) Trace payload -> Prompt (Save as Prompt)
@@ -174,11 +174,11 @@ rendered = render_mustache(fetched["prompt"], {"customer_query": "환불 문의"
         duration: '15분',
         missionTitle: '도입 성숙도 진단(stage_readiness_check.py) 및 전 단원 100% 검증 완주',
         steps: [
-          '<code>ch12-epilogue/stage_readiness_check.py --json</code><br>실행 후 현재 저장소의 Stage 1~4 도입 성숙도를 점검.',
+          '<code>ch12-epilogue/stage_readiness_check.py --format json</code><br>실행 후 현재 저장소의 Stage 1~4 도입 성숙도를 점검.',
           '<code>python3 scripts/verify_chapters.py --all</code><br>루트·플랫폼·ch00~ch12·웹 PPT 통합 검증 게이트를 실행.',
           '<code>git status</code> · <code>docs/index.html</code><br>워킹트리 클린 상태와 GitHub Pages 웹 PPT 렌더링을 최종 확인.',
         ],
-        runCmd: 'python3 ch12-epilogue/stage_readiness_check.py --json\npython3 scripts/verify_chapters.py --all',
+        runCmd: 'python3 ch12-epilogue/stage_readiness_check.py --format json\npython3 scripts/verify_chapters.py --all',
         answerLabel: 'ch12 모범 답안 열기 (Tree + 최종 검증 결과)',
         answerType: 'Tree + Final Gate',
         answerSummary: 'Stage 1~4 체크리스트가 모두 충족되면 <code>verify_chapters.py --all</code>이 전 단원·플랫폼·웹 PPT 검사를 한 번에 PASS로 마칩니다.',

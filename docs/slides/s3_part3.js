@@ -35,23 +35,21 @@
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
       c1.innerHTML = `<div class="h3">5종 전문 서브에이전트 (<code>.claude/agents/</code>)</div>
       <ul class="lab-steps" style="margin-top:16px">
-        <li><code>code-reviewer</code> · <code>test-writer</code><br>읽기 전용 품질·보안 감사 및 단위·엣지 케이스 테스트 작성.</li>
-        <li><code>debugger</code> · <code>doc-updater</code><br>실패 트레이스 원인 추적 및 README·API 문서 동기화.</li>
-        <li><code>feature-builder</code><br>지정된 <code>touch</code> 스코프 내부 기능만 구현.</li>
+        <li><code>api-reviewer.md</code> · <code>code-quality.md</code><br>API 계약·품질 기준을 읽기 전용으로 감사.</li>
+        <li><code>security-scanner.md</code> · <code>test-runner.md</code><br>보안 취약점 스캔 및 테스트 스위트 검증 수행.</li>
+        <li><code>doc-writer.md</code><br>변경된 코드와 README·API 문서를 동기화.</li>
       </ul>
-      <div class="answer-hint" style="margin-top:20px">멀티 플랫폼 포팅: <code>agent_definitions_chatgpt.yaml</code> &amp; <code>agent_definitions_gemini.json</code> 동시 제공</div>`;
+      <div class="answer-hint" style="margin-top:20px">멀티 플랫폼 포팅: <code>agents_chatgpt.json</code> &amp; <code>agents_gemini.json</code> 동시 제공</div>`;
       A(c1, 'up', 0.1, { dur: 0.45 });
 
-      const w2 = win(el, { x: 980, y: 230, w: 840, h: 720, dark: true, title: 'ch06/dynamic_workflow.py — Parallel & Pipeline' });
+      const w2 = win(el, { x: 980, y: 230, w: 840, h: 720, dark: true, title: 'ch06-subagents-workflow/dynamic_workflow.py' });
       w2.body.innerHTML = `<pre class="code-block" style="background:transparent;border:0;padding:0;font-size:21px"><code># --platform claude | chatgpt | gemini 지원
-workflow.phase("discover", parallel([
-    agent("code-reviewer", target="quote-cli/"),
-    agent("doc-updater", target="README.md"),
-]))
-workflow.phase("verify", pipeline([
-    agent("test-writer"),
-    agent("debugger"),
-]))</code></pre>`;
+python3 ch06-subagents-workflow/dynamic_workflow.py \
+  --task-type release_check \
+  --platform gemini --json
+
+# 검색 확장 Quote CLI:
+python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
       A(w2.el, 'up', 0.2, { dur: 0.45 });
     },
   });
@@ -72,26 +70,23 @@ workflow.phase("verify", pipeline([
         duration: '20분',
         missionTitle: '5종 에이전트 역할 정의 검증 및 동적 워크플로 오케스트레이션',
         steps: [
-          '<code>ch06/dynamic_workflow.py --platform claude|chatgpt|gemini</code><br>플랫폼 옵션을 바꿔 실행하고 단계별 파이프라인 로그를 비교.',
-          '<code>ch06/quote-cli/quote_agent.py --query "테스트"</code><br>검색 확장 에이전트 응답을 테스트.',
-          '<code>ch06-subagents-workflow/tests/</code><br>단위 테스트를 실행해 전 케이스 통과를 확인.',
+          '<code>ch06-subagents-workflow/dynamic_workflow.py --platform gemini --json</code><br>플랫폼 옵션을 <code>claude|chatgpt|gemini</code>로 바꿔 실행 로그를 비교.',
+          '<code>ch06/quote-cli/quote_cli.py --search "harness" --json</code><br>검색 확장 옵션(<code>--search</code>, <code>--author</code>, <code>--tag</code>) 동작을 테스트.',
+          '<code>ch06-subagents-workflow/tests/</code> · <code>quote-cli/tests/</code><br>두 테스트 스위트를 실행해 전 케이스 통과를 확인.',
         ],
-        runCmd: 'python3 ch06/dynamic_workflow.py --platform gemini\npython3 -m unittest discover -s ch06-subagents-workflow/tests -p "test_*.py" -v',
+        runCmd: 'python3 ch06-subagents-workflow/dynamic_workflow.py --platform gemini --json\npython3 ch06/quote-cli/quote_cli.py --search "harness" --json',
         answerLabel: 'ch06 모범 답안 열기 (Tree + 워크플로 결과)',
-        answerType: 'Tree + Output',
-        answerSummary: '<code>dynamic_workflow.py</code>는 <code>platforms.get_adapter(platform)</code>을 호출해 어떤 플랫폼에서도 동일한 <code>discover → verify</code> 파이프라인을 재현합니다.',
+        answerType: 'Tree + JSON',
+        answerSummary: '<code>dynamic_workflow.py</code>는 <code>platforms.get_adapter(platform)</code>을 호출해 어떤 플랫폼에서도 동일한 병렬 워크플로를 재현하며, <code>ch06/quote-cli/quote_cli.py</code>는 <code>--search</code> 검색을 지원합니다.',
         tree: `ch06-subagents-workflow/
-├── .claude/agents/ (5종 Markdown 정의)
-├── agent_definitions_chatgpt.yaml
-├── agent_definitions_gemini.json
+├── .claude/agents/ (api-reviewer, code-quality, doc-writer, security-scanner, test-runner)
+├── agents_chatgpt.json · agents_gemini.json
 ├── dynamic_workflow.py
-├── quote-cli/quote_agent.py  (# ch06/quote-cli symlink)
-└── tests/test_subagents_workflow.py`,
-        codeCaption: 'dynamic_workflow.py 실행 결과 예시',
-        answerCode: `[phase:discover] parallel 2 agents -> platform=gemini (offline fallback OK)
-  - code-reviewer: 0 critical findings
-  - doc-updater: synced README checklist
-[phase:verify] pipeline -> test-writer -> debugger -> PASS`,
+├── quote-cli/quote_cli.py   (# ch06/quote-cli symlink)
+└── tests/test_dynamic_workflow.py`,
+        codeCaption: 'quote_cli.py --search & dynamic_workflow.py 결과 요약',
+        answerCode: `[{"id": 3, "text": "Constraints are guardrails that keep autonomous loops safe.", "author": "Harness Principles"}]
+# dynamic_workflow.py --platform gemini --json -> status: "completed"`,
       });
     },
   });
@@ -138,11 +133,11 @@ workflow.phase("verify", pipeline([
         duration: '20분',
         missionTitle: '100줄 AGENTS.md 검증과 아키텍처·보안·문서 3종 하네스 실행',
         steps: [
-          '<code>ch07/harness-templates/arch_linter.py --target .</code><br>모듈 의존성 방향과 <code>AGENTS.md</code> 100줄 상한 준수를 점검.',
+          '<code>ch07/harness-templates/arch_linter.py --root ch07/harness-templates/samples/valid_app --json</code><br>정상 샘플과 <code>invalid_app</code>을 대상으로 계층 의존성 위반 탐지를 점검.',
           '<code>guardrails.py</code> · <code>doc_gardening.py</code><br>시크릿 노출 패턴과 깨진 문서 링크를 검사.',
           '<code>harness-templates/tests/</code><br>의도적 위반 탐지(Negative Test) 통과 여부를 확인.',
         ],
-        runCmd: 'python3 ch07/harness-templates/arch_linter.py --target .\npython3 -m unittest discover -s ch07-harness-engineering/harness-templates/tests -p "test_*.py" -v',
+        runCmd: 'python3 ch07/harness-templates/arch_linter.py --root ch07/harness-templates/samples/valid_app --json\npython3 -m unittest discover -s ch07-harness-engineering/harness-templates/tests -p "test_*.py" -v',
         answerLabel: 'ch07 모범 답안 열기 (Tree + 린터 규칙)',
         answerType: 'Tree + AST',
         answerSummary: '<code>arch_linter.py</code>는 Python <code>ast.parse</code>로 import 그래프를 분석하므로 정규식보다 정확하게 계층 위반을 잡아냅니다.',
@@ -188,7 +183,7 @@ tree = ast.parse(path.read_text(encoding="utf-8"))
       <ul class="lab-steps" style="margin-top:18px">
         <li><b>컨텍스트 초기화 원칙</b><br>반복마다 세션을 비우고 파일 상태만 다시 읽어 컨텍스트 부패를 차단.</li>
         <li><b>무한 루프 가드</b><br><code>MAX_ITERS</code> 상한, 종료 코드 확인, 연속 동일 에러 시 즉시 중단.</li>
-        <li><code>ralph_loop.sh</code> · <code>chatgpt.sh</code> · <code>gemini.sh</code><br>3대 플랫폼용 셸 루프와 <code>goal_evaluator.py</code>를 함께 제공.</li>
+        <li><code>ralph_loop.sh</code> · <code>worker_claude/chatgpt/gemini.sh</code><br>3대 플랫폼용 워커 셸 스크립트와 <code>goal_evaluator.py</code>를 함께 제공.</li>
       </ul>`;
       A(c2, 'up', 0.2, { dur: 0.45 });
     },
@@ -211,26 +206,23 @@ tree = ast.parse(path.read_text(encoding="utf-8"))
         missionTitle: 'SQLite FTS5 전문 검색과 Ralph Loop 목표 달성 판정기 검증',
         steps: [
           '<code>ch08/rss-wiki/db.py</code>, <code>collector.py</code><br>초기화 테스트를 실행해 FTS5 전문 검색 동작을 검증.',
-          '<code>ch08/rss-wiki/goal_evaluator.py --self-test</code><br>실행 후 목표 달성(<code>GOAL_MET</code>) vs 미달(<code>CONTINUE</code>) 판정을 확인.',
-          '<code>ralph_loop.sh</code> · <code>ralph_loop_chatgpt.sh</code> · <code>ralph_loop_gemini.sh</code><br>3대 플랫폼 스크립트의 비대화형 CLI 플래그 차이를 비교.',
+          '<code>ch08/rss-wiki/goal_evaluator.py</code><br>실행 후 목표 달성(<code>GOAL_MET</code>) vs 미달 판정 출력을 확인.',
+          '<code>worker_claude.sh</code> · <code>worker_chatgpt.sh</code> · <code>worker_gemini.sh</code><br>3대 플랫폼 워커 스크립트의 비대화형 CLI 플래그 차이를 비교.',
         ],
-        runCmd: 'python3 ch08/rss-wiki/goal_evaluator.py --self-test\npython3 -m unittest discover -s ch08-inner-ralph-loop/rss-wiki/tests -p "test_*.py" -v',
+        runCmd: 'python3 ch08/rss-wiki/goal_evaluator.py\npython3 -m unittest discover -s ch08-inner-ralph-loop/rss-wiki/tests -p "test_*.py" -v',
         answerLabel: 'ch08 모범 답안 열기 (Tree + FTS5/Goal)',
         answerType: 'Tree + SQL/CLI',
-        answerSummary: '<code>goal_evaluator.py</code>는 테스트 통과율과 에러 건수를 수치로 검증한 뒤 <code>COMPLETE</code> 시그널을 출력해 Ralph Loop를 안전하게 종료시킵니다.',
+        answerSummary: '<code>goal_evaluator.py</code>는 테스트 통과율과 에러 건수를 수치로 검증한 뒤 완료 시그널을 출력해 Ralph Loop를 안전하게 종료시킵니다.',
         tree: `ch08-inner-ralph-loop/rss-wiki/  (# ch08/rss-wiki)
 ├── db.py (SQLite FTS5) · collector.py · app.py
-├── goal_evaluator.py
-├── ralph_loop.sh (Claude)
-├── ralph_loop_chatgpt.sh (Codex/ChatGPT)
-├── ralph_loop_gemini.sh (Gemini CLI)
+├── goal_evaluator.py · ralph_loop.sh
+├── worker_claude.sh · worker_chatgpt.sh · worker_gemini.sh
 └── tests/test_rss_wiki.py`,
-        codeCaption: 'FTS5 가상 테이블 & Goal 판정 결과',
+        codeCaption: 'FTS5 가상 테이블 & Goal 판정 흐름',
         answerCode: `CREATE VIRTUAL TABLE IF NOT EXISTS articles_fts
 USING fts5(title, summary, url UNINDEXED, tokenize='unicode61');
 
-# goal_evaluator.py --self-test
-{"goal_met": true, "signal": "COMPLETE", "checks": {"fts5": "OK", "tests_passed": true}}`,
+# python3 ch08/rss-wiki/goal_evaluator.py -> goal 달성 여부 JSON/상태 출력`,
       });
     },
   });

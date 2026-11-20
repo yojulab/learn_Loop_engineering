@@ -51,7 +51,7 @@
       <ul class="lab-steps" style="margin-top:20px">
         <li><code>--all</code> / <code>--tag &lt;태그&gt;</code><br><code>quotes.json</code> 기반 전체·태그 필터링 결과를 출력.</li>
         <li><code>--author &lt;저자&gt;</code> / <code>--json</code><br>저자별 필터링과 구조화 JSON 출력 포맷을 확인.</li>
-        <li><code>--random --seed &lt;숫자&gt;</code><br>결정론적 시드 기반 랜덤 명언을 추출.</li>
+        <li><code>--seed &lt;숫자&gt;</code><br>결정론적 시드 기반 랜덤 명언을 추출.</li>
         <li><code>interactive_demo.py</code><br>REPL 대화형 루프 데모를 실행해 입력 흐름을 점검.</li>
       </ul>
       <div class="answer-hint" style="margin-top:28px">호환 경로: <code>ch01/quote-cli/</code> → <code>ch01-agentic-coding/quote-cli/</code> (동일 코드)</div>`;
@@ -76,7 +76,7 @@
         missionTitle: '태그·저자 검색 및 JSON 출력을 지원하는 Quote CLI 검증',
         steps: [
           '<code>ch01/quote-cli/quote_cli.py --tag engineering --json</code><br>태그 필터링과 JSON 구조화 출력 결과를 확인.',
-          '<code>--author "Kent Beck"</code> / <code>--random --seed 42</code><br>저자 검색과 결정론적 랜덤 추출 동작을 검증.',
+          '<code>--author "Loop Handbook"</code> / <code>--seed 42</code><br>저자 검색과 결정론적 랜덤 추출 동작을 검증.',
           '<code>test_quote_cli.py</code><br>단위 테스트 스위트를 실행해 전 케이스 통과를 확인.',
         ],
         runCmd: 'python3 ch01/quote-cli/quote_cli.py --tag engineering --json\npython3 -m unittest discover -s ch01-agentic-coding/quote-cli/tests -p "test_*.py" -v',
@@ -133,7 +133,7 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
       c2.innerHTML = `<div class="h3">플랫폼별 MCP·훅 브리지 + 제2장 오타 호환</div>
       <ul class="lab-steps" style="margin-top:18px">
         <li><code>mcp_config_claude.json</code> · <code>chatgpt</code> · <code>gemini</code><br>3대 플랫폼 전용 MCP/Tool 설정 파일을 분리 제공.</li>
-        <li><code>hooks/platform_bridge.py</code><br>플랫폼별 훅 페이로드를 표준 내부 포맷으로 정규화.</li>
+        <li><code>hooks/platform_hook_bridge.py</code><br>플랫폼별 훅 페이로드를 표준 내부 포맷으로 정규화.</li>
         <li><code>audit_logger.py</code><br>PostToolUse 단계에서 도구 실행 감사 로그를 기록.</li>
         <li><code>ch04/quote-cli</code> → <code>ch02-mcp-and-hooks/quote-mcp</code><br>도서 제2장 오타 경로 호환용 심볼릭 링크를 유지.</li>
       </ul>`;
@@ -157,11 +157,11 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
         duration: '25분',
         missionTitle: 'Quote MCP 도구 실행과 위험 Bash 차단 훅 동작 검증',
         steps: [
-          '<code>ch02/quote-mcp/main.py --self-test</code><br>실행 후 MCP 도구 목록과 정상 응답을 확인.',
+          '<code>ch02/quote-mcp/main.py</code><br>실행 후 MCP 서버 메타데이터와 도구·리소스 목록을 확인.',
           '<code>block_dangerous_bash.py</code><br><code>rm -rf</code>와 안전 명령을 전달해 exit code <code>2</code> vs <code>0</code>을 검증.',
           '<code>mcp_config_claude.json</code> · <code>chatgpt</code> · <code>gemini</code><br>3대 플랫폼 설정 스키마 차이를 비교.',
         ],
-        runCmd: 'python3 ch02/quote-mcp/main.py --self-test\npython3 -m unittest discover -s ch02-mcp-and-hooks/quote-mcp/tests -p "test_*.py" -v',
+        runCmd: 'python3 ch02/quote-mcp/main.py\npython3 -m unittest discover -s ch02-mcp-and-hooks/quote-mcp/tests -p "test_*.py" -v',
         answerLabel: 'ch02 모범 답안 열기 (Tree + 훅·MCP 코드)',
         answerType: 'Tree + Config',
         answerSummary: '<code>block_dangerous_bash.py</code>는 exit code <code>2</code>를 반환해 Claude Code / 범용 브리지에서 도구 실행 자체를 사전 차단하며, <code>audit_logger.py</code>가 실행 이력을 남깁니다.',
@@ -173,12 +173,12 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
 └── hooks/
     ├── block_dangerous_bash.py
     ├── audit_logger.py
-    └── platform_bridge.py`,
-        codeCaption: '위험 명령 훅 검사 & self-test 결과',
-        answerCode: `{"status": "ok", "tools": ["get_quote_by_tag", "list_authors", "random_quote"], "count": 3}
+    └── platform_hook_bridge.py`,
+        codeCaption: '위험 명령 훅 검사 & MCP 메타데이터 결과',
+        answerCode: `{"server": "quote-mcp", "transport": "stdio", "tools": ["add_quote", "get_random_quote"], "resources": ["quote://all"], "prompts": ["quote_post"]}
 
 # PreToolUse 검사 흐름:
-# stdin JSON -> platform_bridge.normalize_hook_event()
+# stdin JSON -> platform_hook_bridge.normalize_hook_event()
 # -> regex match(rm -rf / mkfs / force push) -> sys.exit(2) 차단`,
       });
     },
@@ -191,7 +191,7 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     chap: 'ch03 3단계 Skills',
     theme: 'white',
     title: 'ch03: 상시 지침 vs 온디맨드 Skills (3단계 Progressive Disclosure)',
-    notes: '스킬은 평소에는 YAML Frontmatter(이름+설명)만 컨텍스트에 올리고, 트리거될 때만 SKILL.md와 references/scripts를 로드합니다.',
+    notes: '스킬은 평소에는 YAML Frontmatter(이름+설명)만 컨텍스트에 올리고, 트리거될 때만 SKILL.md와 reference.md/scripts를 로드합니다.',
     build(el, A) {
       const T = title(el, 'CH03 · ON-DEMAND SKILLS', '컨텍스트를 아끼는 <span class="hl">3단계 확장형 Skills</span> 아키텍처', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
@@ -199,7 +199,7 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
       const stages = [
         ['1단계 · Metadata (~100 tokens)', 'YAML Frontmatter (name, description)', '항상 컨텍스트에 상주하여 언제 이 스킬을 켤지 판단', '#D5F2E6', '#0B8A5F'],
         ['2단계 · Instructions (< 5KB)', 'SKILL.md 본문 절차 & 규칙', '트리거 조건이 맞을 때만 본문 지침을 온디맨드 로딩', '#DCE6FF', '#1E4FD0'],
-        ['3단계 · Resources (필요 시)', 'references/ · scripts/ · examples/', '긴 체크리스트·검증 스크립트는 실행 직전에만 참조', '#E6E0FF', '#4D2FD0'],
+        ['3단계 · Resources (필요 시)', 'reference.md · scripts/ · examples/', '긴 체크리스트·검증 스크립트는 실행 직전에만 참조', '#E6E0FF', '#4D2FD0'],
       ];
       stages.forEach(([st, file, desc, bg, fg], i) => {
         const c = card(el, { x: 100 + i * 585, y: 230, w: 550, h: 320, pad: 30 });
@@ -210,15 +210,15 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
       });
 
       const c4 = card(el, { x: 100, y: 590, w: 1720, h: 375, pad: 32 });
-      c4.innerHTML = `<div class="h4">5종 GitHub 워크플로 스킬 + 플랫폼 자동 변환(<code>export_platform_skills.py</code>)</div>
+      c4.innerHTML = `<div class="h4">5종 GitHub 워크플로 스킬 + 플랫폼 포팅 가이드(<code>skills_claude/chatgpt/gemini.md</code>)</div>
       <div class="row" style="gap:16px;flex-wrap:wrap;margin-top:20px">
-        <span class="chip lg">1. git-commit-pr</span>
-        <span class="chip lg">2. issue-to-branch</span>
-        <span class="chip lg">3. pr-code-review</span>
-        <span class="chip lg">4. release-changelog</span>
-        <span class="chip lg">5. ci-failure-triage</span>
+        <span class="chip lg">1. git-commit</span>
+        <span class="chip lg">2. gh-issue</span>
+        <span class="chip lg">3. gh-pr</span>
+        <span class="chip lg">4. gh-review</span>
+        <span class="chip lg">5. gh-address-review</span>
       </div>
-      <div class="b2" style="margin-top:24px">단일 <code>SKILL.md</code> 원본을 <code>export_platform_skills.py --platform claude|chatgpt|gemini</code>로 각 플랫폼 전용 번들로 내보냅니다.</div>`;
+      <div class="b2" style="margin-top:24px">각 스킬 디렉터리의 <code>SKILL.md</code> · <code>reference.md</code> · <code>scripts/validate_*.py</code>를 공통 자산으로 유지하고 3대 플랫폼 가이드와 연동합니다.</div>`;
       A(c4, 'up', 0.34, { dur: 0.45 });
     },
   });
@@ -229,42 +229,39 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     part: 'p1',
     chap: 'ch03 실습 & 답안',
     theme: 'paper',
-    title: 'ch03 실습: Skills Frontmatter 검증 & 플랫폼별 Export',
-    notes: '5종 스킬의 YAML Frontmatter 규격을 검사하고 플랫폼별 스킬 포맷으로 변환합니다.',
+    title: 'ch03 실습: Skills 5종 검증 스크립트 & 단위 테스트',
+    notes: '5종 스킬의 validate_*.py 스크립트와 test_github_workflow_skills.py를 실행해 3단계 구조를 검증합니다.',
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch03',
         kicker: 'CH03 · HANDS-ON LAB (30분)',
-        heading: '제3장 실습: <span class="hl">5종 GitHub 스킬</span> 검증 &amp; 플랫폼 Export',
+        heading: '제3장 실습: <span class="hl">5종 GitHub 스킬</span> 검증 스크립트 &amp; 테스트',
         duration: '30분',
-        missionTitle: '3단계 Progressive Disclosure 스킬 구조 검증 및 플랫폼 변환',
+        missionTitle: '3단계 Progressive Disclosure 스킬 구조 및 커밋/PR 검증 스크립트 실행',
         steps: [
-          '<code>ch03/github-workflow-skills/validate_skills.py --all</code><br>5종 스킬의 Frontmatter(<code>name</code>·<code>description</code>) 규격을 검사.',
-          '<code>export_platform_skills.py --platform chatgpt --output /tmp/skills_out</code><br>실행 후 3개 플랫폼 전용 스킬 번들 생성을 확인.',
-          '<code>tests/test_skills.py</code><br>단위 테스트를 실행해 로더 및 검증 결과를 확인.',
+          '<code>ch03/github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"</code><br>Conventional Commits 메시지 검증 스크립트 동작을 확인.',
+          '<code>skills_claude.md</code> · <code>skills_chatgpt.md</code> · <code>skills_gemini.md</code><br>3대 플랫폼용 스킬 적용 가이드를 비교.',
+          '<code>tests/test_github_workflow_skills.py</code><br>5종 스킬 Frontmatter·스크립트 단위 테스트를 실행.',
         ],
-        runCmd: 'python3 ch03/github-workflow-skills/validate_skills.py --all\npython3 -m unittest discover -s ch03-skills/github-workflow-skills/tests -p "test_*.py" -v',
+        runCmd: 'python3 ch03/github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"\npython3 -m unittest discover -s ch03-skills/github-workflow-skills/tests -p "test_*.py" -v',
         answerLabel: 'ch03 모범 답안 열기 (Tree + SKILL.md 구조)',
         answerType: 'Tree + YAML',
-        answerSummary: '모든 스킬은 <code>SKILL.md</code> 상단에 <code>name</code>과 <code>description</code>이 있는 YAML Frontmatter를 가지며, 3개 플랫폼(Claude/ChatGPT/Gemini)용으로 손실 없이 내보낼 수 있습니다.',
-        tree: `ch03-skills/github-workflow-skills/
-├── validate_skills.py
-├── export_platform_skills.py
-├── skill_loader.py
-├── skills/
-│   ├── git-commit-pr/SKILL.md (+ references/, scripts/)
-│   ├── issue-to-branch/SKILL.md
-│   ├── pr-code-review/SKILL.md
-│   ├── release-changelog/SKILL.md
-│   └── ci-failure-triage/SKILL.md
-└── tests/test_skills.py`,
-        codeCaption: 'validate_skills.py 검증 통과 항목',
+        answerSummary: '모든 스킬은 <code>SKILL.md</code> 상단에 <code>name</code>과 <code>description</code>이 있는 YAML Frontmatter를 가지며, 각 하위 <code>scripts/validate_*.py</code>로 형식을 자동 검증합니다.',
+        tree: `ch03-skills/github-workflow-skills/  (# ch03/github-workflow-skills)
+├── git-commit/ (SKILL.md, reference.md, examples/, scripts/validate_commit.py)
+├── gh-issue/   (SKILL.md, reference.md, examples/, scripts/validate_issue.py)
+├── gh-pr/      (SKILL.md, reference.md, examples/, scripts/validate_pr.py)
+├── gh-review/  (SKILL.md, reference.md, examples/, scripts/validate_review.py)
+├── gh-address-review/ (SKILL.md, reference.md, scripts/validate_address_review.py)
+├── skills_claude.md · skills_chatgpt.md · skills_gemini.md
+└── tests/test_github_workflow_skills.py`,
+        codeCaption: 'validate_commit.py & 스킬 테스트 기대 결과',
         answerCode: `---
-name: git-commit-pr
-description: 변경 사항을 Conventional Commits 규칙으로 정리하고 PR 체크리스트를 생성합니다.
+name: git-commit
+description: 변경 사항을 Conventional Commits 규칙으로 정리합니다.
 ---
-[OK] 5/5 skills validated (frontmatter + references + 3-stage disclosure)
-[OK] exported bundles: claude(.claude/skills), chatgpt(AGENTS/skills), gemini(.gemini/skills)`,
+[OK] valid Conventional Commit: feat: add workflow skill
+[OK] 5/5 skills validated via test_github_workflow_skills.py`,
       });
     },
   });
