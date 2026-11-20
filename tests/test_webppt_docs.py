@@ -144,6 +144,7 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertTrue(0 <= idx_cover < idx_arch < idx_time, "p.1과 p.2 사이 target-architecture 배치 오류")
         self.assertIn("LangGraph", s0[idx_arch:idx_time])
         self.assertIn("Langfuse", s0[idx_arch:idx_time])
+        self.assertIn("<svg viewBox=", s0[idx_arch:idx_time])
 
 if __name__ == "__main__":
     unittest.main()
