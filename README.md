@@ -50,7 +50,7 @@ flowchart TB
 | :--- | :--- | :--- | :--- |
 | `README.md`, `AGENTS.md`, `CLAUDE.md`, `CHATGPT.md`, `GEMINI.md`, `platforms/`, `docs/ARCHITECTURE.md` | 루트 | 범용 규칙서, 에이전트별 포인터, 4계층 설계서 | Phase 1 |
 | `scripts/verify_chapters.py`, `tests/test_repo_root.py` | 루트 | 전 단원 통합 검증 러너 및 루트 무결성 테스트 | Phase 1 |
-| `ch00-prologue/` | `ch00-prologue/` | `stack_check.py` (4계층 12대 스택 런타임·저장소 진단) | Phase 1 |
+| `ch00-prologue/` | `ch00-prologue/` | `stack_check.py` (4계층 12대 스택 진단), `agent_check.py` (로컬 AI & 플랫폼 확인) | Phase 1 |
 | `ch01-agentic-coding/quote-cli/` | `ch01/quote-cli/` | `quote_cli.py`, `interactive_demo.py`, `quotes.json` | Phase 2 |
 | `ch02-mcp-and-hooks/quote-mcp/` | `ch02/quote-mcp/`, `ch04/quote-cli/` *(제2장 오타 호환)* | MCP 명언 서버 + PreToolUse/PostToolUse 훅 | Phase 2 |
 | `ch03-skills/github-workflow-skills/` | `ch03/github-workflow-skills/` | 3단계 확장형 GitHub 워크플로 스킬 5종 | Phase 2 |
@@ -72,6 +72,11 @@ flowchart TB
 # 프롤로그 4계층 12대 스택 진단
 python3 ch00-prologue/stack_check.py
 python3 ch00-prologue/stack_check.py --json
+
+# 로컬 AI 동작 및 Agent Platform 확인 (간략 문장 응답)
+python3 ch00-prologue/agent_check.py
+python3 ch00-prologue/agent_check.py --platform gemini --prompt "에이전트 런타임 확인"
+AGENT_PLATFORM=gemini python3 ch00-prologue/agent_check.py --json
 
 # Phase 1 통합 검증 (루트 문서, 가드레일, ch00-prologue)
 python3 scripts/verify_chapters.py --phase 1

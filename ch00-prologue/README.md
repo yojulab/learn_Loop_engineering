@@ -29,8 +29,10 @@ flowchart LR
 ch00-prologue/
 ├── README.md                 # 프롤로그 안내서 (표준 5단 구성)
 ├── stack_check.py            # 4계층 12대 스택 런타임·패키지·저장소 점검 CLI
+├── agent_check.py            # 로컬 AI 동작 및 Agent Platform 확인 CLI
 └── tests/
-    └── test_stack_check.py   # stack_check.py 단위 테스트 (unittest.TestCase)
+    ├── test_stack_check.py   # stack_check.py 단위 테스트 (unittest.TestCase)
+    └── test_agent_check.py   # agent_check.py 단위 테스트 (unittest.TestCase)
 ```
 
 ## 4. 컨테이너 실행 & 테스트 명령어
@@ -41,6 +43,11 @@ python3 ch00-prologue/stack_check.py
 
 # JSON 리포트 출력 (exit 0)
 python3 ch00-prologue/stack_check.py --json
+
+# 로컬 AI 동작 및 Agent Platform 확인 (기본/플랫폼 지정/간략 문장 응답)
+python3 ch00-prologue/agent_check.py
+python3 ch00-prologue/agent_check.py --platform gemini --prompt "로컬 AI 동작 확인"
+AGENT_PLATFORM=gemini python3 ch00-prologue/agent_check.py --json
 
 # 단위 테스트 및 Phase 1 검증
 python3 -m unittest discover -s ch00-prologue/tests -p "test_*.py"
