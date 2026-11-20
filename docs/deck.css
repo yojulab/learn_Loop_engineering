@@ -209,3 +209,39 @@ html.print .hud-actions { display: none; }
 html.print .page { width: 1920px; height: 1080px; position: relative; overflow: hidden; page-break-after: always; break-after: page; }
 html.print .stage { position: absolute; left: 0; top: 0; transform: none; }
 @page { size: 1920px 1080px; margin: 0; }
+
+/* Home 포털 (index.html) & 소셜 QR & AI = Probability 공개 토글 */
+body.home-page { overflow: auto; height: auto; min-height: 100%; background: var(--night); color: #EEF1F8; }
+.home-shell { max-width: 1200px; margin: 0 auto; padding: 48px 28px 72px; display: flex; flex-direction: column; gap: 40px; }
+.home-hero { background: #131B33; border: 1.5px solid rgba(255,255,255,.12); border-radius: 24px; padding: 36px; }
+.home-profile { display: flex; gap: 32px; align-items: center; flex-wrap: wrap; }
+.profile-img { width: 170px; height: 230px; object-fit: cover; border-radius: 18px; border: 2px solid rgba(75,227,166,.4); flex: none; }
+.home-hero-copy { flex: 1; min-width: 280px; }
+.home-title { font-size: clamp(34px, 4.4vw, 56px); font-weight: 860; letter-spacing: -.03em; margin-top: 14px; color: #fff; }
+.home-sub { font-size: 18px; color: #AEB8D3; margin-top: 10px; line-height: 1.5; }
+.home-qr-row { display: flex; gap: 16px; margin-top: 22px; flex-wrap: wrap; }
+.qr-card { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 12px 16px; color: #EEF1F8; text-decoration: none; }
+.qr-card:hover { border-color: var(--mint); background: rgba(75,227,166,.12); }
+.qr-card img { width: 76px; height: 76px; background: #fff; padding: 4px; border-radius: 8px; }
+.qr-card strong { display: block; font-size: 16px; }
+.qr-card span { font-size: 13px; color: #AEB8D3; font-family: var(--mono); }
+.home-sec-title { font-size: 24px; font-weight: 800; margin-bottom: 18px; color: #fff; }
+.deck-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+.deck-card { background: #131B33; border: 1.5px solid rgba(255,255,255,.12); border-radius: 22px; padding: 28px; color: #EEF1F8; text-decoration: none; display: flex; flex-direction: column; gap: 14px; }
+.deck-card:hover:not(.deck-card-soon) { border-color: var(--mint); transform: translateY(-2px); }
+.deck-card h3 { font-size: 24px; font-weight: 800; color: #fff; }
+.deck-card p { font-size: 16px; line-height: 1.55; color: #AEB8D3; flex: 1; }
+.deck-cta { font-weight: 800; color: var(--mint); font-size: 16px; }
+.deck-card-soon { opacity: .68; cursor: default; }
+.deck-card-soon .deck-cta { color: var(--amber); }
+
+.qr-slide-card { display: flex; flex-direction: column; align-items: center; gap: 8px; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.16); border-radius: 18px; padding: 14px; color: #EEF1F8; text-decoration: none; font-size: 16px; font-weight: 700; }
+.qr-slide-card img { width: 132px; height: 132px; background: #fff; padding: 6px; border-radius: 10px; }
+
+.prob-eq { display: flex; align-items: center; justify-content: center; gap: 36px; margin-top: 64px; font-size: 112px; font-weight: 880; letter-spacing: -.04em; color: #fff; }
+.prob-op { color: var(--mint); }
+.prob-reveal { background: rgba(255,255,255,.08); border: 3px dashed rgba(75,227,166,.55); border-radius: 28px; padding: 18px 46px; font: inherit; color: var(--mint); cursor: pointer; min-width: 560px; }
+.prob-reveal[data-revealed="false"] .prob-word { display: none; }
+.prob-reveal[data-revealed="true"] .prob-mask { display: none; }
+.prob-reveal[data-revealed="true"] { border-style: solid; background: rgba(75,227,166,.14); }
+.prob-mask { font-size: 54px; color: #AEB8D3; font-family: var(--mono); }

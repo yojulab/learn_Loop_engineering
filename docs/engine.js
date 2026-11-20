@@ -212,7 +212,13 @@
 
   function toggleCurrentAnswer() {
     const det = slides[cur]?.el?.querySelector('details.answer-toggle');
-    if (det) det.open = !det.open;
+    if (det) { det.open = !det.open; return; }
+    const prob = slides[cur]?.el?.querySelector('.prob-reveal');
+    if (prob) {
+      const next = prob.getAttribute('data-revealed') !== 'true';
+      prob.setAttribute('data-revealed', String(next));
+      prob.setAttribute('aria-pressed', String(next));
+    }
   }
 
   function toggleFullscreen() {

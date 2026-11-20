@@ -16,6 +16,12 @@ REQUIRED_WEBPPT_FILES = (
     "ARCHITECTURE.md",
     ".nojekyll",
     "index.html",
+    "prologue.html",
+    "lecture.html",
+    "slides/p_prologue.js",
+    "assets/profile_ohsanghun.jpg",
+    "assets/qr_linkedin.svg",
+    "assets/qr_facebook.svg",
     "presenter.html",
     "deck.css",
     "engine.js",
@@ -39,7 +45,7 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertGreater(len(arch.strip()), 200)
 
     def test_index_html_uses_relative_local_assets_and_semantic_landmarks(self) -> None:
-        html = (DOCS_DIR / "index.html").read_text(encoding="utf-8")
+        html = (DOCS_DIR / "lecture.html").read_text(encoding="utf-8")
         self.assertIn('<html lang="ko">', html)
         self.assertIn('<main id="deck"', html)
         for asset in (
@@ -173,6 +179,24 @@ class WebPptDocsTests(unittest.TestCase):
                     parts = shlex.split(line)
                     proc = subprocess.run(parts, cwd=REPO_ROOT, capture_output=True, text=True, check=False)
                     self.assertEqual(proc.returncode, 0, f"runCmd 실행 실패 ({line}): {proc.stderr}")
+
+    def test_home_portal_and_dedicated_prologue_ppt(self) -> None:
+        home = (DOCS_DIR / "index.html").read_text(encoding="utf-8")
+        self.assertIn("Let's AX with Cartoons.", home)
+        self.assertIn("assets/profile_ohsanghun.jpg", home)
+        self.assertIn("assets/qr_linkedin.svg", home)
+        self.assertIn("assets/qr_facebook.svg", home)
+        self.assertIn("prologue.html", home)
+        self.assertIn("lecture.html", home)
+
+        p_js = (DOCS_DIR / "slides/p_prologue.js").read_text(encoding="utf-8")
+        self.assertIn("Probability", p_js)
+        self.assertIn("이해의 부채", p_js)
+        self.assertIn("진정한 검증자", p_js)
+
+        s0_js = (DOCS_DIR / "slides/s0_opening.js").read_text(encoding="utf-8")
+        self.assertIn("assets/qr_linkedin.svg", s0_js)
+        self.assertIn("assets/qr_facebook.svg", s0_js)
 
 if __name__ == "__main__":
     unittest.main()

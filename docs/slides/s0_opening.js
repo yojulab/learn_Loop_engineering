@@ -20,6 +20,16 @@
       chip(tag, 'Claude · ChatGPT · Gemini 공용', { bg: 'rgba(124,92,255,.22)', fg: '#C7B8FF' });
       A(tag, 'fade', 0, { dur: 0.4 });
 
+      const qrBox = h('div', 'row abs', el);
+      qrBox.style.cssText = 'right:110px;top:170px;gap:20px';
+      qrBox.innerHTML = `<a class="qr-slide-card" href="https://www.linkedin.com/in/oh-sanghun-5a5b11b9/" target="_blank" rel="noopener noreferrer">
+          <img src="assets/qr_linkedin.svg" alt="LinkedIn QR"><span>LinkedIn</span>
+        </a>
+        <a class="qr-slide-card" href="https://www.facebook.com/otter.oh" target="_blank" rel="noopener noreferrer">
+          <img src="assets/qr_facebook.svg" alt="Facebook QR"><span>Facebook</span>
+        </a>`;
+      A(qrBox, 'fade', 0.2, { dur: 0.45 });
+
       const hero = h('div', 'abs', el);
       hero.style.cssText = 'left:110px;top:210px;width:1280px';
       h('div', 'h1', hero, '모던 AI 에이전트 스택<br><span class="hl">Loop Engineering</span>');

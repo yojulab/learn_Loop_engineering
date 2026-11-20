@@ -3,24 +3,67 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>모던 AI 에이전트 스택 &amp; Loop Engineering (5시간 웹 PPT)</title>
+  <title>Let's AX with Cartoons. | Loop Engineering Web PPT Home</title>
   <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
   <link rel="stylesheet" href="deck.css">
 </head>
-<body>
-  <main id="deck" aria-label="모던 AI 에이전트 스택 5시간 강의 슬라이드"></main>
-  <script src="engine.js"></script>
-  <script src="ui.js"></script>
-  <script src="slides/00_manifest.js"></script>
-  <script src="slides/s0_opening.js"></script>
-  <script src="slides/s1_part1.js"></script>
-  <script src="slides/s2_part2.js"></script>
-  <script src="slides/s3_part3.js"></script>
-  <script src="slides/s4_part4_a.js"></script>
-  <script src="slides/s5_part4_b.js"></script>
-  <script>DECK.start();</script>
+<body class="home-page">
+  <main class="home-shell" aria-label="Loop Engineering 웹 PPT 홈 포털">
+    <section class="home-hero">
+      <div class="home-profile">
+        <img src="assets/profile_ohsanghun.jpg" alt="오상훈 대표 프로필 이미지" class="profile-img">
+        <div class="home-hero-copy">
+          <span class="chip" style="background:rgba(75,227,166,.16);color:#4BE3A6">Loop Engineering · Web PPT Portal</span>
+          <h1 class="home-title">Let's AX with Cartoons.</h1>
+          <p class="home-sub">오상훈 대표 · Tech-driven Business Architect · 22년 차 대형 SI 아키텍트 &amp; AI/RAG 전문 연구원</p>
+          <div class="home-qr-row">
+            <a class="qr-card" href="https://www.linkedin.com/in/oh-sanghun-5a5b11b9/" target="_blank" rel="noopener noreferrer">
+              <img src="assets/qr_linkedin.svg" alt="LinkedIn QR 코드">
+              <div>
+                <strong>LinkedIn</strong>
+                <span>/in/oh-sanghun-5a5b11b9</span>
+              </div>
+            </a>
+            <a class="qr-card" href="https://www.facebook.com/otter.oh" target="_blank" rel="noopener noreferrer">
+              <img src="assets/qr_facebook.svg" alt="Facebook QR 코드">
+              <div>
+                <strong>Facebook</strong>
+                <span>/otter.oh</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-decks" aria-label="강의 PPT 분기 목록">
+      <h2 class="home-sec-title">강의 PPT 선택 (Branch)</h2>
+      <div class="deck-grid">
+        <a class="deck-card" href="prologue.html">
+          <span class="chip" style="background:#DCE6FF;color:#1E4FD0">Prologue · 4 Slides</span>
+          <h3>전용 프롤로그 PPT</h3>
+          <p>강사 프로필 · 경력 사항, <code>AI = Probability</code> (단축키 <code>A</code> 공개), 이해의 부채를 넘는 진정한 검증자, eBook 프롤로그 핵심 요약</p>
+          <span class="deck-cta">프롤로그 열기 →</span>
+        </a>
+
+        <a class="deck-card" href="lecture.html">
+          <span class="chip" style="background:#D5F2E6;color:#0B8A5F">Main · 5시간 (37 Slides)</span>
+          <h3>모던 AI 에이전트 스택 &amp; Loop Engineering</h3>
+          <p><code>ch00</code>~<code>ch12</code> 전 단원 이론 + 한 페이지 실습 미션 &amp; 클릭 토글(<code>A</code>) 모범 답안, LangGraph + Langfuse 최종 아키텍처</p>
+          <span class="deck-cta">메인 강의 열기 →</span>
+        </a>
+
+        <div class="deck-card deck-card-soon" aria-disabled="true">
+          <span class="chip" style="background:#FDEFD3;color:#9A5B00">Coming Soon</span>
+          <h3>심화 워크숍 PPT (추후 추가 예정)</h3>
+          <p>실전 도메인 사례 및 신규 워크숍 슬라이드 링크가 추후 추가될 예정입니다.</p>
+          <span class="deck-cta">추후 추가 예정</span>
+        </div>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
