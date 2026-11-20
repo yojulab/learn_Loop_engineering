@@ -246,7 +246,7 @@
       const cards = [
         ['Claude Code', 'CLAUDE.md · .claude/', 'adapter_claude.py', '*_claude.json / *_claude.py', '#E6E0FF', '#4D2FD0'],
         ['ChatGPT / Codex', 'AGENTS.md · CHATGPT.md', 'adapter_chatgpt.py', '*_chatgpt.yaml / *_chatgpt.py', '#D5F2E6', '#0B8A5F'],
-        ['Gemini / Antigravity', 'GEMINI.md · .gemini/', 'adapter_gemini.py', '*_gemini.json / *_gemini.py', '#DCE6FF', '#1E4FD0'],
+        ['Gemini / Antigravity (agy)', 'GEMINI.md · .gemini/', 'adapter_gemini.py', '*_gemini.json / *_gemini.py', '#DCE6FF', '#1E4FD0'],
       ];
       cards.forEach(([name, entry, adp, files, bg, fg], i) => {
         const c = card(el, { x: 100 + i * 585, y: 230, w: 550, h: 330, pad: 30 });

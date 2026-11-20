@@ -1,5 +1,5 @@
 {
-  "_comment": "Google Gemini CLI / Antigravity (.gemini/settings.json) MCP 및 BeforeTool/AfterTool 훅 매핑",
+  "_comment": "Antigravity CLI(agy) (.gemini/settings.json) MCP 및 BeforeTool/AfterTool 훅 매핑",
   "platform": "gemini",
   "config_location": ".gemini/settings.json",
   "mcpServers": {

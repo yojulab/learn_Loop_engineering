@@ -21,7 +21,7 @@ flowchart LR
 - `base.py`: `resolve_platform`, `get_adapter`, `run_with_any_platform`, `OfflineFallbackAdapter`
 - `adapter_claude.py`: Claude Code CLI & Anthropic Messages API 어댑터
 - `adapter_chatgpt.py`: Codex CLI & OpenAI Chat Completions (LiteLLM 호환) 어댑터
-- `adapter_gemini.py`: Gemini CLI & Google Generative Language API 어댑터
+- `adapter_gemini.py`: Antigravity CLI(`agy`) & Google Generative Language API 어댑터
 
 ## 4. 컨테이너 실행 & 테스트 명령어
 

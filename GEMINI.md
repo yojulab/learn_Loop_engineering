@@ -1,6 +1,6 @@
-# GEMINI.md — Antigravity / Gemini CLI 전용 상시 규칙 & 라우팅 포인터
+# GEMINI.md — Antigravity(agy CLI) 전용 상시 규칙 & 라우팅 포인터
 
-본 파일은 Antigravity 및 Gemini CLI 에이전트가 『2026 모던 AI 에이전트 스택』 실습 저장소에서 작업할 때 참조하는 진입 지침입니다.
+본 파일은 Antigravity(`agy` CLI) 에이전트가 『2026 모던 AI 에이전트 스택』 실습 저장소에서 작업할 때 참조하는 진입 지침입니다.
 핵심 저장소 규칙과 지도는 [AGENTS.md](AGENTS.md) 및 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)로 라우팅합니다.
 
 ## 1. 라우팅 포인터
