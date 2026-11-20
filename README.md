@@ -90,6 +90,12 @@ python3 -m unittest discover -s ch00-prologue/tests -p "test_*.py"
 python3 scripts/verify_chapters.py --all
 ```
 
+### Docker Compose 실습 환경 (`dockers/`)
+
+- **구성**: Langfuse + PostgreSQL + 앱 컨테이너(Python 3.13 · Claude Code CLI · langfuse SDK), 호스트 포트 미게시
+- **설정**: 볼륨 경로·계정·API 키는 `dockers/.env`에서 설정 (`cp dockers/.env.example dockers/.env`)
+- **실행**: `cd dockers && docker compose up -d --build && docker compose exec app bash` (자세한 내용: [`dockers/README.md`](dockers/README.md))
+
 ### Any-Platform 실행 지원 (Claude · ChatGPT · Gemini)
 
 | 플랫폼 | 진입 지침 파일 | 어댑터 & 단원별 호환 파일 (`*_[플랫폼].*`) | 비대화형 실행 예시 |

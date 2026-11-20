@@ -46,7 +46,7 @@ def main(argv: list[str] | None = None) -> int:
     tmp_ctx = tempfile.TemporaryDirectory() if not args.store_dir else None
     store_path = Path(tmp_ctx.name) if tmp_ctx else Path(args.store_dir)
     try:
-        ops = LangfuseOpsClient(store_path)
+        ops = LangfuseOpsClient(store_path, host="" if args.demo else None)
         if args.demo and ops.offline_mode:
             ops.create_prompt(
                 name=args.name,

@@ -1,0 +1,65 @@
+# Loop Engineering 실습 환경: Langfuse(관측) + PostgreSQL + 앱 컨테이너(Claude CLI · Python)
+#  - 호스트 포트는 게시하지 않습니다. 컨테이너 간 통신은 내부 네트워크, 접속은 `docker compose exec app bash`.
+#  - 볼륨 경로, 계정, 키는 모두 .env 에서 설정합니다. (cp .env.example .env)
+services:
+  # Langfuse 전용 PostgreSQL (Langfuse v2 는 PostgreSQL 만 필요)
+  db_postgres:
+    image: postgres:${POSTGRES_IMAGE_TAG:-16}
+    container_name: ${PROJECT_NAME:-learn_loop_engineering}_db_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin123}
+      POSTGRES_DB: ${LANGFUSE_DB_NAME:-db_langfuse}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      TZ: ${TZ:-Asia/Seoul}
+    volumes:
+      - ${POSTGRES_DATA_DIR:-./volumes/postgres}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Langfuse LLM 관측 · 프롬프트 관리 플랫폼
+  langfuse:
+    image: docker.io/langfuse/langfuse:${LANGFUSE_IMAGE_TAG:-2}
+    container_name: ${PROJECT_NAME:-learn_loop_engineering}_langfuse
+    depends_on:
+      db_postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:-admin123}@db_postgres:5432/${LANGFUSE_DB_NAME:-db_langfuse}
+      NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:?.env 에 LANGFUSE_NEXTAUTH_SECRET 설정 필요 (cp .env.example .env)}
+      SALT: ${LANGFUSE_SALT:?.env 에 LANGFUSE_SALT 설정 필요 (cp .env.example .env)}
+      NEXTAUTH_URL: ${LANGFUSE_NEXTAUTH_URL:-http://localhost:3000}
+      TELEMETRY_ENABLED: ${LANGFUSE_TELEMETRY_ENABLED:-false}
+      # 최초 구동 시 조직 · 프로젝트 · 관리자 · API Key 자동 생성 (Headless Initialization)
+      LANGFUSE_INIT_ORG_ID: ${LANGFUSE_INIT_ORG_ID:-loop-org}
+      LANGFUSE_INIT_ORG_NAME: ${LANGFUSE_INIT_ORG_NAME:-Loop Engineering Org}
+      LANGFUSE_INIT_PROJECT_ID: ${LANGFUSE_INIT_PROJECT_ID:-loop-project}
+      LANGFUSE_INIT_PROJECT_NAME: ${LANGFUSE_INIT_PROJECT_NAME:-Loop Engineering}
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-pk-lf-loop-engineering-public}
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-sk-lf-loop-engineering-secret}
+      LANGFUSE_INIT_USER_EMAIL: ${LANGFUSE_INIT_USER_EMAIL:-admin@example.com}
+      LANGFUSE_INIT_USER_NAME: ${LANGFUSE_INIT_USER_NAME:-Admin}
+      LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_INIT_USER_PASSWORD:-admin123456}
+
+  # 실습 앱 컨테이너: Python 3.13 + Claude Code CLI + langfuse SDK (코드는 호스트 저장소를 마운트)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${PROJECT_NAME:-learn_loop_engineering}_app
+    working_dir: /apps/learn_Loop_engineering
+    env_file:
+      - .env
+    environment:
+      CLAUDE_CONFIG_DIR: /root/.claude
+    volumes:
+      - ${APP_SOURCE_DIR:-..}:/apps/learn_Loop_engineering
+      - ${CLAUDE_HOST_DIR:-./volumes/claude}:/root/.claude
+    depends_on:
+      - langfuse
+    stdin_open: true
+    tty: true
+    command: ["sleep", "infinity"]

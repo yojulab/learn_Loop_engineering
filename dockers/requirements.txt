@@ -1,0 +1,6 @@
+# 본 저장소 단원 코드(ch00~ch12)는 Python 표준 라이브러리만으로 동작합니다. (테스트: unittest)
+# 아래는 Langfuse 연동용 SDK 입니다. 서버 이미지 태그 2 와 짝을 이루는 v2 SDK 를 사용합니다.
+langfuse>=2.0.0,<3.0.0
+
+# 선택: 실제 LiteLLM Proxy 를 이 컨테이너에서 직접 실행하려는 경우 주석 해제
+# litellm[proxy]

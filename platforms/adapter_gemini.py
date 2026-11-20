@@ -69,7 +69,8 @@ class GeminiPlatformAdapter(BasePlatformAdapter):
                 fallback_reason = f"http-api fallback ({exc})"
 
         if self.is_cli_available() and not force_offline:
-            proc = subprocess.run([self.config.cli_binary, "-p", prompt], capture_output=True, text=True, check=False)
+            cli_env = {**os.environ, "GEMINI_CLI_TRUST_WORKSPACE": "true"}
+            proc = subprocess.run([self.config.cli_binary, "-p", prompt], capture_output=True, text=True, env=cli_env, check=False)
             if proc.returncode == 0:
                 return PlatformResponse(platform="gemini", mode="cli", model=model, text=proc.stdout.strip())
             fallback_reason = f"cli fallback (exit={proc.returncode})"
