@@ -1,5 +1,5 @@
 # Loop Engineering 실습 환경: Langfuse(관측) + PostgreSQL + 앱 컨테이너(Claude CLI · Python)
-#  - 호스트 포트는 게시하지 않습니다. 컨테이너 간 통신은 내부 네트워크, 접속은 `docker compose exec app bash`.
+#  - Langfuse 웹 UI용 포트(${LANGFUSE_PORT:-3000}:3000)만 게시하며, app·db_postgres 포트는 비공개입니다. 컨테이너 간 통신은 내부 네트워크, 접속은 `docker compose exec app bash`.
 #  - 볼륨 경로, 계정, 키는 모두 .env 에서 설정합니다. (cp .env.example .env)
 services:
   # Langfuse 전용 PostgreSQL (Langfuse v2 는 PostgreSQL 만 필요)
@@ -22,6 +22,8 @@ services:
   langfuse:
     image: docker.io/langfuse/langfuse:${LANGFUSE_IMAGE_TAG:-2}
     container_name: ${PROJECT_NAME:-learn_loop_engineering}_langfuse
+    ports:
+      - "${LANGFUSE_PORT:-3000}:3000"
     depends_on:
       db_postgres:
         condition: service_healthy

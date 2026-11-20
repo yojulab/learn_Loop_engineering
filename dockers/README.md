@@ -1,7 +1,7 @@
 # `dockers/` — Loop Engineering 실습 환경 (Docker Compose)
 
 Langfuse(LLM 관측·프롬프트 관리) + PostgreSQL + 앱 컨테이너(Python 3.13 · Claude Code CLI · Antigravity CLI(`agy`) · langfuse SDK)를 한 번에 올립니다.
-호스트 포트는 게시하지 않으며, 볼륨 경로와 주요 환경 변수는 모두 `.env`에서 설정합니다.
+Langfuse 웹 대시보드(`LANGFUSE_PORT=3000`)만 호스트에 게시하며, 볼륨 경로와 주요 환경 변수는 모두 `.env`에서 설정합니다.
 
 ## 1. 구성
 
@@ -56,15 +56,10 @@ docker compose down -v         # 동일 + 익명 볼륨 제거 (bind 경로 데�
 > `.env`는 API 키가 들어갈 수 있으므로 git에서 제외되어 있습니다. 저장소에는 `.env.example`만 포함됩니다.
 > `*_BASE_URL`, `*_MODEL`은 값이 있을 때만 주석을 해제하세요. 빈 값으로 선언하면 어댑터 기본값을 덮어씁니다.
 
-## 4. Langfuse 화면 확인 (선택)
+## 4. Langfuse 웹 대시보드 접속
 
-포트를 게시하지 않으므로 브라우저 접속이 필요할 때만 임시 포워딩을 사용합니다.
-
-```bash
-docker run --rm -p 3000:3000 --network learn_loop_engineering_default \
-  alpine/socat TCP-LISTEN:3000,fork,reachaddr TCP:langfuse:3000
-# 브라우저: http://localhost:3000  (admin@example.com / admin123456)
-```
+- **주소**: [http://localhost:3000](http://localhost:3000) (포트 변경은 `.env`의 `LANGFUSE_PORT`)
+- **기본 관리자 계정**: `admin@example.com` / `admin123456`
 
 ## 5. 참고
 

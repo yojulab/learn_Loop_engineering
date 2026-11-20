@@ -24,11 +24,12 @@ class DockersComposeTests(unittest.TestCase):
         for name in ("docker-compose.yml", "Dockerfile", "requirements.txt", ".env.example", "README.md"):
             self.assertTrue((DOCKERS / name).is_file(), f"dockers/{name} 누락")
 
-    def test_compose_has_services_and_publishes_no_ports(self) -> None:
+    def test_compose_has_services_and_langfuse_port_only(self) -> None:
         compose = (DOCKERS / "docker-compose.yml").read_text(encoding="utf-8")
         for service in ("db_postgres:", "langfuse:", "app:"):
             self.assertIn(f"\n  {service}", compose, f"서비스 누락: {service}")
-        self.assertIsNone(re.search(r"(?m)^\s*ports:\s*$", compose), "ports 게시 금지")
+        self.assertIn("${LANGFUSE_PORT:-3000}:3000", compose)
+        self.assertEqual(len(re.findall(r"(?m)^\s*ports:\s*$", compose)), 1)
 
     def test_dockerfile_installs_claude_cli_and_python_packages(self) -> None:
         dockerfile = (DOCKERS / "Dockerfile").read_text(encoding="utf-8")
