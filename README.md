@@ -92,9 +92,22 @@ python3 scripts/verify_chapters.py --all
 
 ### Docker Compose 실습 환경 (`dockers/`)
 
-- **구성**: Langfuse + PostgreSQL + 앱 컨테이너(Python 3.13 · Claude Code CLI · langfuse SDK), 호스트 포트 미게시
+- **구성**: Langfuse(`http://localhost:30000`) + PostgreSQL + 앱 컨테이너(Python 3.13 · Claude Code CLI · Antigravity CLI `agy` · langfuse SDK)
 - **설정**: 볼륨 경로·계정·API 키는 `dockers/.env`에서 설정 (`cp dockers/.env.example dockers/.env`)
 - **실행**: `cd dockers && docker compose up -d --build && docker compose exec app bash` (자세한 내용: [`dockers/README.md`](dockers/README.md))
+
+#### Langfuse 대시보드 초기 데이터 적재 (`seed_langfuse_dashboard.py --json`)
+
+- **실행 이유**: Langfuse 최초 기동 직후에는 Dashboard가 비어(`No data`) 있으므로, 외부 LLM API 키 없이도 AI 폴백 모드로 `Traces`, `Model costs/Usage`, `User consumption`, `Scores`, `Latencies`, `Sessions`, `Prompts`, `Datasets` 전체 항목을 즉시 시각화·점검하기 위해 실행합니다.
+
+```bash
+# 기본값으로 적재 (옵션 생략 시 24시간 간격 × 시간당 3회 = 72건, 3대 모델, '고객지원 및 장애 트리아지')
+python3 ch11/support-assistant/seed_langfuse_dashboard.py --json
+
+# 시간 간격(--hours), 시간당 회수(--per-hour), 모델(--models), 업무 주제(--topic) 지정 예시
+python3 ch11/support-assistant/seed_langfuse_dashboard.py \
+  --hours 12 --per-hour 4 --models "gpt-4o-mini,gemini-2.5-flash" --topic "결제 및 장애 트리아지" --json
+```
 
 ### Any-Platform 실행 지원 (Claude · ChatGPT · Gemini)
 
