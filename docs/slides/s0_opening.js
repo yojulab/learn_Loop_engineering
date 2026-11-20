@@ -27,8 +27,7 @@
       A(hero, 'up', 0.12, { dur: 0.55 });
 
       const w = win(el, { x: 110, y: 635, w: 1700, h: 280, dark: true, title: 'quickstart.sh — 키보드 조작 & 컨테이너 환경' });
-      w.body.innerHTML = `<div class="term"><span class="p">$</span><span class="ok">docker exec -it graphrag_agent_app_fullstack bash</span>
-<span class="p">$</span>cd /apps/learn_Loop_engineering && python3 scripts/verify_chapters.py --all
+      w.body.innerHTML = `<div class="term"><span class="p">$</span>cd /apps/learn_Loop_engineering && python3 scripts/verify_chapters.py --all
 <span class="o"># 웹 PPT 단축키: → / Space(다음) · ←(이전) · A(모범답안 열기/닫기) · O(전체 목차) · P(발표자 창) · F(전체 화면) · ?print(PDF)</span></div>`;
       A(w.el, 'up', 0.28, { dur: 0.5 });
     },
