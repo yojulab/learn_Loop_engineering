@@ -198,5 +198,15 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertIn("assets/qr_linkedin.svg", s0_js)
         self.assertIn("assets/qr_facebook.svg", s0_js)
 
+        self.assertIn("https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing", home)
+        self.assertIn("https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing", p_js)
+        self.assertIn("https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing", (DOCS_DIR / "engine.js").read_text(encoding="utf-8"))
+        ui_txt = (DOCS_DIR / "ui.js").read_text(encoding="utf-8")
+        self.assertIn("btn-copy-prompt", ui_txt)
+        self.assertIn("show-prompt", ui_txt)
+        s5_txt = (DOCS_DIR / "slides/s5_part4_b.js").read_text(encoding="utf-8")
+        self.assertLess(s5_txt.find("id: 'ch11-lab'"), s5_txt.find("id: 'ch11-eval-methods'"))
+        self.assertLess(s5_txt.find("id: 'ch11-eval-methods'"), s5_txt.find("id: 'ch12-theory'"))
+
 if __name__ == "__main__":
     unittest.main()

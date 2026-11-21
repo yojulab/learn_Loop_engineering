@@ -18,6 +18,8 @@
       chip(tag, '5시간 (300분) 실전 워크숍', { bg: 'rgba(75,227,166,.16)', fg: '#4BE3A6' });
       chip(tag, 'GitHub Pages · Web PPT', { bg: 'rgba(47,107,255,.22)', fg: '#9DBBFF' });
       chip(tag, 'Claude · ChatGPT · Gemini 공용', { bg: 'rgba(124,92,255,.22)', fg: '#C7B8FF' });
+      h('a', 'edu-sheet-btn', tag, '📊 교육 관련 정보 시트 ↗').setAttribute('href', 'https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing');
+      tag.lastElementChild.setAttribute('target', '_blank');
       A(tag, 'fade', 0, { dur: 0.4 });
 
       const qrBox = h('div', 'row abs', el);
@@ -335,6 +337,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch00',
+        userPrompt: 'ch00-prologue/stack_check.py를 --json 모드로 실행해 Python 3.13+, SQLite FTS5, 4계층 12대 스택 준비 상태를 진단하고, AGENT_PLATFORM을 claude/chatgpt/gemini로 전환하며 platforms/ 단위 테스트와 AGENTS.md 100줄 제한 통과 여부를 검증해줘.',
         kicker: 'CH00 PROLOGUE · HANDS-ON LAB',
         heading: '프롤로그 실습: 4계층 스택 진단 & <span class="hl">플랫폼 감지</span>',
         duration: '15분',

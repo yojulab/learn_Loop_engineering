@@ -65,6 +65,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch04',
+        userPrompt: 'ch04-context-engineering/context_budget.py --json을 실행해 토큰 점유율과 압축(compaction_needed) 경고를 분석하고, 7항목 프롬프트 템플릿·Few-shot·플랫폼별 guidelines_*.md 정합성 테스트를 통과시켜줘.',
         kicker: 'CH04 · HANDS-ON LAB (20분)',
         heading: '제4장 실습: <span class="hv">컨텍스트 예산</span> 계산 &amp; 프롬프트 어댑팅',
         duration: '20분',
@@ -143,6 +144,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch05',
+        userPrompt: 'ch05/memory_pattern/agentic_rag.py로 하이브리드 검색 및 RRF 재순위화 점수를 확인하고, memory_manager.py를 실행해 TASKS.md 완료 상태와 JOURNAL.md 에피소드 기록이 정상 갱신되는지 단위 테스트로 검증해줘.',
         kicker: 'CH05 · HANDS-ON LAB (25분)',
         heading: '제5장 실습: <span class="hl">Agentic RAG</span> &amp; 파일 기반 지속 메모리',
         duration: '25분',

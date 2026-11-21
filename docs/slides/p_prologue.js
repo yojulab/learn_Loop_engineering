@@ -5,49 +5,55 @@
 
   DECK.part('prologue', 'Prologue · 오프닝 & eBook 핵심 (4장)', '#2F6BFF');
 
-  // p.1: 프로필 이미지 + 소셜 QR 코드 + 경력 사항 표
+  // p.1: 대형 프로필 이미지 영역 + 소셜 QR 코드 + 교육 정보 시트 링크 + 경력 사항 표
   DECK.slide({
     id: 'prologue-profile',
     part: 'prologue',
     chap: '강사 소개 & 경력',
     theme: 'paper',
     title: "Let's AX with Cartoons. — 오상훈 대표 프로필 & 경력 사항",
-    notes: '강사 프로필, LinkedIn/Facebook QR 코드 및 주요 경력 사항 요약 페이지입니다.',
+    notes: '대형 프로필 이미지, LinkedIn/Facebook QR 코드, 교육 관련 정보 시트 링크 및 주요 경력 사항 표 페이지입니다.',
     build(el, A) {
-      const T = title(el, "LET'S AX WITH CARTOONS", '오상훈 대표 <span class="hb">프로필 &amp; 주요 경력</span>', { y: 54 });
+      const T = title(el, "LET'S AX WITH CARTOONS", '오상훈 대표 <span class="hb">프로필 &amp; 주요 경력</span>', { y: 48 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
-      const left = card(el, { x: 100, y: 215, w: 560, h: 760, pad: 28 });
-      left.innerHTML = `<div style="display:flex;gap:20px;align-items:center">
-        <img src="assets/profile_ohsanghun.jpg" alt="오상훈 대표" style="width:150px;height:210px;object-fit:cover;border-radius:16px;border:2px solid var(--ln)">
-        <div>
-          <span class="chip" style="background:var(--blue-l);color:var(--blue-d)">Tech-driven Business Architect</span>
-          <div class="h4" style="margin-top:12px">오상훈 대표</div>
-          <div class="b3" style="margin-top:8px">22년 차 대형 SI 아키텍트<br>AI/RAG 전문 연구원 · 7,000h+ 강의</div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px">
-        <a href="https://www.linkedin.com/in/oh-sanghun-5a5b11b9/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit;background:#F6F8FC;border:1.5px solid var(--ln);border-radius:16px;padding:16px;text-align:center">
-          <img src="assets/qr_linkedin.svg" alt="LinkedIn QR" style="width:150px;height:150px;display:block;margin:0 auto">
-          <div class="cap" style="margin-top:10px;color:var(--blue-d)">LinkedIn</div>
-        </a>
-        <a href="https://www.facebook.com/otter.oh" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit;background:#F6F8FC;border:1.5px solid var(--ln);border-radius:16px;padding:16px;text-align:center">
-          <img src="assets/qr_facebook.svg" alt="Facebook QR" style="width:150px;height:150px;display:block;margin:0 auto">
-          <div class="cap" style="margin-top:10px;color:var(--blue-d)">Facebook</div>
-        </a>
+      // 좌측: 프로필 이미지 대형 할당 (w: 520, h: 785)
+      const left = card(el, { x: 100, y: 195, w: 520, h: 785, pad: 18 });
+      left.innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#F6EFE4;border-radius:18px;overflow:hidden;border:1.5px solid var(--ln)">
+        <img src="assets/profile_ohsanghun.jpg" alt="오상훈 대표 대형 프로필 이미지" style="width:100%;height:100%;object-fit:contain;display:block">
       </div>`;
       A(left, 'up', 0.1, { dur: 0.45 });
 
-      const right = card(el, { x: 690, y: 215, w: 1130, h: 760, pad: 30 });
-      right.innerHTML = `<div class="h4" style="margin-bottom:16px">주요 경력 사항 &amp; 전문 분야</div>
+      // 우측: 상단 소개 & QR & 교육 정보 링크 + 하단 경력 사항 표
+      const right = card(el, { x: 650, y: 195, w: 1170, h: 785, pad: 28 });
+      right.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:18px;border-bottom:1.5px solid var(--ln)">
+        <div>
+          <div class="row" style="gap:10px;flex-wrap:wrap">
+            <span class="chip" style="background:var(--blue-l);color:var(--blue-d)">Tech-driven Business Architect</span>
+            <a class="edu-sheet-pill" href="https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing" target="_blank" rel="noopener noreferrer">📊 교육 관련 정보 시트 열기 ↗</a>
+          </div>
+          <div class="h3" style="margin-top:12px">오상훈 대표 <span class="b2" style="font-weight:600;color:var(--fg2)">· 22년 차 대형 SI 아키텍트 &amp; AI/RAG 전문 연구원</span></div>
+        </div>
+        <div style="display:flex;gap:14px;flex:none">
+          <a href="https://www.linkedin.com/in/oh-sanghun-5a5b11b9/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit;background:#F6F8FC;border:1.5px solid var(--ln);border-radius:14px;padding:10px 14px;text-align:center">
+            <img src="assets/qr_linkedin.svg" alt="LinkedIn QR" style="width:104px;height:104px;display:block;margin:0 auto">
+            <div class="cap" style="margin-top:6px;font-size:16px;color:var(--blue-d)">LinkedIn</div>
+          </a>
+          <a href="https://www.facebook.com/otter.oh" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit;background:#F6F8FC;border:1.5px solid var(--ln);border-radius:14px;padding:10px 14px;text-align:center">
+            <img src="assets/qr_facebook.svg" alt="Facebook QR" style="width:104px;height:104px;display:block;margin:0 auto">
+            <div class="cap" style="margin-top:6px;font-size:16px;color:var(--blue-d)">Facebook</div>
+          </a>
+        </div>
+      </div>
+      <div class="h4" style="margin:18px 0 12px">주요 경력 사항 &amp; 전문 분야</div>
       <table class="tbl">
-        <thead><tr><th style="width:240px">구분</th><th>주요 경력 및 핵심 역량</th></tr></thead>
+        <thead><tr><th style="width:220px">구분</th><th>주요 경력 및 핵심 역량</th></tr></thead>
         <tbody>
           <tr><td><b>엔터프라이즈 SI</b></td><td>22년 차 대형 SI 프로젝트 리드 (Samsung, SK, LG 등) 및 로보틱스 자동화 시스템 구축</td></tr>
           <tr><td><b>AI / RAG 연구</b></td><td>점선면 연구소 대표 — AI/RAG &amp; 의사결정지원시스템(DSS) 설계·구축</td></tr>
           <tr><td><b>실전 교육 PM</b></td><td>AI 전문 교육 PM / 누적 <b>7,000시간+</b> 실전 강의 및 기업 AX 컨설팅</td></tr>
           <tr><td><b>아키텍처 핵심</b></td><td>Java/Cloud 대규모 분산 아키텍처 · 지능형 에이전트(MCP · Loop) · Tech-driven 로보틱스 DT 전략</td></tr>
-          <tr><td><b>웹 사이트</b></td><td><code>https://cocolabhub.com/</code> · <code>https://lectomate.com</code></td></tr>
+          <tr><td><b>교육 정보 &amp; 웹</b></td><td><a href="https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:var(--blue-d);font-weight:700">교육 관련 정보 시트(Google Sheets) ↗</a> · <code>https://cocolabhub.com/</code> · <code>https://lectomate.com</code></td></tr>
         </tbody>
       </table>`;
       A(right, 'up', 0.18, { dur: 0.45 });

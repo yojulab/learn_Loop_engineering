@@ -63,6 +63,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch09',
+        userPrompt: 'ch09/harness/run.py --mode sim --platform chatgpt로 Planner-Generator-Evaluator 3-Agent 루프를 실행하고, consensus.py의 블라인드 첫 줄 합의(\'선택: A\')·3회 불일치 HALT 및 0~3점 루브릭 채점 테스트를 검증해줘.',
         kicker: 'CH09 · HANDS-ON LAB (20분)',
         heading: '제9장 실습: <span class="hb">3-Agent 합의</span> &amp; 채점표(Rubric) 검증',
         duration: '20분',
@@ -135,6 +136,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch10',
+        userPrompt: 'AGENT_PLATFORM=gemini로 ch10/todo-loop/loop.py를 실행해 DISCOVER→PLAN→EXECUTE→VERIFY→ITERATE 5단계 전이와 CALC-001~004 완주를 확인하고, 동일 오류 반복(Stall) 중단 및 선택적 되돌림 테스트를 검증해줘.',
         kicker: 'CH10 · HANDS-ON LAB (25분)',
         heading: '제10장 실습: <span class="ha">아우터 루프</span> 실행 &amp; Stall/Rollback 검증',
         duration: '25분',

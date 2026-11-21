@@ -100,6 +100,7 @@ litellm_settings:
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch11',
+        userPrompt: 'ch11/support-assistant/trace_to_prompt.py --demo --json으로 Trace를 프롬프트 자산으로 승격하고, fetch_prompt.py --demo --json으로 production 라벨 프롬프트 렌더링을 확인한 뒤 3종 Eval 및 회귀 비교 테스트를 통과시켜줘.',
         kicker: 'CH11 · HANDS-ON LAB (25분)',
         heading: '제11장 실습: <span class="hb">Save as Prompt</span> + <code>fetch_prompt</code> + 3종 Eval',
         duration: '25분',
@@ -126,6 +127,72 @@ promoted = extract_prompt_from_trace(trace_payload, name="support-reply", label=
 # 2) Fetch & render Mustache variables
 rendered = render_mustache(fetched["prompt"], {"customer_query": "환불 문의"})
 # 3) Run 3-tier Evals -> pass_rate >= 0.85 PASS`,
+      });
+    },
+  });
+
+  // ch11 심화 (p.35): 실무에서 활용하는 3가지 평가(Eval) 기법과 알맞은 예시
+  DECK.slide({
+    id: 'ch11-eval-methods',
+    part: 'p4b',
+    chap: 'ch11 실무 3대 Eval 기법',
+    theme: 'white',
+    title: 'ch11 심화: 실무에서 활용하는 3가지 평가(Eval) 기법과 예시',
+    notes: 'p.34 ch11 실습 직후, 실무 LLMOps 파이프라인에서 조합하는 3가지 평가(코드 기반 결정론적 평가, LLM-as-a-Judge, 사람 평가 & 운영 피드백)와 실제 예시를 정리합니다.',
+    build(el, A) {
+      const T = title(
+        el,
+        'CH11 · PRACTICAL 3-TIER EVALUATION METHODS',
+        '실무에서 활용하는 <span class="hb">3가지 평가(Eval) 기법</span>과 실전 예시',
+        { y: 56 },
+      );
+      A(T.t, 'up', 0, { dur: 0.4 });
+
+      const methods = [
+        [
+          '01 · 코드 기반 결정론적 평가',
+          'Code-based / Heuristic Eval',
+          '매 커밋·CI마다 전수 실행 (비용 $0 · 수 ms).<br>JSON 스키마, 필수 섹션 포함, 금지어·PII 노출을 정규식·파서로 즉시 판정.',
+          '#DCE6FF',
+          '#1E4FD0',
+          `# evaluator.py — 코드 기반 형식·금지어 검증 예시
+def eval_code_rules(reply: str) -> bool:
+    has_next_step = "다음 단계:" in reply
+    no_forbidden = not re.search(r"(무조건\\s*환불|비밀번호\\s*요구)", reply)
+    return has_next_step and no_forbidden and len(reply) >= 40`,
+        ],
+        [
+          '02 · LLM-as-a-Judge 평가',
+          'Model-based Rubric Scoring',
+          '정답이 하나로 고정되지 않는 어조·친절도·근거 충실도(Faithfulness)를<br>0~3점 명시적 루브릭(Rubric)으로 채점 (근거 먼저 생성 후 점수 부여).',
+          '#D5F2E6',
+          '#0B8A5F',
+          `# 0~3점 루브릭 Judge 프롬프트 & 출력 예시
+[기준] 3점: 정책 근거 인용 + 다음 행동 안내 완비 / 0점: 환각·누락
+{"reasoning": "환불 7일 규정 인용 및 주문번호 회신 안내 포함",
+ "score": 3, "verdict": "PASS"}`,
+        ],
+        [
+          '03 · 사람 평가 & 운영 피드백',
+          'Human-in-the-Loop & Golden Dataset',
+          '고위험 케이스·낮은 점수 Trace를 도메인 전문가(SME)가 검수해<br>교정 답변을 골든 데이터셋과 프롬프트(Save as Prompt)로 승격.',
+          '#FDEFD3',
+          '#9A5B00',
+          `# Langfuse Trace -> Golden Dataset & 회귀 비교 예시
+1) Langfuse에서 score < 0.7 Trace 필터링 & 전문가 교정 답변 작성
+2) loop-triage-benchmark Dataset 추가 후 회귀 게이트 실행:
+$ python3 ch11/support-assistant/regression_compare.py`,
+        ],
+      ];
+
+      methods.forEach(([badge, sub, desc, bg, fg, codeEx], i) => {
+        const c = card(el, { x: 100 + i * 585, y: 215, w: 550, h: 755, pad: 28 });
+        c.innerHTML = `<span class="chip" style="background:${bg};color:${fg}">${badge}</span>
+          <div class="h4" style="margin-top:16px">${sub}</div>
+          <div class="b3" style="margin-top:12px;color:var(--fg2)">${desc}</div>
+          <div class="cap" style="margin-top:20px;color:var(--ink)">실전 코드 / 루브릭 예시</div>
+          <pre class="code-block" style="margin-top:10px;font-size:17px;line-height:1.48"><code>${UI.esc(codeEx)}</code></pre>`;
+        A(c, 'up', 0.1 + i * 0.08, { dur: 0.45 });
       });
     },
   });
@@ -169,6 +236,7 @@ rendered = render_mustache(fetched["prompt"], {"customer_query": "환불 문의"
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch12',
+        userPrompt: 'ch12-epilogue/stage_readiness_check.py --format json을 실행해 Stage 1~4 도입 성숙도를 진단하고, python3 scripts/verify_chapters.py --all로 전 단원·플랫폼·웹 PPT 통합 게이트(100% PASS)를 최종 검증해줘.',
         kicker: 'CH12 · FINAL CAPSTONE LAB (15분)',
         heading: '최종 실습: <span class="hl">Stage 1~4</span> 진단 &amp; 전 단원 통합 게이트',
         duration: '15분',

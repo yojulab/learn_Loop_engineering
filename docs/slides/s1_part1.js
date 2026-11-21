@@ -70,6 +70,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch01',
+        userPrompt: 'ch01/quote-cli/quote_cli.py에서 --tag engineering --json, --author "Loop Handbook", --seed 42 옵션을 실행해 필터링과 결정론적 랜덤 출력을 확인하고, ch01-agentic-coding/quote-cli/tests 단위 테스트를 모두 통과시켜줘.',
         kicker: 'CH01 · HANDS-ON LAB (20분)',
         heading: '제1장 실습: <span class="hb">Quote CLI</span> 필터 &amp; 단위 테스트',
         duration: '20분',
@@ -152,6 +153,7 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch02',
+        userPrompt: 'ch02/quote-mcp/main.py의 MCP 도구·리소스 메타데이터를 확인하고, hooks/block_dangerous_bash.py에 \'rm -rf /\'와 안전 명령을 각각 전달해 PreToolUse 차단(exit 2) 및 허용(exit 0) 가드레일과 단위 테스트를 검증해줘.',
         kicker: 'CH02 · HANDS-ON LAB (25분)',
         heading: '제2장 실습: <span class="hl">MCP 서버</span> &amp; <span class="hb">PreToolUse</span> 차단 검증',
         duration: '25분',
@@ -234,6 +236,7 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch03',
+        userPrompt: 'ch03/github-workflow-skills의 5종 스킬 YAML Frontmatter(name, description)와 3단계 Progressive Disclosure 구조를 점검하고, validate_commit.py --text "feat: add workflow skill" 검증과 스킬 단위 테스트를 실행해줘.',
         kicker: 'CH03 · HANDS-ON LAB (30분)',
         heading: '제3장 실습: <span class="hl">5종 GitHub 스킬</span> 검증 스크립트 &amp; 테스트',
         duration: '30분',

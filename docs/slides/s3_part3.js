@@ -65,6 +65,7 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch06',
+        userPrompt: 'ch06-subagents-workflow/dynamic_workflow.py를 --platform gemini --json으로 실행해 병렬 서브에이전트 파이프라인 결과를 확인하고, ch06/quote-cli/quote_cli.py --search "harness" --json 검색 확장 동작과 테스트 스위트를 검증해줘.',
         kicker: 'CH06 · HANDS-ON LAB (20분)',
         heading: '제6장 실습: <span class="hl">서브에이전트</span> 위임 &amp; 멀티 플랫폼 실행',
         duration: '20분',
@@ -128,6 +129,7 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch07',
+        userPrompt: 'ch07/harness-templates/arch_linter.py로 valid_app과 invalid_app의 계층 의존성 위반을 AST 기반으로 검사하고, guardrails.py·doc_gardening.py 및 AGENTS.md 100줄 상한 규칙 테스트를 모두 통과시켜줘.',
         kicker: 'CH07 · HANDS-ON LAB (20분)',
         heading: '제7장 실습: <span class="hl">하네스 린터</span> &amp; 문서 정원가꾸기',
         duration: '20분',
@@ -200,6 +202,7 @@ tree = ast.parse(path.read_text(encoding="utf-8"))
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch08',
+        userPrompt: 'ch08/rss-wiki의 SQLite FTS5 전문 검색(db.py, collector.py)과 goal_evaluator.py 완료 판정(MET)을 실행하고, 3대 플랫폼 비대화형 워커(worker_claude/chatgpt/gemini.sh) 및 서킷 브레이커 단위 테스트를 검증해줘.',
         kicker: 'CH08 · HANDS-ON LAB (25분)',
         heading: '제8장 실습: <span class="hb">FTS5 Wiki</span> &amp; <span class="hl">Ralph Loop /goal</span> 평가',
         duration: '25분',
