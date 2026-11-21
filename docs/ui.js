@@ -94,16 +94,18 @@
 
     const grid = h('div', 'lab-grid', el);
 
-    // 좌측 컬럼: ('A' 토글 시 상단에 표시되는 백지 상태 해결용 사용자 프롬프트) + (하단 실습 미션 카드)
+    // 좌측 컬럼: 기본은 '실습 미션' 카드가 꽉 차 있고, 'A' 토글 시 동일 카드 사이즈에 맞게 '실습 해결용 사용자 프롬프트'가 겹쳐(Overlay) 표시됨
     const leftCol = h('div', 'lab-left-col', grid);
 
+    // 1) 'A' 모범 답안 열기 시 실습 미션 카드 위에 동일 사이즈로 겹쳐(Overlay) 표시되는 해결용 사용자 프롬프트
     const promptText = spec.userPrompt || (
-      `아무것도 없는 초기 상태에서 [${spec.id || '실습'}] ${spec.missionTitle}에 필요한 디렉터리, 코드, 단위 테스트를 처음부터 구현하고 실행 명령(${(spec.runCmd || '').replace(/\n/g, ' && ')})으로 검증해줘.`
+      `아무것도 없는 초기 백지 상태에서 [${spec.id || '실습'}] ${spec.missionTitle} 모범 답안을 100% 재현하도록 디렉터리, 코드, 단위 테스트를 처음부터 구현하고 실행 명령(${(spec.runCmd || '').replace(/\n/g, ' && ')})으로 검증해줘.`
     );
     const pBox = h('div', 'lab-prompt-box no-advance', leftCol);
     const pHead = h('div', 'lab-prompt-head', pBox);
-    h('span', 'lab-prompt-title', pHead, '💬 실습 해결용 사용자 프롬프트 (초기 백지 상태에서 생성 지시)');
-    const copyBtn = h('button', 'btn-copy-prompt no-advance', pHead, '📋 프롬프트 복사');
+    h('span', 'lab-prompt-title', pHead, '💬 실습 해결용 사용자 프롬프트 (초기 백지 상태에서 모범 답안 재현)');
+    const pActions = h('div', 'lab-prompt-actions', pHead);
+    const copyBtn = h('button', 'btn-copy-prompt no-advance', pActions, '📋 프롬프트 복사');
     copyBtn.type = 'button';
     copyBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -115,7 +117,7 @@
     pPre.setAttribute('tabindex', '0');
     h('code', '', pPre, esc(promptText));
 
-    // 좌측: 실습 미션 카드 (프롬프트 박스 바로 아래)
+    // 2) 좌측 기본 카드: 실습 미션 카드 (leftCol 전체 영역 차지)
     const left = h('section', 'lab-mission', leftCol);
     left.setAttribute('aria-label', spec.missionTitle || '실습 과제');
     h('div', 'row', left, `<span class="chip" style="background:var(--blue-l);color:var(--blue-d)">실습 미션</span><span class="cap" style="margin-left:12px">${esc(spec.duration || '15분')}</span><span class="cap" style="margin-left:auto;color:var(--green)">[A] 모범답안 &amp; 해결 프롬프트</span>`);

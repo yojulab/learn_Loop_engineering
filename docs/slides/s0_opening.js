@@ -337,7 +337,17 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch00',
-        userPrompt: '현재 아무것도 없는 백지 상태의 저장소에 루트 지침서(AGENTS.md 100줄 이하, CLAUDE.md, CHATGPT.md, GEMINI.md), 3대 플랫폼 공용 어댑터(platforms/base.py, adapter_claude.py, adapter_chatgpt.py, adapter_gemini.py), 그리고 ch00-prologue/stack_check.py (--json 지원, Python 3.13·SQLite FTS5·4계층 12대 스택 진단)와 단위 테스트(ch00-prologue/tests/test_stack_check.py , platforms/tests/test_platforms.py)를 처음부터 생성하고 테스트를 통과시켜줘.',
+        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch00 모범 답안 재현 프롬프트]
+현재 저장소에 ch00 관련 파일이 아무것도 없다는 전제로 다음 Tree와 핵심 구현을 처음부터 작성해줘.
+1. 생성할 파일 구조:
+   - 루트 지침서: AGENTS.md (100줄 이하 목차형), CLAUDE.md, CHATGPT.md, GEMINI.md
+   - 플랫폼 공용 어댑터: platforms/base.py (get_adapter("claude"|"chatgpt"|"gemini"), API 키 미설정 시 deterministic offline 폴백), platforms/adapter_claude.py, platforms/adapter_chatgpt.py, platforms/adapter_gemini.py, platforms/tests/test_platforms.py
+   - 프롤로그 진단기: ch00-prologue/stack_check.py , ch00-prologue/tests/test_stack_check.py
+2. 핵심 구현 및 출력 규격:
+   - stack_check.py는 --json 플래그를 지원하고, 실행 시 {"python_version": "3.13+", "sqlite_fts5": true, "platforms_supported": ["claude", "chatgpt", "gemini"], "layers_count": 4, "elements_count": 12, "overall_ready": true} 구조를 출력할 것.
+3. 검증 명령:
+   - python3 ch00-prologue/stack_check.py --json
+   - python3 -m unittest discover -s platforms/tests -p "test_*.py" -v`,
         kicker: 'CH00 PROLOGUE · HANDS-ON LAB',
         heading: '프롤로그 실습: 4계층 스택 진단 & <span class="hl">플랫폼 감지</span>',
         duration: '15분',

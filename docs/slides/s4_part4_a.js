@@ -63,7 +63,24 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch09',
-        userPrompt: '아무것도 없는 초기 상태에서 ch09-orchestration/harness(및 ch09/harness 심볼릭 링크)를 만들고, 역할별 프롬프트(prompts/*.md), touch 권한 검증기(permissions.py), Planner·Evaluator 첫 줄(선택: A) 블라인드 합의 및 3회 불일치 HALT 처리기(consensus.py), 0~3점 루브릭 채점기(rubric.py), 3-Agent 오케스트레이터(orchestrator.py, run.py --mode sim --platform)와 단위 테스트를 처음부터 구현해줘.',
+        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch09 모범 답안 재현 프롬프트]
+ch09 관련 파일이 전혀 없는 초기 상태에서 Maker!=Checker(Planner·Generator·Evaluator) 3-Agent 블라인드 합의 하네스 모범 답안을 처음부터 구현해줘.
+1. 생성할 파일 구조 및 심볼릭 링크:
+   - ch09-orchestration/harness/run.py
+   - ch09-orchestration/harness/src/harness/orchestrator.py
+   - ch09-orchestration/harness/src/harness/consensus.py
+   - ch09-orchestration/harness/src/harness/rubric.py
+   - ch09-orchestration/harness/src/harness/permissions.py
+   - ch09-orchestration/harness/src/harness/prompts/ (planner.md, generator.md, evaluator.md)
+   - ch09-orchestration/harness/tests/test_orchestration_harness.py
+   - 심볼릭 링크: ch09/harness -> ../ch09-orchestration/harness
+2. 핵심 구현 및 출력 규격:
+   - permissions.py: Generator가 TASKS.md에 지정된 touch 허용 파일 범위만 수정했는지 검증
+   - consensus.py: Planner(decisions/*.planner.md)와 Evaluator(decisions/*.evaluator.md)가 서로의 문서를 읽지 않은 상태에서 첫 줄("선택: A")만 파싱해 일치 시 합의 확정, 3회 불일치 시 docs/HALT 생성
+   - rubric.py & run.py: correctness, tests, scope 각 0~3점(총 9점) 채점 후 {"consensus": {"planner": "A", "evaluator": "A", "agreed": true}, "rubric_score": {"correctness": 3, "tests": 3, "scope": 3, "total": 9}, "verdict": "PASS"} 출력 (--mode sim|dry-run --platform claude|chatgpt|gemini 지원)
+3. 검증 명령:
+   - python3 ch09/harness/run.py --mode sim --platform chatgpt
+   - python3 -m unittest discover -s ch09-orchestration/harness/tests -p "test_*.py" -v`,
         kicker: 'CH09 · HANDS-ON LAB (20분)',
         heading: '제9장 실습: <span class="hb">3-Agent 합의</span> &amp; 채점표(Rubric) 검증',
         duration: '20분',
@@ -136,7 +153,22 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch10',
-        userPrompt: '백지 상태에서 ch10-outer-loop/todo-loop(및 ch10/todo-loop 심볼릭 링크)를 생성하고, 작업 계약 모델(models.py, sample_tasks/tasks_contract.json, calc_verifier.py), 결정론적·LLM 워커(workers.py), 비용·토큰 로거(cost_logger.py), 5단계(DISCOVER→PLAN→EXECUTE→VERIFY→ITERATE) 전이와 7대 완료·중단 조건(Stall 감지·선택적 되돌림)을 갖춘 loop.py 및 단위 테스트를 처음부터 작성해줘.',
+        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch10 모범 답안 재현 프롬프트]
+ch10 관련 디렉터리가 전혀 없는 백지 상태에서 5단계 아우터 루프(Outer Loop)와 7대 완료·중단 조건 모범 답안을 처음부터 작성해줘.
+1. 생성할 파일 구조 및 심볼릭 링크:
+   - ch10-outer-loop/todo-loop/loop.py
+   - ch10-outer-loop/todo-loop/workers.py
+   - ch10-outer-loop/todo-loop/cost_logger.py
+   - ch10-outer-loop/todo-loop/models.py
+   - ch10-outer-loop/todo-loop/sample_tasks/ (tasks_contract.json — CALC-001~CALC-004 작업 계약, calc_verifier.py)
+   - ch10-outer-loop/todo-loop/tests/test_todo_loop.py
+   - 심볼릭 링크: ch10/todo-loop -> ../ch10-outer-loop/todo-loop
+2. 핵심 구현 및 출력 규격:
+   - loop.py: DISCOVER -> PLAN -> EXECUTE -> VERIFY -> ITERATE 5단계 운영 루프 및 선택적 되돌림(구현 오류는 EXECUTE, 설계 모호성은 PLAN, 요구사항 오류는 DISCOVER로 롤백) 구현
+   - 7대 완료·중단 조건: 완료 3조건(exit_zero=True, quality=True, stability_streak=2) + 중단 4조건(반복 한도, 비용 한도, 동일 에러·상태 불변 2회 연속 STALL_HALT, 비가역 작업 HALT) 판정 후 CALC-001~CALC-004(4/4) 완주 요약 출력
+3. 검증 명령:
+   - python3 ch10/todo-loop/loop.py --platform claude
+   - python3 -m unittest discover -s ch10-outer-loop/todo-loop/tests -p "test_*.py" -v`,
         kicker: 'CH10 · HANDS-ON LAB (25분)',
         heading: '제10장 실습: <span class="ha">아우터 루프</span> 실행 &amp; Stall/Rollback 검증',
         duration: '25분',

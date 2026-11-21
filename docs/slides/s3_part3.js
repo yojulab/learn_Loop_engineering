@@ -65,7 +65,21 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch06',
-        userPrompt: '백지 상태에서 ch06-subagents-workflow를 생성하고, 5종 전문 서브에이전트 정의(.claude/agents/*.md 및 agents_chatgpt.json, agents_gemini.json), 작업 유형별 병렬·파이프라인 서브에이전트 워크플로 시뮬레이터(dynamic_workflow.py --platform/--task-type/--json), 키워드 검색(--search)을 확장한 명언 CLI(quote-cli/quote_cli.py 및 ch06/quote-cli 링크), 단위 테스트를 처음부터 작성해줘.',
+        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch06 모범 답안 재현 프롬프트]
+ch06 관련 파일이 전혀 없는 백지 상태에서 5종 서브에이전트와 동적 워크플로 모범 답안을 처음부터 작성해줘.
+1. 생성할 파일 구조 및 심볼릭 링크:
+   - ch06-subagents-workflow/.claude/agents/ (api-reviewer.md, code-quality.md, doc-writer.md, security-scanner.md, test-runner.md 5종 역할·허용 도구 정의)
+   - ch06-subagents-workflow/agents_chatgpt.json , agents_gemini.json
+   - ch06-subagents-workflow/dynamic_workflow.py
+   - ch06-subagents-workflow/quote-cli/quote_cli.py (기존 명언 CLI에 --search <키워드> 본문·저자·태그 통합 검색 확장)
+   - ch06-subagents-workflow/tests/test_dynamic_workflow.py
+   - 심볼릭 링크: ch06/quote-cli -> ../ch06-subagents-workflow/quote-cli
+2. 핵심 구현 규격:
+   - dynamic_workflow.py: --task-type, --platform (claude|chatgpt|gemini), --json 옵션을 받아 platforms.get_adapter(platform) 기반으로 병렬·파이프라인 서브에이전트 워크플로를 실행하고 status: "completed" JSON 반환
+   - quote_cli.py --search "harness" --json 실행 시 매칭되는 명언 배열(예: id=3 "Constraints are guardrails that keep autonomous loops safe.") 출력
+3. 검증 명령:
+   - python3 ch06-subagents-workflow/dynamic_workflow.py --platform gemini --json
+   - python3 ch06/quote-cli/quote_cli.py --search "harness" --json`,
         kicker: 'CH06 · HANDS-ON LAB (20분)',
         heading: '제6장 실습: <span class="hl">서브에이전트</span> 위임 &amp; 멀티 플랫폼 실행',
         duration: '20분',
@@ -129,7 +143,23 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch07',
-        userPrompt: '아무것도 없는 초기 상태에서 ch07-harness-engineering/harness-templates(및 ch07/harness-templates 심볼릭 링크)를 만들고, 100줄 이하 목차형 AGENTS.md, AST 기반 계층 아키텍처 의존성 린터(arch_linter.py --root/--json), 시크릿·위험 패턴 가드레일(guardrails.py), 문서-코드 드리프트 정원가꾸기(doc_gardening.py), 검증용 샘플 앱(samples/valid_app, invalid_app)과 단위 테스트를 처음부터 구현해줘.',
+        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch07 모범 답안 재현 프롬프트]
+ch07 관련 파일이 전혀 없는 초기 상태에서 AST 아키텍처 린터와 가드레일 3종 세트 모범 답안을 처음부터 구현해줘.
+1. 생성할 파일 구조 및 심볼릭 링크:
+   - ch07-harness-engineering/harness-templates/AGENTS_TEMPLATE.md (100줄 이하 목차형 표준)
+   - ch07-harness-engineering/harness-templates/CLAUDE_TEMPLATE.md , GEMINI_TEMPLATE.md , CHATGPT_TEMPLATE.md
+   - ch07-harness-engineering/harness-templates/arch_linter.py
+   - ch07-harness-engineering/harness-templates/guardrails.py
+   - ch07-harness-engineering/harness-templates/doc_gardening.py
+   - ch07-harness-engineering/harness-templates/samples/valid_app/ , samples/invalid_app/
+   - ch07-harness-engineering/harness-templates/tests/test_harness_templates.py
+   - 심볼릭 링크: ch07/harness-templates -> ../ch07-harness-engineering/harness-templates
+2. 핵심 구현 규격:
+   - arch_linter.py: ast.parse()로 import 구문을 분석해 FORBIDDEN_IMPORTS = {"domain": {"infra", "ui"}, "core": {"ui"}} 계층 역참조 위반 및 파일 줄 수 상한을 탐지 (--root, --json 지원, valid_app은 위반 0건 exit 0, invalid_app은 위반 탐지)
+   - guardrails.py(시크릿·위험 패턴 탐지) 및 doc_gardening.py(문서 내 깨진 파일 참조 Drift 탐지) 구현
+3. 검증 명령:
+   - python3 ch07/harness-templates/arch_linter.py --root ch07/harness-templates/samples/valid_app --json
+   - python3 -m unittest discover -s ch07-harness-engineering/harness-templates/tests -p "test_*.py" -v`,
         kicker: 'CH07 · HANDS-ON LAB (20분)',
         heading: '제7장 실습: <span class="hl">하네스 린터</span> &amp; 문서 정원가꾸기',
         duration: '20분',
@@ -202,7 +232,25 @@ tree = ast.parse(path.read_text(encoding="utf-8"))
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch08',
-        userPrompt: '백지 상태에서 ch08-inner-ralph-loop/rss-wiki(및 ch08/rss-wiki 심볼릭 링크)를 생성하고, SQLite FTS5 전문 검색 위키 DB(db.py), 피드 수집기(collector.py), 내장 웹 서버(app.py), /goal 완료 판정기(goal_evaluator.py), 서킷 브레이커와 컨텍스트 초기화를 갖춘 ralph_loop.sh 및 3대 플랫폼 워커(worker_claude.sh · worker_chatgpt.sh · worker_gemini.sh), 단위 테스트(tests/test_rss_wiki.py)를 처음부터 작성해줘.',
+        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch08 모범 답안 재현 프롬프트]
+ch08 관련 디렉터리가 전혀 없는 백지 상태에서 SQLite FTS5 RSS Wiki와 Ralph Loop (/goal 평가기) 모범 답안을 처음부터 작성해줘.
+1. 생성할 파일 구조 및 심볼릭 링크:
+   - ch08-inner-ralph-loop/rss-wiki/db.py
+   - ch08-inner-ralph-loop/rss-wiki/collector.py
+   - ch08-inner-ralph-loop/rss-wiki/app.py
+   - ch08-inner-ralph-loop/rss-wiki/goal_evaluator.py
+   - ch08-inner-ralph-loop/rss-wiki/ralph_loop.sh
+   - ch08-inner-ralph-loop/rss-wiki/worker_claude.sh , worker_chatgpt.sh , worker_gemini.sh
+   - ch08-inner-ralph-loop/rss-wiki/tests/test_rss_wiki.py
+   - 심볼릭 링크: ch08/rss-wiki -> ../ch08-inner-ralph-loop/rss-wiki
+2. 핵심 구현 규격:
+   - db.py: CREATE VIRTUAL TABLE IF NOT EXISTS articles_fts USING fts5(title, summary, url UNINDEXED, tokenize='unicode61'); 기반 전문 검색 인덱싱 및 질의
+   - collector.py: 로컬 샘플 RSS 피드 파싱 및 중복 제거 적재 / app.py: 내장 http.server 검색 API
+   - goal_evaluator.py: 기사 수·FTS5 인덱스·테스트 통과 여부를 수치로 검증해 GOAL_MET 상태 출력
+   - ralph_loop.sh: 반복마다 컨텍스트를 초기화하고 MAX_ITERS 및 연속 에러 서킷 브레이커로 무한 루프 차단
+3. 검증 명령:
+   - python3 ch08/rss-wiki/goal_evaluator.py
+   - python3 -m unittest discover -s ch08-inner-ralph-loop/rss-wiki/tests -p "test_*.py" -v`,
         kicker: 'CH08 · HANDS-ON LAB (25분)',
         heading: '제8장 실습: <span class="hb">FTS5 Wiki</span> &amp; <span class="hl">Ralph Loop /goal</span> 평가',
         duration: '25분',

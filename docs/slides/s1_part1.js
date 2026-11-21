@@ -70,7 +70,21 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch01',
-        userPrompt: '아무것도 없는 초기 상태에서 ch01-agentic-coding/quote-cli 디렉터리와 호환 심볼릭 링크(ch01/quote-cli)를 만들고, 명언 데이터(quotes.json), 태그·저자 필터링과 시드 기반 랜덤 추출 및 JSON 출력을 지원하는 CLI(quote_cli.py --all/--tag/--author/--seed/--json), 대화형 루프 데모(interactive_demo.py), 단위 테스트(tests/test_quote_cli.py)를 표준 라이브러리만으로 처음부터 작성하고 검증해줘.',
+        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch01 모범 답안 재현 프롬프트]
+ch01 관련 디렉터리와 파일이 전혀 없는 초기 상태에서 아래 모범 답안 Tree와 동작을 100% 재현해줘.
+1. 생성할 파일 구조 및 호환 심볼릭 링크:
+   - ch01-agentic-coding/README.md
+   - ch01-agentic-coding/quote-cli/quotes.json (id, text, author, tags 배열을 가진 명언 데이터)
+   - ch01-agentic-coding/quote-cli/quote_cli.py
+   - ch01-agentic-coding/quote-cli/interactive_demo.py
+   - ch01-agentic-coding/quote-cli/tests/test_quote_cli.py
+   - 심볼릭 링크: ch01/quote-cli -> ../ch01-agentic-coding/quote-cli
+2. 핵심 구현 규격 (표준 라이브러리 argparse, json, random만 사용):
+   - filter_quotes(quotes, tag=None, author=None): 태그 대소문자 무시 일치 및 저자 부분 문자열 필터링
+   - CLI 옵션: --all, --tag <태그>, --author <저자>, --seed <정수>(결정론적 랜덤 1건 추출), --json(구조화 JSON 출력)
+3. 검증 명령:
+   - python3 ch01/quote-cli/quote_cli.py --tag engineering --json
+   - python3 -m unittest discover -s ch01-agentic-coding/quote-cli/tests -p "test_*.py" -v`,
         kicker: 'CH01 · HANDS-ON LAB (20분)',
         heading: '제1장 실습: <span class="hb">Quote CLI</span> 필터 &amp; 단위 테스트',
         duration: '20분',
@@ -153,7 +167,22 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch02',
-        userPrompt: '백지 상태에서 ch02-mcp-and-hooks/quote-mcp(및 ch02/quote-mcp 심볼릭 링크)를 생성하고, 표준 입출력 기반 명언 MCP 서버(main.py), 위험 Bash 명령(rm -rf 등)을 사전 차단(exit code 2)하는 PreToolUse 훅(hooks/block_dangerous_bash.py), 실행 감사 로거(hooks/audit_logger.py), 3대 플랫폼 브리지(hooks/platform_hook_bridge.py)와 설정 파일(mcp_config_claude.json · mcp_config_chatgpt.json · mcp_config_gemini.json), 단위 테스트를 처음부터 구현해줘.',
+        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch02 모범 답안 재현 프롬프트]
+ch02 관련 디렉터리와 파일이 전혀 없는 백지 상태에서 아래 모범 답안 Tree와 동작을 100% 재현해줘.
+1. 생성할 파일 구조 및 심볼릭 링크:
+   - ch02-mcp-and-hooks/quote-mcp/main.py
+   - ch02-mcp-and-hooks/quote-mcp/mcp_config_claude.json , mcp_config_chatgpt.json , mcp_config_gemini.json
+   - ch02-mcp-and-hooks/quote-mcp/hooks/block_dangerous_bash.py
+   - ch02-mcp-and-hooks/quote-mcp/hooks/audit_logger.py
+   - ch02-mcp-and-hooks/quote-mcp/hooks/platform_hook_bridge.py
+   - ch02-mcp-and-hooks/quote-mcp/tests/test_quote_mcp.py
+   - 심볼릭 링크: ch02/quote-mcp -> ../ch02-mcp-and-hooks/quote-mcp (및 도서 오타 호환용 ch04/quote-cli 링크)
+2. 핵심 구현 규격:
+   - main.py 실행 시 {"server": "quote-mcp", "transport": "stdio", "tools": ["add_quote", "get_random_quote"], "resources": ["quote://all"], "prompts": ["quote_post"]} 메타데이터 및 JSON-RPC self-test 출력
+   - block_dangerous_bash.py: stdin JSON을 platform_hook_bridge.normalize_hook_event()로 정규화 후 rm -rf, 포크 폭탄, git push --force 감지 시 sys.exit(2)로 사전 차단(안전 명령은 exit 0)
+3. 검증 명령:
+   - python3 ch02/quote-mcp/main.py
+   - python3 -m unittest discover -s ch02-mcp-and-hooks/quote-mcp/tests -p "test_*.py" -v`,
         kicker: 'CH02 · HANDS-ON LAB (25분)',
         heading: '제2장 실습: <span class="hl">MCP 서버</span> &amp; <span class="hb">PreToolUse</span> 차단 검증',
         duration: '25분',
@@ -236,7 +265,24 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch03',
-        userPrompt: '아무것도 없는 초기 상태에서 ch03-skills/github-workflow-skills(및 ch03/github-workflow-skills 심볼릭 링크)를 만들고, 3단계 Progressive Disclosure 구조(YAML Frontmatter SKILL.md + reference.md + examples/ + scripts/validate_*.py)를 갖춘 5종 GitHub 스킬(git-commit, gh-issue, gh-pr, gh-review, gh-address-review)과 플랫폼 가이드(skills_claude.md · skills_chatgpt.md · skills_gemini.md), 단위 테스트(tests/test_github_workflow_skills.py)를 처음부터 작성해줘.',
+        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch03 모범 답안 재현 프롬프트]
+ch03 관련 디렉터리가 전혀 없는 초기 상태에서 3단계 Progressive Disclosure 구조의 5종 GitHub 스킬 모범 답안을 처음부터 재현해줘.
+1. 생성할 파일 구조 및 심볼릭 링크:
+   - ch03-skills/github-workflow-skills/ 하위에 5개 스킬 폴더 생성:
+     * git-commit/ (SKILL.md, reference.md, examples/, scripts/validate_commit.py)
+     * gh-issue/ (SKILL.md, reference.md, examples/, scripts/validate_issue.py)
+     * gh-pr/ (SKILL.md, reference.md, examples/, scripts/validate_pr.py)
+     * gh-review/ (SKILL.md, reference.md, examples/, scripts/validate_review.py)
+     * gh-address-review/ (SKILL.md, reference.md, scripts/validate_address_review.py)
+   - 플랫폼별 적용 가이드: skills_claude.md , skills_chatgpt.md , skills_gemini.md
+   - 단위 테스트: ch03-skills/github-workflow-skills/tests/test_github_workflow_skills.py
+   - 심볼릭 링크: ch03/github-workflow-skills -> ../ch03-skills/github-workflow-skills
+2. 핵심 구현 규격:
+   - 모든 SKILL.md 상단에 YAML Frontmatter(--- name: ... description: ... ---) 필수 포함
+   - validate_commit.py --text "feat: add workflow skill" 실행 시 Conventional Commits 규칙 검증 후 "[OK] valid Conventional Commit" 및 종료 코드 0 반환
+3. 검증 명령:
+   - python3 ch03/github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"
+   - python3 -m unittest discover -s ch03-skills/github-workflow-skills/tests -p "test_*.py" -v`,
         kicker: 'CH03 · HANDS-ON LAB (30분)',
         heading: '제3장 실습: <span class="hl">5종 GitHub 스킬</span> 검증 스크립트 &amp; 테스트',
         duration: '30분',
