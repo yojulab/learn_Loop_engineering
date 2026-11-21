@@ -66,19 +66,29 @@
       buildLabSlide(el, A, {
         id: 'ch04',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch04 모범 답안 재현 프롬프트]
-ch04 관련 파일이 전혀 없는 백지 상태에서 아래 모범 답안 Tree와 컨텍스트 예산 계산기를 처음부터 구현해줘.
-1. 생성할 파일 구조 및 심볼릭 링크:
-   - ch04-context-engineering/prompt_template.txt (Role·Goal·Context·Constraints·Few-shot·Format·Self-Check 7항목 템플릿)
+ch04 관련 파일이 전혀 없는 백지 상태에서 7항목 프롬프트·4대 지침 층위·컨텍스트 예산 시뮬레이터 모범 답안을 처음부터 구현해줘.
+
+1. 생성할 파일 구조 및 도서 호환 심볼릭 링크
+   - ch04-context-engineering/prompt_template.txt (Role, Goal, Context, Constraints, Few-shot, Format, Self-Check 7항목 템플릿)
    - ch04-context-engineering/few_shot_reference.txt
    - ch04-context-engineering/claude_working_guidelines.md
    - ch04-context-engineering/guidelines_claude.md , guidelines_chatgpt.md , guidelines_gemini.md
-   - ch04-context-engineering/AGENTS.md , CLAUDE.md , GEMINI.md , .claude/rules/api.md
+   - ch04-context-engineering/AGENTS.md , ch04-context-engineering/CLAUDE.md , ch04-context-engineering/GEMINI.md , ch04-context-engineering/.claude/rules/api.md
    - ch04-context-engineering/context_budget.py
    - ch04-context-engineering/tests/test_context_engineering.py
-   - 호환 심볼릭 링크: ch04/prompt_template.txt , ch04/few_shot_reference.txt 등 연결
-2. 핵심 구현 및 JSON 출력 규격:
-   - context_budget.py --json 실행 시 {"system": 4000, "instructions": 3000, "tools": 18000, "history": 65000, "output": 8000, "utilization_pct": 76.56, "compaction_needed": true} 형태의 토큰 점유율 및 압축 필요 여부를 계산해 반환할 것
-3. 검증 명령:
+   - 심볼릭 링크: ch04/prompt_template.txt , ch04/few_shot_reference.txt 연결
+
+2. 핵심 구현 명세 (context_budget.py)
+   - BudgetAllocation dataclass(system, instructions, tools, history, output, max_window, total_tokens, utilization, status, lost_in_the_middle_risk, recommendations)
+   - estimate_tokens(text): max(1, (len(stripped) + 3) // 4) 근사 토큰 계산
+   - evaluate_budget(system, instructions, tools, history, output, max_window=200_000, warn_ratio=0.75):
+     * utilization >= 0.90 이면 status="CRITICAL" + /clear 권고
+     * utilization >= warn_ratio 이면 status="WARN" + /compact 권고, 그 외 "OK"
+     * utilization >= 0.65 또는 history/max_window >= 0.50 이면 lost_in_the_middle_risk=True
+     * tools/max_window >= 0.30 이면 Top-K & 발췌 필터링 권고 추가
+   - format_budget_report(alloc, as_json=False) 및 --json CLI 출력
+
+3. 검증 명령 (전부 exit 0 통과 필수)
    - python3 ch04-context-engineering/context_budget.py --json
    - python3 -m unittest discover -s ch04-context-engineering/tests -p "test_*.py" -v`,
         kicker: 'CH04 · HANDS-ON LAB (20분)',
@@ -160,18 +170,21 @@ ch04 관련 파일이 전혀 없는 백지 상태에서 아래 모범 답안 Tre
       buildLabSlide(el, A, {
         id: 'ch05',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch05 모범 답안 재현 프롬프트]
-ch05 관련 디렉터리가 전혀 없는 초기 상태에서 외부 벡터 DB 없이 순수 Python만으로 아래 Agentic RAG & 지속 메모리 모범 답안을 재현해줘.
-1. 생성할 파일 구조 및 심볼릭 링크:
+ch05 관련 디렉터리가 전혀 없는 초기 상태에서 외부 벡터 DB 없이 순수 Python만으로 Top-K·발췌 필터링 Agentic RAG와 지속 메모리 모범 답안을 재현해줘.
+
+1. 생성할 파일 구조 및 심볼릭 링크
    - ch05-rag-and-memory/memory_pattern/agentic_rag.py
    - ch05-rag-and-memory/memory_pattern/memory_manager.py
-   - ch05-rag-and-memory/memory_pattern/corpus/ (01~04_*.md 샘플 문서 4종)
+   - ch05-rag-and-memory/memory_pattern/corpus/ 하위에 4종 샘플 마크다운 문서(01~04) 생성
    - ch05-rag-and-memory/memory_pattern/TASKS.md , JOURNAL.md
    - ch05-rag-and-memory/memory_pattern/tests/test_memory_pattern.py
    - 심볼릭 링크: ch05/memory_pattern -> ../ch05-rag-and-memory/memory_pattern
-2. 핵심 구현 규격:
-   - agentic_rag.py: Query Rewrite -> TF-IDF 코사인 유사도 + 키워드 하이브리드 검색 -> rrf_fuse(rankings: list[list[str]], k: int = 60) 기반 1.0 / (k + rank) RRF 재순위화 -> 근거 신뢰도 미달 시 Self-Critique 재검색 루프 수행
-   - memory_manager.py: Working Memory(TASKS.md 체크리스트 상태 전이)와 Episodic Memory(JOURNAL.md 작업 일지 누적) 파일 관리
-3. 검증 명령:
+
+2. 핵심 구현 명세
+   - agentic_rag.py: DocumentChunk(source, title, excerpt, score, matched_terms) dataclass와 AgenticRetriever(corpus_dir) 구현. search(query, top_k=3, max_chars_per_excerpt=240) 메서드는 한·영 토큰화(_tokenize) 후 코퍼스 .md 파일을 스캔해 _extract_best_excerpt()로 핵심 문장만 max_chars_per_excerpt 이내로 잘라 상위 top_k건을 점수 내림차순(-score, source)으로 반환할 것.
+   - memory_manager.py: TaskItem(task_id, title, status, note) dataclass와 MemoryManager(tasks_path, journal_path) 구현. '- [ ] **ID**: 제목' / '[x]' / '[!]' 정규식 파싱(parse_tasks), next_pending_task(), mark_task_done(), mark_task_blocked('[BLOCKED] ...'), append_journal(actor, decision, evidence) 제공.
+
+3. 검증 명령 (전부 exit 0 통과 필수)
    - python3 ch05/memory_pattern/agentic_rag.py
    - python3 -m unittest discover -s ch05-rag-and-memory/memory_pattern/tests -p "test_*.py" -v`,
         kicker: 'CH05 · HANDS-ON LAB (25분)',

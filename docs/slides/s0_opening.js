@@ -338,15 +338,21 @@
       buildLabSlide(el, A, {
         id: 'ch00',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch00 모범 답안 재현 프롬프트]
-현재 저장소에 ch00 관련 파일이 아무것도 없다는 전제로 다음 Tree와 핵심 구현을 처음부터 작성해줘.
-1. 생성할 파일 구조:
+현재 저장소에 ch00 및 플랫폼 어댑터가 전혀 없는 백지 상태라고 가정하고 아래 모범 답안과 단위 테스트를 처음부터 구현해줘.
+
+1. 디렉터리 & 파일 구조
    - 루트 지침서: AGENTS.md (100줄 이하 목차형), CLAUDE.md, CHATGPT.md, GEMINI.md
-   - 플랫폼 공용 어댑터: platforms/base.py (get_adapter("claude"|"chatgpt"|"gemini"), API 키 미설정 시 deterministic offline 폴백), platforms/adapter_claude.py, platforms/adapter_chatgpt.py, platforms/adapter_gemini.py, platforms/tests/test_platforms.py
+   - 플랫폼 어댑터: platforms/base.py , platforms/adapter_claude.py , platforms/adapter_chatgpt.py , platforms/adapter_gemini.py , platforms/tests/test_platforms.py
    - 프롤로그 진단기: ch00-prologue/stack_check.py , ch00-prologue/tests/test_stack_check.py
-2. 핵심 구현 및 출력 규격:
-   - stack_check.py는 --json 플래그를 지원하고, 실행 시 {"python_version": "3.13+", "sqlite_fts5": true, "platforms_supported": ["claude", "chatgpt", "gemini"], "layers_count": 4, "elements_count": 12, "overall_ready": true} 구조를 출력할 것.
-3. 검증 명령:
+
+2. 핵심 구현 명세 (표준 라이브러리만 사용)
+   - platforms/base.py: AGENT_PLATFORM 환경 변수 또는 인자로 get_adapter("claude"|"chatgpt"|"gemini")를 반환하고, API 키 미설정 시 deterministic offline 시뮬레이터로 안전 폴백할 것.
+   - ch00-prologue/stack_check.py: FOUR_LAYERS_12_ELEMENTS 상수에 4계층(지식과 기억·행동과 도구·표준과 확장·위임과 검증) 12대 스택을 정의하고, Python 3.13+ 버전, sqlite3 FTS5 모듈 가용성, Git/Node 런타임, 3대 플랫폼 어댑터 준비 상태를 점검할 것.
+   - CLI 옵션: --json 지원 시 {"python_version", "sqlite_fts5": true, "platforms_supported": ["claude", "chatgpt", "gemini"], "layers_count": 4, "elements_count": 12, "overall_ready": true} 형태로 출력할 것.
+
+3. 검증 명령 (전부 exit 0 통과 필수)
    - python3 ch00-prologue/stack_check.py --json
+   - python3 -m unittest discover -s ch00-prologue/tests -p "test_*.py" -v
    - python3 -m unittest discover -s platforms/tests -p "test_*.py" -v`,
         kicker: 'CH00 PROLOGUE · HANDS-ON LAB',
         heading: '프롤로그 실습: 4계층 스택 진단 & <span class="hl">플랫폼 감지</span>',

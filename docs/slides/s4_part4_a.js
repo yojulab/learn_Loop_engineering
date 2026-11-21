@@ -65,20 +65,21 @@
         id: 'ch09',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch09 모범 답안 재현 프롬프트]
 ch09 관련 파일이 전혀 없는 초기 상태에서 Maker!=Checker(Planner·Generator·Evaluator) 3-Agent 블라인드 합의 하네스 모범 답안을 처음부터 구현해줘.
-1. 생성할 파일 구조 및 심볼릭 링크:
+
+1. 생성할 파일 구조 및 심볼릭 링크
    - ch09-orchestration/harness/run.py
-   - ch09-orchestration/harness/src/harness/orchestrator.py
-   - ch09-orchestration/harness/src/harness/consensus.py
-   - ch09-orchestration/harness/src/harness/rubric.py
-   - ch09-orchestration/harness/src/harness/permissions.py
-   - ch09-orchestration/harness/src/harness/prompts/ (planner.md, generator.md, evaluator.md)
+   - ch09-orchestration/harness/src/harness/orchestrator.py , consensus.py , rubric.py , permissions.py
+   - ch09-orchestration/harness/src/harness/prompts/ 하위에 planner, generator, evaluator 마크다운 프롬프트
    - ch09-orchestration/harness/tests/test_orchestration_harness.py
    - 심볼릭 링크: ch09/harness -> ../ch09-orchestration/harness
-2. 핵심 구현 및 출력 규격:
-   - permissions.py: Generator가 TASKS.md에 지정된 touch 허용 파일 범위만 수정했는지 검증
-   - consensus.py: Planner(decisions/*.planner.md)와 Evaluator(decisions/*.evaluator.md)가 서로의 문서를 읽지 않은 상태에서 첫 줄("선택: A")만 파싱해 일치 시 합의 확정, 3회 불일치 시 docs/HALT 생성
-   - rubric.py & run.py: correctness, tests, scope 각 0~3점(총 9점) 채점 후 {"consensus": {"planner": "A", "evaluator": "A", "agreed": true}, "rubric_score": {"correctness": 3, "tests": 3, "scope": 3, "total": 9}, "verdict": "PASS"} 출력 (--mode sim|dry-run --platform claude|chatgpt|gemini 지원)
-3. 검증 명령:
+
+2. 핵심 구현 명세
+   - permissions.py: Generator가 TASKS.md에 명시된 touch 허용 경로 외 파일을 수정하지 않도록 검증.
+   - consensus.py: CHOICE_RE = r"^선택\\s*:\\s*([A-Z])\\b", parse_choice_line(), evaluate_consensus(docs_dir, topic, attempt, max_attempts=3, irreversible=False) 구현. Planner(.planner.md)와 Evaluator(.evaluator.md)가 상호 문서를 열람하지 않은 채 첫 줄만 비교해 일치 시 ConsensusOutcome(status="AGREED"), max_attempts(3회) 불일치 또는 irreversible=True 시 docs/HALT 파일 생성 후 status="HALTED" 반환.
+   - rubric.py: BASE_CRITERIA = ("spec_fit", "module_boundary", "test_rigor", "ops_readiness") 각 0~3점 채점(max_score=12 또는 ui_polish 포함 시 15, total>=9 PASS) 후 score_evaluation() 반환.
+   - run.py & orchestrator.py: --mode sim|dry-run --platform claude|chatgpt|gemini CLI 지원.
+
+3. 검증 명령 (전부 exit 0 통과 필수)
    - python3 ch09/harness/run.py --mode sim --platform chatgpt
    - python3 -m unittest discover -s ch09-orchestration/harness/tests -p "test_*.py" -v`,
         kicker: 'CH09 · HANDS-ON LAB (20분)',
@@ -155,18 +156,19 @@ ch09 관련 파일이 전혀 없는 초기 상태에서 Maker!=Checker(Planner·
         id: 'ch10',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch10 모범 답안 재현 프롬프트]
 ch10 관련 디렉터리가 전혀 없는 백지 상태에서 5단계 아우터 루프(Outer Loop)와 7대 완료·중단 조건 모범 답안을 처음부터 작성해줘.
-1. 생성할 파일 구조 및 심볼릭 링크:
-   - ch10-outer-loop/todo-loop/loop.py
-   - ch10-outer-loop/todo-loop/workers.py
-   - ch10-outer-loop/todo-loop/cost_logger.py
-   - ch10-outer-loop/todo-loop/models.py
-   - ch10-outer-loop/todo-loop/sample_tasks/ (tasks_contract.json — CALC-001~CALC-004 작업 계약, calc_verifier.py)
+
+1. 생성할 파일 구조 및 심볼릭 링크
+   - ch10-outer-loop/todo-loop/models.py , workers.py , cost_logger.py , loop.py
+   - ch10-outer-loop/todo-loop/sample_tasks/ 하위에 tasks_contract.json (CALC-001~CALC-004 계약 정의) 및 calc_verifier.py
    - ch10-outer-loop/todo-loop/tests/test_todo_loop.py
    - 심볼릭 링크: ch10/todo-loop -> ../ch10-outer-loop/todo-loop
-2. 핵심 구현 및 출력 규격:
-   - loop.py: DISCOVER -> PLAN -> EXECUTE -> VERIFY -> ITERATE 5단계 운영 루프 및 선택적 되돌림(구현 오류는 EXECUTE, 설계 모호성은 PLAN, 요구사항 오류는 DISCOVER로 롤백) 구현
-   - 7대 완료·중단 조건: 완료 3조건(exit_zero=True, quality=True, stability_streak=2) + 중단 4조건(반복 한도, 비용 한도, 동일 에러·상태 불변 2회 연속 STALL_HALT, 비가역 작업 HALT) 판정 후 CALC-001~CALC-004(4/4) 완주 요약 출력
-3. 검증 명령:
+
+2. 핵심 구현 명세
+   - models.py: TaskContract, LoopBudget(max_turns, max_retries_per_task, max_cost_usd), LoopResult, StopReason Enum(DONE, HALT_HUMAN_DECISION, HALT_BUDGET_EXCEEDED, HALT_MAX_RETRIES 등).
+   - workers.py & cost_logger.py: BaseWorker, DeterministicTestWorker, LLMWorker(platform 지원) 및 토큰·비용 JSONL 기록기 CostLogger(total_cost_usd 계산).
+   - loop.py: OuterLoopController(tasks, worker, budget, cost_logger). 의존성(_dependencies_done) 확인 -> 사람 승인 필요(requires_human_decision) 시 HALT_HUMAN_DECISION 중단 -> max_retries_per_task/max_cost_usd 가드 내 worker.run_task() & verify_task_independently() 실행 -> --platform auto|claude|chatgpt|gemini|offline 지원 및 JSON 결과(stop_reason, completed_tasks, halted_tasks, turns_executed, total_cost_usd) 출력.
+
+3. 검증 명령 (전부 exit 0 통과 필수)
    - python3 ch10/todo-loop/loop.py --platform claude
    - python3 -m unittest discover -s ch10-outer-loop/todo-loop/tests -p "test_*.py" -v`,
         kicker: 'CH10 · HANDS-ON LAB (25분)',

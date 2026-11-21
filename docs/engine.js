@@ -212,7 +212,12 @@
 
   function toggleCurrentAnswer() {
     const det = slides[cur]?.el?.querySelector('details.answer-toggle');
-    if (det) { det.open = !det.open; return; }
+    if (det) {
+      det.open = !det.open;
+      const lc = slides[cur]?.el?.querySelector('.lab-left-col');
+      if (lc) lc.classList.toggle('show-prompt', det.open);
+      return;
+    }
     const prob = slides[cur]?.el?.querySelector('.prob-reveal');
     if (prob) {
       const next = prob.getAttribute('data-revealed') !== 'true';

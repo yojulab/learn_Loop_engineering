@@ -111,6 +111,9 @@
       e.stopPropagation();
       copyTextToClipboard(promptText, copyBtn);
     });
+    const closeABtn = h('button', 'btn-lab-a btn-lab-a-close no-advance', pActions, '[A] 원상태');
+    closeABtn.type = 'button';
+    closeABtn.title = '실습 미션 카드로 되돌아가기 (단축키 A)';
     const pPre = h('pre', 'lab-prompt-text', pBox);
     pPre.setAttribute('role', 'region');
     pPre.setAttribute('aria-label', '실습 해결용 사용자 프롬프트');
@@ -120,7 +123,10 @@
     // 2) 좌측 기본 카드: 실습 미션 카드 (leftCol 전체 영역 차지)
     const left = h('section', 'lab-mission', leftCol);
     left.setAttribute('aria-label', spec.missionTitle || '실습 과제');
-    h('div', 'row', left, `<span class="chip" style="background:var(--blue-l);color:var(--blue-d)">실습 미션</span><span class="cap" style="margin-left:12px">${esc(spec.duration || '15분')}</span><span class="cap" style="margin-left:auto;color:var(--green)">[A] 모범답안 &amp; 해결 프롬프트</span>`);
+    const missionHead = h('div', 'row', left, `<span class="chip" style="background:var(--blue-l);color:var(--blue-d)">실습 미션</span><span class="cap" style="margin-left:12px">${esc(spec.duration || '15분')}</span>`);
+    const openABtn = h('button', 'btn-lab-a no-advance', missionHead, '[A] 모범답안 &amp; 해결 프롬프트');
+    openABtn.type = 'button';
+    openABtn.title = '모범 답안과 해결 프롬프트 함께 보기 (단축키 A)';
     h('h3', 'h4', left, esc(spec.missionTitle));
     const ul = h('ul', 'lab-steps', left);
     (spec.steps || []).forEach(st => h('li', '', ul, st));
@@ -142,8 +148,19 @@
     const sum = h('summary', '', det);
     h('span', '', sum, spec.answerLabel || '모범 답안 확인하기 (클릭하여 열기/닫기)');
     h('span', 'answer-badge', sum, spec.answerType || 'Tree + Code');
-    det.addEventListener('toggle', () => {
+    const syncOverlay = () => {
       leftCol.classList.toggle('show-prompt', det.open);
+    };
+    det.addEventListener('toggle', syncOverlay);
+    openABtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      det.open = !det.open;
+      syncOverlay();
+    });
+    closeABtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      det.open = false;
+      syncOverlay();
     });
 
     const body = h('div', 'answer-body', det);

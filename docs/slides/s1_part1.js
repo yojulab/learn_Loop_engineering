@@ -72,18 +72,25 @@
         id: 'ch01',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch01 모범 답안 재현 프롬프트]
 ch01 관련 디렉터리와 파일이 전혀 없는 초기 상태에서 아래 모범 답안 Tree와 동작을 100% 재현해줘.
-1. 생성할 파일 구조 및 호환 심볼릭 링크:
+
+1. 생성할 파일 구조 및 도서 호환 심볼릭 링크
    - ch01-agentic-coding/README.md
-   - ch01-agentic-coding/quote-cli/quotes.json (id, text, author, tags 배열을 가진 명언 데이터)
+   - ch01-agentic-coding/quote-cli/quotes.json (id, text, author, tags 배열을 포함한 최소 5건 이상의 엔지니어링 명언 데이터, engineering 태그 포함)
    - ch01-agentic-coding/quote-cli/quote_cli.py
-   - ch01-agentic-coding/quote-cli/interactive_demo.py
+   - ch01-agentic-coding/quote-cli/interactive_demo.py (REPL 대화형 루프 데모)
    - ch01-agentic-coding/quote-cli/tests/test_quote_cli.py
    - 심볼릭 링크: ch01/quote-cli -> ../ch01-agentic-coding/quote-cli
-2. 핵심 구현 규격 (표준 라이브러리 argparse, json, random만 사용):
-   - filter_quotes(quotes, tag=None, author=None): 태그 대소문자 무시 일치 및 저자 부분 문자열 필터링
-   - CLI 옵션: --all, --tag <태그>, --author <저자>, --seed <정수>(결정론적 랜덤 1건 추출), --json(구조화 JSON 출력)
-3. 검증 명령:
+
+2. 핵심 구현 명세 (표준 라이브러리 argparse, json, random, pathlib만 사용)
+   - load_quotes(path): quotes.json을 파싱하며 list가 아니면 ValueError 발생
+   - filter_by_tag(quotes, tag): 대소문자 무시 정확 일치(t.lower() == tag.strip().lower()) 필터링
+   - get_random_quote(quotes, rng=None): 빈 목록이면 ValueError, rng(random.Random(seed)) 전달 시 결정론적 1건 선택
+   - format_quotes(quotes, as_json=False): JSON 문자열 또는 '[id] "text" — author (tags: ...)' 텍스트 반환
+   - CLI 옵션: --all, --tag, --json, --seed, --data
+
+3. 검증 명령 (전부 exit 0 통과 필수)
    - python3 ch01/quote-cli/quote_cli.py --tag engineering --json
+   - python3 ch01/quote-cli/quote_cli.py --seed 42 --json
    - python3 -m unittest discover -s ch01-agentic-coding/quote-cli/tests -p "test_*.py" -v`,
         kicker: 'CH01 · HANDS-ON LAB (20분)',
         heading: '제1장 실습: <span class="hb">Quote CLI</span> 필터 &amp; 단위 테스트',
@@ -168,20 +175,25 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
       buildLabSlide(el, A, {
         id: 'ch02',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch02 모범 답안 재현 프롬프트]
-ch02 관련 디렉터리와 파일이 전혀 없는 백지 상태에서 아래 모범 답안 Tree와 동작을 100% 재현해줘.
-1. 생성할 파일 구조 및 심볼릭 링크:
+ch02 관련 파일이 전혀 없는 백지 상태에서 MCP 서버와 PreToolUse/PostToolUse 훅 가드레일 모범 답안을 처음부터 재현해줘.
+
+1. 생성할 파일 구조 및 호환 심볼릭 링크
    - ch02-mcp-and-hooks/quote-mcp/main.py
    - ch02-mcp-and-hooks/quote-mcp/mcp_config_claude.json , mcp_config_chatgpt.json , mcp_config_gemini.json
    - ch02-mcp-and-hooks/quote-mcp/hooks/block_dangerous_bash.py
    - ch02-mcp-and-hooks/quote-mcp/hooks/audit_logger.py
    - ch02-mcp-and-hooks/quote-mcp/hooks/platform_hook_bridge.py
-   - ch02-mcp-and-hooks/quote-mcp/tests/test_quote_mcp.py
+   - ch02-mcp-and-hooks/quote-mcp/tests/test_quote_mcp_and_hooks.py
    - 심볼릭 링크: ch02/quote-mcp -> ../ch02-mcp-and-hooks/quote-mcp (및 도서 오타 호환용 ch04/quote-cli 링크)
-2. 핵심 구현 규격:
-   - main.py 실행 시 {"server": "quote-mcp", "transport": "stdio", "tools": ["add_quote", "get_random_quote"], "resources": ["quote://all"], "prompts": ["quote_post"]} 메타데이터 및 JSON-RPC self-test 출력
-   - block_dangerous_bash.py: stdin JSON을 platform_hook_bridge.normalize_hook_event()로 정규화 후 rm -rf, 포크 폭탄, git push --force 감지 시 sys.exit(2)로 사전 차단(안전 명령은 exit 0)
-3. 검증 명령:
+
+2. 핵심 구현 명세
+   - main.py: 외부 mcp.server.fastmcp 미설치 시 동일 데코레이터 계약을 제공하는 LocalFastMCP 폴백 클래스 포함. @mcp.tool() get_random_quote / add_quote, @mcp.resource("quote://all"), @mcp.prompt() quote_post 등록. run("stdio") 실행 시 {"server": "quote-mcp", "transport": "stdio", "tools": [...], "resources": ["quote://all"], "prompts": ["quote_post"]} 메타데이터 출력.
+   - hooks/block_dangerous_bash.py: evaluate_command(command)로 rm -rf, git push --force/-f, git reset --hard, DROP TABLE, find ... -delete, mkfs 정규식 탐지. --command 인자 또는 stdin JSON(platform_hook_bridge.normalize_hook_event() 호환)을 받아 차단 시 {"decision": "block", "reason": ...} 출력 후 sys.exit(2), 안전 명령은 exit 0.
+   - hooks/audit_logger.py: 도구 실행 이벤트를 JSONL 감사 로그로 기록.
+
+3. 검증 명령 (전부 통과 필수)
    - python3 ch02/quote-mcp/main.py
+   - echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | python3 ch02/quote-mcp/hooks/block_dangerous_bash.py  # exit=2 확인
    - python3 -m unittest discover -s ch02-mcp-and-hooks/quote-mcp/tests -p "test_*.py" -v`,
         kicker: 'CH02 · HANDS-ON LAB (25분)',
         heading: '제2장 실습: <span class="hl">MCP 서버</span> &amp; <span class="hb">PreToolUse</span> 차단 검증',
@@ -266,21 +278,25 @@ ch02 관련 디렉터리와 파일이 전혀 없는 백지 상태에서 아래 �
       buildLabSlide(el, A, {
         id: 'ch03',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch03 모범 답안 재현 프롬프트]
-ch03 관련 디렉터리가 전혀 없는 초기 상태에서 3단계 Progressive Disclosure 구조의 5종 GitHub 스킬 모범 답안을 처음부터 재현해줘.
-1. 생성할 파일 구조 및 심볼릭 링크:
-   - ch03-skills/github-workflow-skills/ 하위에 5개 스킬 폴더 생성:
-     * git-commit/ (SKILL.md, reference.md, examples/, scripts/validate_commit.py)
-     * gh-issue/ (SKILL.md, reference.md, examples/, scripts/validate_issue.py)
-     * gh-pr/ (SKILL.md, reference.md, examples/, scripts/validate_pr.py)
-     * gh-review/ (SKILL.md, reference.md, examples/, scripts/validate_review.py)
-     * gh-address-review/ (SKILL.md, reference.md, scripts/validate_address_review.py)
-   - 플랫폼별 적용 가이드: skills_claude.md , skills_chatgpt.md , skills_gemini.md
+ch03 관련 디렉터리가 전혀 없는 초기 상태에서 3단계 Progressive Disclosure(1단계 Metadata -> 2단계 Instructions -> 3단계 Resources) 구조의 5종 GitHub 스킬 모범 답안을 처음부터 재현해줘.
+
+1. 생성할 파일 구조 및 심볼릭 링크
+   - ch03-skills/github-workflow-skills/ 하위에 5종 스킬 디렉터리 각각 구성:
+     * git-commit/ : SKILL.md, reference.md, examples/, scripts/validate_commit.py
+     * gh-issue/   : SKILL.md, reference.md, examples/, scripts/validate_issue.py
+     * gh-pr/      : SKILL.md, reference.md, examples/, scripts/validate_pr.py
+     * gh-review/  : SKILL.md, reference.md, examples/, scripts/validate_review.py
+     * gh-address-review/ : SKILL.md, reference.md, examples/, scripts/validate_address_review.py
+   - 3대 플랫폼 가이드: skills_claude.md , skills_chatgpt.md , skills_gemini.md
    - 단위 테스트: ch03-skills/github-workflow-skills/tests/test_github_workflow_skills.py
    - 심볼릭 링크: ch03/github-workflow-skills -> ../ch03-skills/github-workflow-skills
-2. 핵심 구현 규격:
-   - 모든 SKILL.md 상단에 YAML Frontmatter(--- name: ... description: ... ---) 필수 포함
-   - validate_commit.py --text "feat: add workflow skill" 실행 시 Conventional Commits 규칙 검증 후 "[OK] valid Conventional Commit" 및 종료 코드 0 반환
-3. 검증 명령:
+
+2. 핵심 구현 명세
+   - 각 SKILL.md 상단에 '---\\nname: <스킬명>\\ndescription: <활성화 조건 설명>\\n---' YAML Frontmatter를 반드시 배치(1단계 로딩 최소화).
+   - 본문(2단계)에는 절차와 규칙을 간결하게(<5KB) 적고, 상세 체크리스트는 reference.md(3단계)로 분리.
+   - validate_commit.py: --text 인자를 받아 Conventional Commits 패턴(^(feat|fix|docs|style|refactor|test|chore)(\\(.+\\))?: .+)을 검증해 유효 시 exit 0("[OK] valid Conventional Commit"), 위반 시 exit 1 반환. 나머지 4개 validate_*.py도 동일 패턴으로 구현.
+
+3. 검증 명령 (전부 exit 0 통과 필수)
    - python3 ch03/github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"
    - python3 -m unittest discover -s ch03-skills/github-workflow-skills/tests -p "test_*.py" -v`,
         kicker: 'CH03 · HANDS-ON LAB (30분)',

@@ -102,15 +102,22 @@ litellm_settings:
         id: 'ch11',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch11 모범 답안 재현 프롬프트]
 ch11 관련 디렉터리가 전혀 없는 초기 상태에서 LiteLLM 무코드 프록시 + Langfuse Save as Prompt + 3종 Eval 모범 답안을 처음부터 구현해줘.
-1. 생성할 파일 구조 및 심볼릭 링크:
+
+1. 생성할 파일 구조 및 심볼릭 링크
    - ch11-eval-and-llmops/support-assistant/litellm_proxy/ (litellm_config.yaml, zero_code_proxy_demo.py, client_claude.py, client_chatgpt.py, client_gemini.py)
-   - ch11-eval-and-llmops/support-assistant/trace_to_prompt.py (extract_prompt_from_trace 기반 Save as Prompt 승격 CLI, --demo --json 지원)
-   - ch11-eval-and-llmops/support-assistant/fetch_prompt.py (label="production" 조회 및 Mustache {{customer_query}} 렌더링 CLI, --demo --json 지원)
-   - ch11-eval-and-llmops/support-assistant/seed_prompts.py , prompting.py , langfuse_ops.py (Langfuse HTTP v2 연동 및 오프라인 JSONL 폴백)
-   - ch11-eval-and-llmops/support-assistant/evaluator.py , regression_compare.py (1.코드 기반 결정론적 규칙 2.LLM-as-a-Judge 0~3점 루브릭 3.사람 평가 골든셋 회귀 비교, pass_rate >= 0.85 게이트)
-   - ch11-eval-and-llmops/support-assistant/tests/test_support_assistant.py (로컬 Langfuse Mock HTTP v2 서버 내장 통합 테스트)
+   - ch11-eval-and-llmops/support-assistant/langfuse_ops.py (LangfuseOpsClient: HTTP v2 API 연동 및 오프라인 JSONL 폴백)
+   - ch11-eval-and-llmops/support-assistant/trace_to_prompt.py , fetch_prompt.py , seed_prompts.py , prompting.py
+   - ch11-eval-and-llmops/support-assistant/evaluator.py , regression_compare.py
+   - ch11-eval-and-llmops/support-assistant/tests/test_support_assistant.py
    - 심볼릭 링크: ch11/support-assistant -> ../ch11-eval-and-llmops/support-assistant
-2. 검증 명령:
+
+2. 핵심 구현 명세
+   - trace_to_prompt.py: extract_prompt_template_from_trace(trace_entry, variable_mapping) 및 promote_trace_as_prompt()로 Trace input의 샘플 값을 {{var}} 변수로 승격해 Prompt 자산 등록(--demo --json 지원).
+   - fetch_prompt.py & prompting.py: fetch_and_compile_prompt(ops, prompt_name, ticket, label="production")로 production 라벨 프롬프트를 가져와 SupportTicket 변수로 컴파일(--demo --json 지원).
+   - evaluator.py & regression_compare.py: evaluate_rule_based(), evaluate_reference_and_judge(), evaluate_safety_policy(), run_three_evals()와 compare_prompt_versions(dataset, "production", "candidate", ops) 회귀 비교.
+   - tests/test_support_assistant.py: 외부 키 없이 로컬 Mock HTTP v2 서버로 Trace 조회·Prompt 등록·라벨 Fetch·3종 Eval을 모두 검증.
+
+3. 검증 명령 (전부 exit 0 통과 필수)
    - python3 ch11/support-assistant/trace_to_prompt.py --demo --json
    - python3 ch11/support-assistant/fetch_prompt.py --demo --json
    - python3 -m unittest discover -s ch11-eval-and-llmops/support-assistant/tests -p "test_*.py" -v`,
@@ -253,16 +260,21 @@ $ python3 ch11/support-assistant/regression_compare.py`,
       buildLabSlide(el, A, {
         id: 'ch12',
         userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch12 모범 답안 재현 프롬프트]
-ch12 관련 파일이 전혀 없는 백지 상태에서 4계층 12대 스택 치트시트, Stage 1~4 도입 성숙도 진단기, 전 단원 통합 검증 게이트 모범 답안을 처음부터 작성해줘.
-1. 생성할 파일 구조:
+ch12 관련 파일이 전혀 없는 백지 상태에서 4계층 12대 스택 치트시트, Stage 1~4 성숙도 진단기, 전 단원 통합 검증 게이트 모범 답안을 처음부터 작성해줘.
+
+1. 생성할 파일 구조
    - ch12-epilogue/README.md (4계층 12대 스택 한눈에 보기 치트시트 & Stage 1~4 점진적 도입 로드맵)
-   - ch12-epilogue/stage_readiness_check.py (--format json 지원)
+   - ch12-epilogue/stage_readiness_check.py
    - ch12-epilogue/tests/test_stage_readiness.py
-   - scripts/verify_chapters.py (--all 옵션으로 루트·플랫폼·ch00~ch12·docs 웹 PPT 전체 통합 검증)
-2. 핵심 구현 및 출력 규격:
-   - stage_readiness_check.py --format json 실행 시 Stage 1(개인 루프: ch01·ch04), Stage 2(도구와 안전: ch02·ch03·ch07), Stage 3(기억과 위임: ch05·ch06·ch08), Stage 4(합의와 LLMOps: ch09·ch10·ch11) 준비 여부를 점검해 {"current_stage": 4, "stage_1_to_4_ready": true, "platforms_verified": ["claude", "chatgpt", "gemini"]} 출력
-3. 검증 명령:
+   - scripts/verify_chapters.py (--all 옵션으로 루트·플랫폼·ch00~ch12·docs 웹 PPT 통합 검증)
+
+2. 핵심 구현 명세 (stage_readiness_check.py)
+   - inspect_stages(repo_root): 저장소의 stage_1_foundation(AGENTS.md/CLAUDE.md/verify_chapters.py), stage_2_role_separation(ch09 permissions.py/rubric.py), stage_3_outer_loop(ch10 loop.py/cost_logger.py), stage_4_llmops(ch11 evaluator.py/langfuse_ops.py) 존재 여부를 점검해 {"repo_root", "stages": {...}, "completed_stages": 4, "total_stages": 4}를 반환할 것.
+   - CLI 옵션: --path, --format (text|json) 지원.
+
+3. 검증 명령 (전부 exit 0 통과 필수)
    - python3 ch12-epilogue/stage_readiness_check.py --format json
+   - python3 -m unittest discover -s ch12-epilogue/tests -p "test_*.py" -v
    - python3 scripts/verify_chapters.py --all`,
         kicker: 'CH12 · FINAL CAPSTONE LAB (15분)',
         heading: '최종 실습: <span class="hl">Stage 1~4</span> 진단 &amp; 전 단원 통합 게이트',

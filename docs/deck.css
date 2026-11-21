@@ -263,12 +263,13 @@ body.home-page { overflow: auto; height: auto; min-height: 100%; background: var
 }
 .edu-sheet-btn:hover, .edu-sheet-pill:hover { background: #F5A524; color: #0F1B3D; }
 
-/* 'A' 모범 답안 열기 시 실습 미션 카드 사이즈에 딱 맞게 겹쳐(Overlay) 나타나는 해결용 사용자 프롬프트 + Copy 버튼 */
+/* 'A' 모범 답안 열기 시 실습 미션 카드 사이즈에 딱 맞게 겹쳐(Overlay) 나타나는 해결용 사용자 프롬프트 + Copy & [A] 원상태 버튼 */
 .lab-left-col {
   position: relative;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  width: 100%;
   height: 100%;
 }
 .lab-left-col .lab-mission {
@@ -280,11 +281,13 @@ body.home-page { overflow: auto; height: auto; min-height: 100%; background: var
 .lab-prompt-box {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 15;
   display: none;
   flex-direction: column;
   gap: 14px;
-  padding: 26px 32px;
+  padding: 28px 34px;
   border-radius: 24px;
   background: var(--card);
   border: 2.5px solid var(--green);
@@ -309,6 +312,26 @@ body.home-page { overflow: auto; height: auto; min-height: 100%; background: var
 }
 .btn-copy-prompt:hover { background: var(--green-d); }
 .btn-copy-prompt.copied { background: var(--blue); }
+.btn-lab-a {
+  margin-left: auto;
+  background: rgba(18,176,122,.12);
+  color: var(--green-d);
+  border: 1.5px solid rgba(18,176,122,.42);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  flex: none;
+}
+.btn-lab-a:hover { background: var(--green); color: #fff; border-color: var(--green); }
+.theme-ink .btn-lab-a, .theme-night .btn-lab-a { color: var(--mint); border-color: rgba(75,227,166,.45); background: rgba(75,227,166,.12); }
+.theme-ink .btn-lab-a:hover, .theme-night .btn-lab-a:hover { background: var(--mint); color: #0F1B3D; }
+.btn-lab-a-close {
+  margin-left: 0;
+  border-radius: 10px;
+  padding: 8px 14px;
+}
 .lab-prompt-text {
   flex: 1;
   min-height: 0;
@@ -318,11 +341,15 @@ body.home-page { overflow: auto; height: auto; min-height: 100%; background: var
   border-radius: 14px;
   padding: 18px 22px;
   font-family: var(--mono);
-  font-size: 17.5px;
-  line-height: 1.55;
+  font-size: 16.5px;
+  line-height: 1.56;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   border: 1px solid rgba(255,255,255,.12);
 }
-  border: 1px solid rgba(255,255,255,.12);
+.lab-prompt-text code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: 1em;
 }
