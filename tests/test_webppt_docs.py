@@ -204,9 +204,12 @@ class WebPptDocsTests(unittest.TestCase):
         ui_txt = (DOCS_DIR / "ui.js").read_text(encoding="utf-8")
         self.assertIn("btn-copy-prompt", ui_txt)
         self.assertIn("show-prompt", ui_txt)
+        self.assertIn("lab-left-col", ui_txt)
+        self.assertLess(ui_txt.find("lab-prompt-box"), ui_txt.find("section.lab-mission"))
         s5_txt = (DOCS_DIR / "slides/s5_part4_b.js").read_text(encoding="utf-8")
         self.assertLess(s5_txt.find("id: 'ch11-lab'"), s5_txt.find("id: 'ch11-eval-methods'"))
         self.assertLess(s5_txt.find("id: 'ch11-eval-methods'"), s5_txt.find("id: 'ch12-theory'"))
+        self.assertIn("height:250px;display:flex;flex-direction:column", s5_txt)
 
 if __name__ == "__main__":
     unittest.main()

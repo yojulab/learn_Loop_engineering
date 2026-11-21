@@ -94,8 +94,29 @@
 
     const grid = h('div', 'lab-grid', el);
 
-    // 좌측: 실습 미션 카드
-    const left = h('section', 'lab-mission', grid);
+    // 좌측 컬럼: ('A' 토글 시 상단에 표시되는 백지 상태 해결용 사용자 프롬프트) + (하단 실습 미션 카드)
+    const leftCol = h('div', 'lab-left-col', grid);
+
+    const promptText = spec.userPrompt || (
+      `아무것도 없는 초기 상태에서 [${spec.id || '실습'}] ${spec.missionTitle}에 필요한 디렉터리, 코드, 단위 테스트를 처음부터 구현하고 실행 명령(${(spec.runCmd || '').replace(/\n/g, ' && ')})으로 검증해줘.`
+    );
+    const pBox = h('div', 'lab-prompt-box no-advance', leftCol);
+    const pHead = h('div', 'lab-prompt-head', pBox);
+    h('span', 'lab-prompt-title', pHead, '💬 실습 해결용 사용자 프롬프트 (초기 백지 상태에서 생성 지시)');
+    const copyBtn = h('button', 'btn-copy-prompt no-advance', pHead, '📋 프롬프트 복사');
+    copyBtn.type = 'button';
+    copyBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      copyTextToClipboard(promptText, copyBtn);
+    });
+    const pPre = h('pre', 'lab-prompt-text', pBox);
+    pPre.setAttribute('role', 'region');
+    pPre.setAttribute('aria-label', '실습 해결용 사용자 프롬프트');
+    pPre.setAttribute('tabindex', '0');
+    h('code', '', pPre, esc(promptText));
+
+    // 좌측: 실습 미션 카드 (프롬프트 박스 바로 아래)
+    const left = h('section', 'lab-mission', leftCol);
     left.setAttribute('aria-label', spec.missionTitle || '실습 과제');
     h('div', 'row', left, `<span class="chip" style="background:var(--blue-l);color:var(--blue-d)">실습 미션</span><span class="cap" style="margin-left:12px">${esc(spec.duration || '15분')}</span><span class="cap" style="margin-left:auto;color:var(--green)">[A] 모범답안 &amp; 해결 프롬프트</span>`);
     h('h3', 'h4', left, esc(spec.missionTitle));
@@ -110,26 +131,7 @@
       h('code', '', cmdPre, esc(spec.runCmd));
     }
 
-    // 'A' 모범 답안 열기 시 실습 미션 카드 내부에 표시되는 해결용 사용자 프롬프트 + Copy 버튼
-    const promptText = spec.userPrompt || (
-      `[${spec.id || '실습'}] ${spec.missionTitle} 과제를 해결해줘. 실행 명령(${(spec.runCmd || '').replace(/\n/g, ' && ')})으로 동작과 테스트 통과 여부를 끝까지 검증해줘.`
-    );
-    const pBox = h('div', 'lab-prompt-box no-advance', left);
-    const pHead = h('div', 'lab-prompt-head', pBox);
-    h('span', 'lab-prompt-title', pHead, '💬 실습 해결용 사용자 프롬프트 (AI 에이전트 입력용)');
-    const copyBtn = h('button', 'btn-copy-prompt no-advance', pHead, '📋 프롬프트 복사');
-    copyBtn.type = 'button';
-    copyBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      copyTextToClipboard(promptText, copyBtn);
-    });
-    const pPre = h('pre', 'lab-prompt-text', pBox);
-    pPre.setAttribute('role', 'region');
-    pPre.setAttribute('aria-label', '실습 해결용 사용자 프롬프트');
-    pPre.setAttribute('tabindex', '0');
-    h('code', '', pPre, esc(promptText));
-
-    A(left, 'up', 0.12, { dur: 0.45 });
+    A(leftCol, 'up', 0.12, { dur: 0.45 });
 
     // 우측: 클릭 시 열리는 모범 답안 (<details>/<summary>, heading 금지)
     const right = h('section', 'lab-solution', grid);
@@ -139,7 +141,7 @@
     h('span', '', sum, spec.answerLabel || '모범 답안 확인하기 (클릭하여 열기/닫기)');
     h('span', 'answer-badge', sum, spec.answerType || 'Tree + Code');
     det.addEventListener('toggle', () => {
-      left.classList.toggle('show-prompt', det.open);
+      leftCol.classList.toggle('show-prompt', det.open);
     });
 
     const body = h('div', 'answer-body', det);

@@ -327,7 +327,7 @@
         buildSlideDom(d, idx);
         d.el.classList.add('on');
         d.el.querySelectorAll('details.answer-toggle').forEach(det => { det.open = true; });
-        d.el.querySelectorAll('.lab-mission').forEach(m => m.classList.add('show-prompt'));
+        d.el.querySelectorAll('.lab-left-col').forEach(m => m.classList.add('show-prompt'));
         const fin = Array.from({ length: (d.steps || 0) + 1 }, () => FINAL);
         renderSlide(d, FINAL, d.steps || 0, fin);
       });

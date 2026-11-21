@@ -70,7 +70,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch01',
-        userPrompt: 'ch01/quote-cli/quote_cli.py에서 --tag engineering --json, --author "Loop Handbook", --seed 42 옵션을 실행해 필터링과 결정론적 랜덤 출력을 확인하고, ch01-agentic-coding/quote-cli/tests 단위 테스트를 모두 통과시켜줘.',
+        userPrompt: '아무것도 없는 초기 상태에서 ch01-agentic-coding/quote-cli 디렉터리와 호환 심볼릭 링크(ch01/quote-cli)를 만들고, 명언 데이터(quotes.json), 태그·저자 필터링과 시드 기반 랜덤 추출 및 JSON 출력을 지원하는 CLI(quote_cli.py --all/--tag/--author/--seed/--json), 대화형 루프 데모(interactive_demo.py), 단위 테스트(tests/test_quote_cli.py)를 표준 라이브러리만으로 처음부터 작성하고 검증해줘.',
         kicker: 'CH01 · HANDS-ON LAB (20분)',
         heading: '제1장 실습: <span class="hb">Quote CLI</span> 필터 &amp; 단위 테스트',
         duration: '20분',
@@ -153,7 +153,7 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch02',
-        userPrompt: 'ch02/quote-mcp/main.py의 MCP 도구·리소스 메타데이터를 확인하고, hooks/block_dangerous_bash.py에 \'rm -rf /\'와 안전 명령을 각각 전달해 PreToolUse 차단(exit 2) 및 허용(exit 0) 가드레일과 단위 테스트를 검증해줘.',
+        userPrompt: '백지 상태에서 ch02-mcp-and-hooks/quote-mcp(및 ch02/quote-mcp 심볼릭 링크)를 생성하고, 표준 입출력 기반 명언 MCP 서버(main.py), 위험 Bash 명령(rm -rf 등)을 사전 차단(exit code 2)하는 PreToolUse 훅(hooks/block_dangerous_bash.py), 실행 감사 로거(hooks/audit_logger.py), 3대 플랫폼 브리지(hooks/platform_hook_bridge.py)와 설정 파일(mcp_config_claude.json · mcp_config_chatgpt.json · mcp_config_gemini.json), 단위 테스트를 처음부터 구현해줘.',
         kicker: 'CH02 · HANDS-ON LAB (25분)',
         heading: '제2장 실습: <span class="hl">MCP 서버</span> &amp; <span class="hb">PreToolUse</span> 차단 검증',
         duration: '25분',
@@ -236,7 +236,7 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch03',
-        userPrompt: 'ch03/github-workflow-skills의 5종 스킬 YAML Frontmatter(name, description)와 3단계 Progressive Disclosure 구조를 점검하고, validate_commit.py --text "feat: add workflow skill" 검증과 스킬 단위 테스트를 실행해줘.',
+        userPrompt: '아무것도 없는 초기 상태에서 ch03-skills/github-workflow-skills(및 ch03/github-workflow-skills 심볼릭 링크)를 만들고, 3단계 Progressive Disclosure 구조(YAML Frontmatter SKILL.md + reference.md + examples/ + scripts/validate_*.py)를 갖춘 5종 GitHub 스킬(git-commit, gh-issue, gh-pr, gh-review, gh-address-review)과 플랫폼 가이드(skills_claude.md · skills_chatgpt.md · skills_gemini.md), 단위 테스트(tests/test_github_workflow_skills.py)를 처음부터 작성해줘.',
         kicker: 'CH03 · HANDS-ON LAB (30분)',
         heading: '제3장 실습: <span class="hl">5종 GitHub 스킬</span> 검증 스크립트 &amp; 테스트',
         duration: '30분',

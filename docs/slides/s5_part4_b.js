@@ -100,7 +100,7 @@ litellm_settings:
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch11',
-        userPrompt: 'ch11/support-assistant/trace_to_prompt.py --demo --json으로 Trace를 프롬프트 자산으로 승격하고, fetch_prompt.py --demo --json으로 production 라벨 프롬프트 렌더링을 확인한 뒤 3종 Eval 및 회귀 비교 테스트를 통과시켜줘.',
+        userPrompt: '아무것도 없는 초기 상태에서 ch11-eval-and-llmops/support-assistant(및 ch11/support-assistant 심볼릭 링크)를 만들고, Langfuse v2 클라이언트 및 오프라인 JSONL 폴백(langfuse_ops.py), LiteLLM 무코드 관측 프록시 설정·데모(litellm_proxy/), Trace→Prompt 승격(trace_to_prompt.py), 라벨 기반 프롬프트 조회·컴파일(fetch_prompt.py, prompting.py), 3종 Eval 및 회귀 비교기(evaluator.py, regression_compare.py)와 단위 테스트를 처음부터 구현해줘.',
         kicker: 'CH11 · HANDS-ON LAB (25분)',
         heading: '제11장 실습: <span class="hb">Save as Prompt</span> + <code>fetch_prompt</code> + 3종 Eval',
         duration: '25분',
@@ -187,11 +187,14 @@ $ python3 ch11/support-assistant/regression_compare.py`,
 
       methods.forEach(([badge, sub, desc, bg, fg, codeEx], i) => {
         const c = card(el, { x: 100 + i * 585, y: 215, w: 550, h: 755, pad: 28 });
-        c.innerHTML = `<span class="chip" style="background:${bg};color:${fg}">${badge}</span>
-          <div class="h4" style="margin-top:16px">${sub}</div>
-          <div class="b3" style="margin-top:12px;color:var(--fg2)">${desc}</div>
-          <div class="cap" style="margin-top:20px;color:var(--ink)">실전 코드 / 루브릭 예시</div>
-          <pre class="code-block" style="margin-top:10px;font-size:17px;line-height:1.48"><code>${UI.esc(codeEx)}</code></pre>`;
+        c.style.cssText += ';display:flex;flex-direction:column';
+        c.innerHTML = `<div style="height:250px;display:flex;flex-direction:column;align-items:flex-start">
+            <span class="chip" style="background:${bg};color:${fg}">${badge}</span>
+            <div class="h4" style="margin-top:16px">${sub}</div>
+            <div class="b3" style="margin-top:12px;color:var(--fg2)">${desc}</div>
+          </div>
+          <div class="cap" style="color:var(--ink)">실전 코드 / 루브릭 예시</div>
+          <pre class="code-block" style="margin-top:10px;font-size:17px;line-height:1.48;flex:1;margin-bottom:0"><code>${UI.esc(codeEx)}</code></pre>`;
         A(c, 'up', 0.1 + i * 0.08, { dur: 0.45 });
       });
     },
@@ -236,7 +239,7 @@ $ python3 ch11/support-assistant/regression_compare.py`,
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch12',
-        userPrompt: 'ch12-epilogue/stage_readiness_check.py --format json을 실행해 Stage 1~4 도입 성숙도를 진단하고, python3 scripts/verify_chapters.py --all로 전 단원·플랫폼·웹 PPT 통합 게이트(100% PASS)를 최종 검증해줘.',
+        userPrompt: '백지 상태에서 ch12-epilogue 디렉터리를 생성하고, 4계층 12대 스택 치트시트와 Stage 1~4 점진적 도입 로드맵을 담은 README.md, 저장소 전체의 Stage 1~4 준비 상태를 진단하는 stage_readiness_check.py(--format json 지원), 단위 테스트(tests/test_stage_readiness.py)를 처음부터 작성해 전 단원 통합 검증(verify_chapters.py --all)을 통과시켜줘.',
         kicker: 'CH12 · FINAL CAPSTONE LAB (15분)',
         heading: '최종 실습: <span class="hl">Stage 1~4</span> 진단 &amp; 전 단원 통합 게이트',
         duration: '15분',

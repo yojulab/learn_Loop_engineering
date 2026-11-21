@@ -65,7 +65,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch04',
-        userPrompt: 'ch04-context-engineering/context_budget.py --json을 실행해 토큰 점유율과 압축(compaction_needed) 경고를 분석하고, 7항목 프롬프트 템플릿·Few-shot·플랫폼별 guidelines_*.md 정합성 테스트를 통과시켜줘.',
+        userPrompt: '백지 상태에서 ch04-context-engineering(및 ch04 심볼릭 링크)을 생성하고, 7항목 구조화 프롬프트(prompt_template.txt), Few-shot 예시(few_shot_reference.txt), 4대 층위 지침(AGENTS.md, CLAUDE.md, GEMINI.md, .claude/rules/api.md, guidelines_claude.md · guidelines_chatgpt.md · guidelines_gemini.md), 토큰 점유율 및 압축(compaction_needed) 경고를 계산하는 context_budget.py(--json 지원)와 단위 테스트를 처음부터 구현해줘.',
         kicker: 'CH04 · HANDS-ON LAB (20분)',
         heading: '제4장 실습: <span class="hv">컨텍스트 예산</span> 계산 &amp; 프롬프트 어댑팅',
         duration: '20분',
@@ -144,7 +144,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch05',
-        userPrompt: 'ch05/memory_pattern/agentic_rag.py로 하이브리드 검색 및 RRF 재순위화 점수를 확인하고, memory_manager.py를 실행해 TASKS.md 완료 상태와 JOURNAL.md 에피소드 기록이 정상 갱신되는지 단위 테스트로 검증해줘.',
+        userPrompt: '아무것도 없는 초기 상태에서 ch05-rag-and-memory/memory_pattern(및 ch05/memory_pattern 심볼릭 링크)을 만들고, 4종 샘플 코퍼스(corpus/*.md), 쿼리 재작성·하이브리드 검색·RRF 재순위화·자기비평 루프를 수행하는 agentic_rag.py, TASKS.md와 JOURNAL.md 파일 기반 지속 메모리를 관리하는 memory_manager.py, 단위 테스트(tests/test_memory_pattern.py)를 외부 DB 없이 순수 Python으로 처음부터 구현해줘.',
         kicker: 'CH05 · HANDS-ON LAB (25분)',
         heading: '제5장 실습: <span class="hl">Agentic RAG</span> &amp; 파일 기반 지속 메모리',
         duration: '25분',

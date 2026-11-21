@@ -337,7 +337,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch00',
-        userPrompt: 'ch00-prologue/stack_check.py를 --json 모드로 실행해 Python 3.13+, SQLite FTS5, 4계층 12대 스택 준비 상태를 진단하고, AGENT_PLATFORM을 claude/chatgpt/gemini로 전환하며 platforms/ 단위 테스트와 AGENTS.md 100줄 제한 통과 여부를 검증해줘.',
+        userPrompt: '현재 아무것도 없는 백지 상태의 저장소에 루트 지침서(AGENTS.md 100줄 이하, CLAUDE.md, CHATGPT.md, GEMINI.md), 3대 플랫폼 공용 어댑터(platforms/base.py, adapter_claude.py, adapter_chatgpt.py, adapter_gemini.py), 그리고 ch00-prologue/stack_check.py (--json 지원, Python 3.13·SQLite FTS5·4계층 12대 스택 진단)와 단위 테스트(ch00-prologue/tests/test_stack_check.py , platforms/tests/test_platforms.py)를 처음부터 생성하고 테스트를 통과시켜줘.',
         kicker: 'CH00 PROLOGUE · HANDS-ON LAB',
         heading: '프롤로그 실습: 4계층 스택 진단 & <span class="hl">플랫폼 감지</span>',
         duration: '15분',

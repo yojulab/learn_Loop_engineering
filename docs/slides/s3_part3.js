@@ -65,7 +65,7 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch06',
-        userPrompt: 'ch06-subagents-workflow/dynamic_workflow.py를 --platform gemini --json으로 실행해 병렬 서브에이전트 파이프라인 결과를 확인하고, ch06/quote-cli/quote_cli.py --search "harness" --json 검색 확장 동작과 테스트 스위트를 검증해줘.',
+        userPrompt: '백지 상태에서 ch06-subagents-workflow를 생성하고, 5종 전문 서브에이전트 정의(.claude/agents/*.md 및 agents_chatgpt.json, agents_gemini.json), 작업 유형별 병렬·파이프라인 서브에이전트 워크플로 시뮬레이터(dynamic_workflow.py --platform/--task-type/--json), 키워드 검색(--search)을 확장한 명언 CLI(quote-cli/quote_cli.py 및 ch06/quote-cli 링크), 단위 테스트를 처음부터 작성해줘.',
         kicker: 'CH06 · HANDS-ON LAB (20분)',
         heading: '제6장 실습: <span class="hl">서브에이전트</span> 위임 &amp; 멀티 플랫폼 실행',
         duration: '20분',
@@ -129,7 +129,7 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch07',
-        userPrompt: 'ch07/harness-templates/arch_linter.py로 valid_app과 invalid_app의 계층 의존성 위반을 AST 기반으로 검사하고, guardrails.py·doc_gardening.py 및 AGENTS.md 100줄 상한 규칙 테스트를 모두 통과시켜줘.',
+        userPrompt: '아무것도 없는 초기 상태에서 ch07-harness-engineering/harness-templates(및 ch07/harness-templates 심볼릭 링크)를 만들고, 100줄 이하 목차형 AGENTS.md, AST 기반 계층 아키텍처 의존성 린터(arch_linter.py --root/--json), 시크릿·위험 패턴 가드레일(guardrails.py), 문서-코드 드리프트 정원가꾸기(doc_gardening.py), 검증용 샘플 앱(samples/valid_app, invalid_app)과 단위 테스트를 처음부터 구현해줘.',
         kicker: 'CH07 · HANDS-ON LAB (20분)',
         heading: '제7장 실습: <span class="hl">하네스 린터</span> &amp; 문서 정원가꾸기',
         duration: '20분',
@@ -202,7 +202,7 @@ tree = ast.parse(path.read_text(encoding="utf-8"))
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch08',
-        userPrompt: 'ch08/rss-wiki의 SQLite FTS5 전문 검색(db.py, collector.py)과 goal_evaluator.py 완료 판정(MET)을 실행하고, 3대 플랫폼 비대화형 워커(worker_claude/chatgpt/gemini.sh) 및 서킷 브레이커 단위 테스트를 검증해줘.',
+        userPrompt: '백지 상태에서 ch08-inner-ralph-loop/rss-wiki(및 ch08/rss-wiki 심볼릭 링크)를 생성하고, SQLite FTS5 전문 검색 위키 DB(db.py), 피드 수집기(collector.py), 내장 웹 서버(app.py), /goal 완료 판정기(goal_evaluator.py), 서킷 브레이커와 컨텍스트 초기화를 갖춘 ralph_loop.sh 및 3대 플랫폼 워커(worker_claude.sh · worker_chatgpt.sh · worker_gemini.sh), 단위 테스트(tests/test_rss_wiki.py)를 처음부터 작성해줘.',
         kicker: 'CH08 · HANDS-ON LAB (25분)',
         heading: '제8장 실습: <span class="hb">FTS5 Wiki</span> &amp; <span class="hl">Ralph Loop /goal</span> 평가',
         duration: '25분',

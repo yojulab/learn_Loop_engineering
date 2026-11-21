@@ -263,18 +263,30 @@ body.home-page { overflow: auto; height: auto; min-height: 100%; background: var
 }
 .edu-sheet-btn:hover, .edu-sheet-pill:hover { background: #F5A524; color: #0F1B3D; }
 
-/* 'A' 모범 답안 열기 시 실습 미션 카드 내부에 나타나는 해결용 사용자 프롬프트 + Copy 버튼 */
+/* 'A' 모범 답안 열기 시 실습 미션 카드 위에 나타나는 해결용 사용자 프롬프트 + Copy 버튼 */
+.lab-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  height: 100%;
+}
+.lab-left-col .lab-mission {
+  flex: 1;
+  min-height: 0;
+}
 .lab-prompt-box {
   display: none;
   flex-direction: column;
   gap: 10px;
-  margin-top: 4px;
-  padding: 14px 18px;
-  border-radius: 16px;
-  background: rgba(18,176,122,.10);
-  border: 2px solid var(--green);
+  padding: 16px 22px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 2.5px solid var(--green);
+  box-shadow: 0 18px 38px -20px rgba(15,27,61,.25);
+  flex: none;
 }
-.lab-mission.show-prompt .lab-prompt-box { display: flex; }
+.lab-left-col.show-prompt .lab-prompt-box { display: flex; }
 .lab-prompt-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .lab-prompt-title { font-size: 18px; font-weight: 800; color: var(--green-d); }
 .theme-ink .lab-prompt-title, .theme-night .lab-prompt-title { color: var(--mint); }

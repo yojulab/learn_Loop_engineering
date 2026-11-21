@@ -63,7 +63,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch09',
-        userPrompt: 'ch09/harness/run.py --mode sim --platform chatgpt로 Planner-Generator-Evaluator 3-Agent 루프를 실행하고, consensus.py의 블라인드 첫 줄 합의(\'선택: A\')·3회 불일치 HALT 및 0~3점 루브릭 채점 테스트를 검증해줘.',
+        userPrompt: '아무것도 없는 초기 상태에서 ch09-orchestration/harness(및 ch09/harness 심볼릭 링크)를 만들고, 역할별 프롬프트(prompts/*.md), touch 권한 검증기(permissions.py), Planner·Evaluator 첫 줄(선택: A) 블라인드 합의 및 3회 불일치 HALT 처리기(consensus.py), 0~3점 루브릭 채점기(rubric.py), 3-Agent 오케스트레이터(orchestrator.py, run.py --mode sim --platform)와 단위 테스트를 처음부터 구현해줘.',
         kicker: 'CH09 · HANDS-ON LAB (20분)',
         heading: '제9장 실습: <span class="hb">3-Agent 합의</span> &amp; 채점표(Rubric) 검증',
         duration: '20분',
@@ -136,7 +136,7 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch10',
-        userPrompt: 'AGENT_PLATFORM=gemini로 ch10/todo-loop/loop.py를 실행해 DISCOVER→PLAN→EXECUTE→VERIFY→ITERATE 5단계 전이와 CALC-001~004 완주를 확인하고, 동일 오류 반복(Stall) 중단 및 선택적 되돌림 테스트를 검증해줘.',
+        userPrompt: '백지 상태에서 ch10-outer-loop/todo-loop(및 ch10/todo-loop 심볼릭 링크)를 생성하고, 작업 계약 모델(models.py, sample_tasks/tasks_contract.json, calc_verifier.py), 결정론적·LLM 워커(workers.py), 비용·토큰 로거(cost_logger.py), 5단계(DISCOVER→PLAN→EXECUTE→VERIFY→ITERATE) 전이와 7대 완료·중단 조건(Stall 감지·선택적 되돌림)을 갖춘 loop.py 및 단위 테스트를 처음부터 작성해줘.',
         kicker: 'CH10 · HANDS-ON LAB (25분)',
         heading: '제10장 실습: <span class="ha">아우터 루프</span> 실행 &amp; Stall/Rollback 검증',
         duration: '25분',
