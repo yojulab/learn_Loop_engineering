@@ -63,15 +63,14 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch09',
-        userPrompt: `[ch09 3-Agent 블라인드 합의 & 루브릭 모범 답안 재현 프롬프트]
+        userPrompt: `[3-Agent 블라인드 합의 & 루브릭 모범 답안 재현 프롬프트]
 Maker!=Checker(Planner·Generator·Evaluator) 역할 분리, touch 스코프 검증, 첫 줄 블라인드 합의 및 0~3점 루브릭 채점 하네스를 아래 명세에 맞게 구현하고 검증해줘.
 
-1. 생성할 파일 구조 및 심볼릭 링크
-   - ch09-orchestration/harness/run.py
-   - ch09-orchestration/harness/src/harness/orchestrator.py , consensus.py , rubric.py , permissions.py
-   - ch09-orchestration/harness/src/harness/prompts/ 하위에 planner, generator, evaluator 마크다운 프롬프트
-   - ch09-orchestration/harness/tests/test_orchestration_harness.py
-   - 심볼릭 링크: ch09/harness -> ../ch09-orchestration/harness
+1. 생성할 파일 구조
+   - harness/run.py
+   - harness/src/harness/orchestrator.py , consensus.py , rubric.py , permissions.py
+   - harness/src/harness/prompts/ 하위에 planner, generator, evaluator 마크다운 프롬프트
+   - harness/tests/test_orchestration_harness.py
 
 2. 핵심 구현 명세
    - permissions.py: Generator가 TASKS.md에 명시된 touch 허용 경로 외 파일을 수정하지 않도록 검증.
@@ -80,22 +79,22 @@ Maker!=Checker(Planner·Generator·Evaluator) 역할 분리, touch 스코프 검
    - run.py & orchestrator.py: --mode sim|dry-run --platform claude|chatgpt|gemini CLI 지원.
 
 3. 검증 명령 (전부 exit 0 통과 필수)
-   - python3 ch09/harness/run.py --mode sim --platform chatgpt
-   - python3 -m unittest discover -s ch09-orchestration/harness/tests -p "test_*.py" -v`,
+   - python3 harness/run.py --mode sim --platform chatgpt
+   - python3 -m unittest discover -s harness/tests -p "test_*.py" -v`,
         kicker: 'CH09 · HANDS-ON LAB (20분)',
         heading: '제9장 실습: <span class="hb">3-Agent 합의</span> &amp; 채점표(Rubric) 검증',
         duration: '20분',
         missionTitle: 'Planner-Generator-Evaluator 분리 실행 및 블라인드 합의 확인',
         steps: [
-          '<code>ch09/harness/run.py --mode sim --platform chatgpt</code><br>3-Agent 오케스트레이션 시뮬레이터를 <code>claude|chatgpt|gemini</code> 모드로 실행.',
-          '<code>ch09/harness/src/harness/consensus.py</code><br>첫 줄(<code>선택: X</code>) 비교 로직과 3회 불일치 시 <code>HALT</code> 생성을 검증.',
-          '<code>ch09-orchestration/harness/tests/test_orchestration_harness.py</code><br>0~3점 채점표(Rubric) 컷오프 판정 테스트를 실행.',
+          '<code>harness/run.py --mode sim --platform chatgpt</code><br>3-Agent 오케스트레이션 시뮬레이터를 <code>claude|chatgpt|gemini</code> 모드로 실행.',
+          '<code>harness/src/harness/consensus.py</code><br>첫 줄(<code>선택: X</code>) 비교 로직과 3회 불일치 시 <code>HALT</code> 생성을 검증.',
+          '<code>harness/tests/test_orchestration_harness.py</code><br>0~3점 채점표(Rubric) 컷오프 판정 테스트를 실행.',
         ],
-        runCmd: 'python3 ch09/harness/run.py --mode sim --platform chatgpt\npython3 -m unittest discover -s ch09-orchestration/harness/tests -p "test_*.py" -v',
-        answerLabel: 'ch09 모범 답안 열기 (Tree + 합의·채점표)',
+        runCmd: 'python3 harness/run.py --mode sim --platform chatgpt\npython3 -m unittest discover -s harness/tests -p "test_*.py" -v',
+        answerLabel: '모범 답안 열기 (Tree + 합의·채점표)',
         answerType: 'Tree + Python',
         answerSummary: '오케스트레이터(<code>run.py</code>)는 Planner의 선택안과 Evaluator의 선택안 첫 줄(<code>선택: X</code>)만 파싱해 일치 시 PASS, 불일치 누적 시 HALT를 트리거합니다.',
-        tree: `ch09-orchestration/harness/  (# ch09/harness)
+        tree: `harness/
 ├── run.py              # --mode sim|dry-run --platform claude|chatgpt|gemini
 ├── src/harness/ (orchestrator.py, consensus.py, rubric.py, permissions.py, prompts/)
 └── tests/test_orchestration_harness.py`,
@@ -154,14 +153,13 @@ Maker!=Checker(Planner·Generator·Evaluator) 역할 분리, touch 스코프 검
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch10',
-        userPrompt: `[ch10 5단계 아우터 루프 & 7대 조건 제어기 모범 답안 재현 프롬프트]
+        userPrompt: `[5단계 아우터 루프 & 7대 조건 제어기 모범 답안 재현 프롬프트]
 5단계(DISCOVER->PLAN->EXECUTE->VERIFY->ITERATE) 아우터 루프 상태 전이, 선택적 롤백, 7대 완료·중단 조건 제어기(loop.py) 모범 답안을 아래 명세에 맞게 구현하고 검증해줘.
 
-1. 생성할 파일 구조 및 심볼릭 링크
-   - ch10-outer-loop/todo-loop/models.py , workers.py , cost_logger.py , loop.py
-   - ch10-outer-loop/todo-loop/sample_tasks/ 하위에 tasks_contract.json (CALC-001~CALC-004 계약 정의) 및 calc_verifier.py
-   - ch10-outer-loop/todo-loop/tests/test_todo_loop.py
-   - 심볼릭 링크: ch10/todo-loop -> ../ch10-outer-loop/todo-loop
+1. 생성할 파일 구조
+   - todo-loop/models.py , workers.py , cost_logger.py , loop.py
+   - todo-loop/sample_tasks/ 하위에 tasks_contract.json (CALC-001~CALC-004 계약 정의) 및 calc_verifier.py
+   - todo-loop/tests/test_todo_loop.py
 
 2. 핵심 구현 명세
    - models.py: TaskContract, LoopBudget(max_turns, max_retries_per_task, max_cost_usd), LoopResult, StopReason Enum(DONE, HALT_HUMAN_DECISION, HALT_BUDGET_EXCEEDED, HALT_MAX_RETRIES 등).
@@ -169,22 +167,22 @@ Maker!=Checker(Planner·Generator·Evaluator) 역할 분리, touch 스코프 검
    - loop.py: OuterLoopController(tasks, worker, budget, cost_logger). 의존성(_dependencies_done) 확인 -> 사람 승인 필요(requires_human_decision) 시 HALT_HUMAN_DECISION 중단 -> max_retries_per_task/max_cost_usd 가드 내 worker.run_task() & verify_task_independently() 실행 -> --platform auto|claude|chatgpt|gemini|offline 지원 및 JSON 결과(stop_reason, completed_tasks, halted_tasks, turns_executed, total_cost_usd) 출력.
 
 3. 검증 명령 (전부 exit 0 통과 필수)
-   - python3 ch10/todo-loop/loop.py --platform claude
-   - python3 -m unittest discover -s ch10-outer-loop/todo-loop/tests -p "test_*.py" -v`,
+   - python3 todo-loop/loop.py --platform claude
+   - python3 -m unittest discover -s todo-loop/tests -p "test_*.py" -v`,
         kicker: 'CH10 · HANDS-ON LAB (25분)',
         heading: '제10장 실습: <span class="ha">아우터 루프</span> 실행 &amp; Stall/Rollback 검증',
         duration: '25분',
         missionTitle: 'CALC-001~004 아우터 루프 완주 및 7대 완료/중단 조건 테스트',
         steps: [
-          '<code>AGENT_PLATFORM=gemini python3 ch10/todo-loop/loop.py --platform gemini</code><br>실행 후 5단계 상태 전이와 <code>CALC-001~004</code> 결과를 확인.',
+          '<code>AGENT_PLATFORM=gemini python3 todo-loop/loop.py --platform gemini</code><br>실행 후 5단계 상태 전이와 <code>CALC-001~004</code> 결과를 확인.',
           '<code>tests/test_todo_loop.py</code><br>동일 오류 반복(Stall) 시 자동 중단과 선택적 되돌림 케이스를 검증.',
           '<code>docs/ARCHITECTURE.md</code><br>아우터 루프 설계 사양과 실제 구현 흐름을 비교.',
         ],
-        runCmd: 'python3 ch10/todo-loop/loop.py --platform claude\npython3 -m unittest discover -s ch10-outer-loop/todo-loop/tests -p "test_*.py" -v',
-        answerLabel: 'ch10 모범 답안 열기 (Tree + 7대 조건)',
+        runCmd: 'python3 todo-loop/loop.py --platform claude\npython3 -m unittest discover -s todo-loop/tests -p "test_*.py" -v',
+        answerLabel: '모범 답안 열기 (Tree + 7대 조건)',
         answerType: 'Tree + Output',
         answerSummary: '<code>loop.py</code>는 상태 불변 또는 동일 에러 시그니처가 2회 연속 발생하면 즉시 <code>STALL_HALT</code>로 전환해 무한 토큰 소모를 차단합니다.',
-        tree: `ch10-outer-loop/todo-loop/  (# ch10/todo-loop)
+        tree: `todo-loop/
 ├── loop.py · workers.py · cost_logger.py · models.py
 ├── sample_tasks/ (calc_verifier.py, tasks_contract.json)
 └── tests/test_todo_loop.py`,

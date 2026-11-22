@@ -70,16 +70,15 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch01',
-        userPrompt: `[ch01 에이전트 코딩 루프 & Quote CLI 모범 답안 재현 프롬프트]
+        userPrompt: `[에이전트 코딩 루프 & Quote CLI 모범 답안 재현 프롬프트]
 명언 데이터와 태그 필터링, 결정론적 시드 기반 랜덤 추출을 지원하는 Quote CLI 및 단위 테스트를 아래 명세에 맞게 구현하고 검증해줘.
 
-1. 생성할 파일 구조 및 도서 호환 심볼릭 링크
-   - ch01-agentic-coding/README.md
-   - ch01-agentic-coding/quote-cli/quotes.json (id, text, author, tags 배열을 포함한 최소 5건 이상의 엔지니어링 명언 데이터, engineering 태그 포함)
-   - ch01-agentic-coding/quote-cli/quote_cli.py
-   - ch01-agentic-coding/quote-cli/interactive_demo.py (REPL 대화형 루프 데모)
-   - ch01-agentic-coding/quote-cli/tests/test_quote_cli.py
-   - 심볼릭 링크: ch01/quote-cli -> ../ch01-agentic-coding/quote-cli
+1. 생성할 파일 구조
+   - README.md
+   - quote-cli/quotes.json (id, text, author, tags 배열을 포함한 최소 5건 이상의 엔지니어링 명언 데이터, engineering 태그 포함)
+   - quote-cli/quote_cli.py
+   - quote-cli/interactive_demo.py (REPL 대화형 루프 데모)
+   - quote-cli/tests/test_quote_cli.py
 
 2. 핵심 구현 명세 (표준 라이브러리 argparse, json, random, pathlib만 사용)
    - load_quotes(path): quotes.json을 파싱하며 list가 아니면 ValueError 발생
@@ -89,25 +88,25 @@
    - CLI 옵션: --all, --tag, --json, --seed, --data
 
 3. 검증 명령 (전부 exit 0 통과 필수)
-   - python3 ch01/quote-cli/quote_cli.py --tag engineering --json
-   - python3 ch01/quote-cli/quote_cli.py --seed 42 --json
-   - python3 -m unittest discover -s ch01-agentic-coding/quote-cli/tests -p "test_*.py" -v`,
+   - python3 quote-cli/quote_cli.py --tag engineering --json
+   - python3 quote-cli/quote_cli.py --seed 42 --json
+   - python3 -m unittest discover -s quote-cli/tests -p "test_*.py" -v`,
         kicker: 'CH01 · HANDS-ON LAB (20분)',
         heading: '제1장 실습: <span class="hb">Quote CLI</span> 필터 &amp; 단위 테스트',
         duration: '20분',
         missionTitle: '태그·저자 검색 및 JSON 출력을 지원하는 Quote CLI 검증',
         steps: [
-          '<code>ch01/quote-cli/quote_cli.py --tag engineering --json</code><br>태그 필터링과 JSON 구조화 출력 결과를 확인.',
+          '<code>quote-cli/quote_cli.py --tag engineering --json</code><br>태그 필터링과 JSON 구조화 출력 결과를 확인.',
           '<code>--author "Loop Handbook"</code> / <code>--seed 42</code><br>저자 검색과 결정론적 랜덤 추출 동작을 검증.',
           '<code>test_quote_cli.py</code><br>단위 테스트 스위트를 실행해 전 케이스 통과를 확인.',
         ],
-        runCmd: 'python3 ch01/quote-cli/quote_cli.py --tag engineering --json\npython3 -m unittest discover -s ch01-agentic-coding/quote-cli/tests -p "test_*.py" -v',
-        answerLabel: 'ch01 모범 답안 열기 (Tree + 구현 코드)',
+        runCmd: 'python3 quote-cli/quote_cli.py --tag engineering --json\npython3 -m unittest discover -s quote-cli/tests -p "test_*.py" -v',
+        answerLabel: '모범 답안 열기 (Tree + 구현 코드)',
         answerType: 'Tree + Python',
-        answerSummary: '<code>quote_cli.py</code>는 표준 라이브러리(<code>argparse</code>, <code>json</code>, <code>random</code>)만으로 CLI·JSON·시드 랜덤을 지원하며 <code>ch01/quote-cli</code> 심볼릭 링크로 접근됩니다.',
-        tree: `ch01-agentic-coding/
+        answerSummary: '<code>quote_cli.py</code>는 표준 라이브러리(<code>argparse</code>, <code>json</code>, <code>random</code>)만으로 CLI·JSON·시드 랜덤을 지원합니다.',
+        tree: `project/
 ├── README.md
-└── quote-cli/           # <- ch01/quote-cli symlink
+└── quote-cli/
     ├── quotes.json
     ├── quote_cli.py
     ├── interactive_demo.py
@@ -121,7 +120,7 @@
         items = [q for q in items if author.lower() in q.get("author", "").lower()]
     return items
 
-# 실행 예: python3 ch01/quote-cli/quote_cli.py --all --json`,
+# 실행 예: python3 quote-cli/quote_cli.py --all --json`,
       });
     },
   });
@@ -174,17 +173,16 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch02',
-        userPrompt: `[ch02 MCP & PreToolUse 훅 가드레일 모범 답안 재현 프롬프트]
+        userPrompt: `[MCP & PreToolUse 훅 가드레일 모범 답안 재현 프롬프트]
 FastMCP 표준 프로토콜 기반 Quote MCP 서버와 위험 Bash 명령 차단 훅, 멀티 플랫폼 설정 및 단위 테스트를 아래 명세에 맞게 구현하고 검증해줘.
 
-1. 생성할 파일 구조 및 호환 심볼릭 링크
-   - ch02-mcp-and-hooks/quote-mcp/main.py
-   - ch02-mcp-and-hooks/quote-mcp/mcp_config_claude.json , mcp_config_chatgpt.json , mcp_config_gemini.json
-   - ch02-mcp-and-hooks/quote-mcp/hooks/block_dangerous_bash.py
-   - ch02-mcp-and-hooks/quote-mcp/hooks/audit_logger.py
-   - ch02-mcp-and-hooks/quote-mcp/hooks/platform_hook_bridge.py
-   - ch02-mcp-and-hooks/quote-mcp/tests/test_quote_mcp_and_hooks.py
-   - 심볼릭 링크: ch02/quote-mcp -> ../ch02-mcp-and-hooks/quote-mcp (및 도서 오타 호환용 ch04/quote-cli 링크)
+1. 생성할 파일 구조
+   - quote-mcp/main.py
+   - quote-mcp/mcp_config_claude.json , mcp_config_chatgpt.json , mcp_config_gemini.json
+   - quote-mcp/hooks/block_dangerous_bash.py
+   - quote-mcp/hooks/audit_logger.py
+   - quote-mcp/hooks/platform_hook_bridge.py
+   - quote-mcp/tests/test_quote_mcp_and_hooks.py
 
 2. 핵심 구현 명세
    - main.py: 외부 mcp.server.fastmcp 미설치 시 동일 데코레이터 계약을 제공하는 LocalFastMCP 폴백 클래스 포함. @mcp.tool() get_random_quote / add_quote, @mcp.resource("quote://all"), @mcp.prompt() quote_post 등록. run("stdio") 실행 시 {"server": "quote-mcp", "transport": "stdio", "tools": [...], "resources": ["quote://all"], "prompts": ["quote_post"]} 메타데이터 출력.
@@ -192,23 +190,23 @@ FastMCP 표준 프로토콜 기반 Quote MCP 서버와 위험 Bash 명령 차단
    - hooks/audit_logger.py: 도구 실행 이벤트를 JSONL 감사 로그로 기록.
 
 3. 검증 명령 (전부 통과 필수)
-   - python3 ch02/quote-mcp/main.py
-   - echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | python3 ch02/quote-mcp/hooks/block_dangerous_bash.py  # exit=2 확인
-   - python3 -m unittest discover -s ch02-mcp-and-hooks/quote-mcp/tests -p "test_*.py" -v`,
+   - python3 quote-mcp/main.py
+   - echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | python3 quote-mcp/hooks/block_dangerous_bash.py  # exit=2 확인
+   - python3 -m unittest discover -s quote-mcp/tests -p "test_*.py" -v`,
         kicker: 'CH02 · HANDS-ON LAB (25분)',
         heading: '제2장 실습: <span class="hl">MCP 서버</span> &amp; <span class="hb">PreToolUse</span> 차단 검증',
         duration: '25분',
         missionTitle: 'Quote MCP 도구 실행과 위험 Bash 차단 훅 동작 검증',
         steps: [
-          '<code>ch02/quote-mcp/main.py</code><br>실행 후 MCP 서버 메타데이터와 도구·리소스 목록을 확인.',
+          '<code>quote-mcp/main.py</code><br>실행 후 MCP 서버 메타데이터와 도구·리소스 목록을 확인.',
           '<code>block_dangerous_bash.py</code><br><code>rm -rf</code>와 안전 명령을 전달해 exit code <code>2</code> vs <code>0</code>을 검증.',
           '<code>mcp_config_claude.json</code> · <code>chatgpt</code> · <code>gemini</code><br>3대 플랫폼 설정 스키마 차이를 비교.',
         ],
-        runCmd: 'python3 ch02/quote-mcp/main.py\npython3 -m unittest discover -s ch02-mcp-and-hooks/quote-mcp/tests -p "test_*.py" -v',
-        answerLabel: 'ch02 모범 답안 열기 (Tree + 훅·MCP 코드)',
+        runCmd: 'python3 quote-mcp/main.py\npython3 -m unittest discover -s quote-mcp/tests -p "test_*.py" -v',
+        answerLabel: '모범 답안 열기 (Tree + 훅·MCP 코드)',
         answerType: 'Tree + Config',
         answerSummary: '<code>block_dangerous_bash.py</code>는 exit code <code>2</code>를 반환해 Claude Code / 범용 브리지에서 도구 실행 자체를 사전 차단하며, <code>audit_logger.py</code>가 실행 이력을 남깁니다.',
-        tree: `ch02-mcp-and-hooks/quote-mcp/  (# ch02/quote-mcp & ch04/quote-cli)
+        tree: `quote-mcp/
 ├── main.py                    # MCP JSON-RPC / self-test
 ├── mcp_config_claude.json     # Claude MCP 스키마
 ├── mcp_config_chatgpt.json    # ChatGPT MCP/Tool 스키마
@@ -277,19 +275,18 @@ FastMCP 표준 프로토콜 기반 Quote MCP 서버와 위험 Bash 명령 차단
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch03',
-        userPrompt: `[ch03 3단계 Skills & GitHub 워크플로 모범 답안 재현 프롬프트]
+        userPrompt: `[3단계 Skills & GitHub 워크플로 모범 답안 재현 프롬프트]
 3단계 Progressive Disclosure(1단계 Metadata -> 2단계 Instructions -> 3단계 Resources) 구조의 5종 GitHub 스킬 및 검증 테스트를 아래 명세에 맞게 구현하고 검증해줘.
 
-1. 생성할 파일 구조 및 심볼릭 링크
-   - ch03-skills/github-workflow-skills/ 하위에 5종 스킬 디렉터리 각각 구성:
+1. 생성할 파일 구조
+   - github-workflow-skills/ 하위에 5종 스킬 디렉터리 각각 구성:
      * git-commit/ : SKILL.md, reference.md, examples/, scripts/validate_commit.py
      * gh-issue/   : SKILL.md, reference.md, examples/, scripts/validate_issue.py
      * gh-pr/      : SKILL.md, reference.md, examples/, scripts/validate_pr.py
      * gh-review/  : SKILL.md, reference.md, examples/, scripts/validate_review.py
      * gh-address-review/ : SKILL.md, reference.md, examples/, scripts/validate_address_review.py
    - 3대 플랫폼 가이드: skills_claude.md , skills_chatgpt.md , skills_gemini.md
-   - 단위 테스트: ch03-skills/github-workflow-skills/tests/test_github_workflow_skills.py
-   - 심볼릭 링크: ch03/github-workflow-skills -> ../ch03-skills/github-workflow-skills
+   - 단위 테스트: github-workflow-skills/tests/test_github_workflow_skills.py
 
 2. 핵심 구현 명세
    - 각 SKILL.md 상단에 '---\\nname: <스킬명>\\ndescription: <활성화 조건 설명>\\n---' YAML Frontmatter를 반드시 배치(1단계 로딩 최소화).
@@ -297,22 +294,22 @@ FastMCP 표준 프로토콜 기반 Quote MCP 서버와 위험 Bash 명령 차단
    - validate_commit.py: --text 인자를 받아 Conventional Commits 패턴(^(feat|fix|docs|style|refactor|test|chore)(\\(.+\\))?: .+)을 검증해 유효 시 exit 0("[OK] valid Conventional Commit"), 위반 시 exit 1 반환. 나머지 4개 validate_*.py도 동일 패턴으로 구현.
 
 3. 검증 명령 (전부 exit 0 통과 필수)
-   - python3 ch03/github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"
-   - python3 -m unittest discover -s ch03-skills/github-workflow-skills/tests -p "test_*.py" -v`,
+   - python3 github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"
+   - python3 -m unittest discover -s github-workflow-skills/tests -p "test_*.py" -v`,
         kicker: 'CH03 · HANDS-ON LAB (30분)',
         heading: '제3장 실습: <span class="hl">5종 GitHub 스킬</span> 검증 스크립트 &amp; 테스트',
         duration: '30분',
         missionTitle: '3단계 Progressive Disclosure 스킬 구조 및 커밋/PR 검증 스크립트 실행',
         steps: [
-          '<code>ch03/github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"</code><br>Conventional Commits 메시지 검증 스크립트 동작을 확인.',
+          '<code>github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"</code><br>Conventional Commits 메시지 검증 스크립트 동작을 확인.',
           '<code>skills_claude.md</code> · <code>skills_chatgpt.md</code> · <code>skills_gemini.md</code><br>3대 플랫폼용 스킬 적용 가이드를 비교.',
           '<code>tests/test_github_workflow_skills.py</code><br>5종 스킬 Frontmatter·스크립트 단위 테스트를 실행.',
         ],
-        runCmd: 'python3 ch03/github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"\npython3 -m unittest discover -s ch03-skills/github-workflow-skills/tests -p "test_*.py" -v',
-        answerLabel: 'ch03 모범 답안 열기 (Tree + SKILL.md 구조)',
+        runCmd: 'python3 github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"\npython3 -m unittest discover -s github-workflow-skills/tests -p "test_*.py" -v',
+        answerLabel: '모범 답안 열기 (Tree + SKILL.md 구조)',
         answerType: 'Tree + YAML',
         answerSummary: '모든 스킬은 <code>SKILL.md</code> 상단에 <code>name</code>과 <code>description</code>이 있는 YAML Frontmatter를 가지며, 각 하위 <code>scripts/validate_*.py</code>로 형식을 자동 검증합니다.',
-        tree: `ch03-skills/github-workflow-skills/  (# ch03/github-workflow-skills)
+        tree: `github-workflow-skills/
 ├── git-commit/ (SKILL.md, reference.md, examples/, scripts/validate_commit.py)
 ├── gh-issue/   (SKILL.md, reference.md, examples/, scripts/validate_issue.py)
 ├── gh-pr/      (SKILL.md, reference.md, examples/, scripts/validate_pr.py)

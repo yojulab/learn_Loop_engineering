@@ -152,6 +152,20 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertIn("Langfuse", s0[idx_arch:idx_time])
         self.assertIn("<svg viewBox=", s0[idx_arch:idx_time])
 
+    @staticmethod
+    def _resolve_repo_path(rel_path: str, chap_hint: str = "") -> Path:
+        direct = REPO_ROOT / rel_path
+        if direct.exists():
+            return direct
+        if chap_hint and re.match(r"^ch\d{2}$", chap_hint):
+            hinted = sorted(REPO_ROOT.glob(f"{chap_hint}*/{rel_path}"))
+            if hinted:
+                return hinted[0]
+        matches = sorted(REPO_ROOT.glob(f"ch*/{rel_path}"))
+        if matches:
+            return matches[0]
+        return direct
+
     def test_all_slide_referenced_paths_and_runcmds_are_valid(self) -> None:
         import shlex
         slides_text = "\n".join(
@@ -164,21 +178,47 @@ class WebPptDocsTests(unittest.TestCase):
             self.assertTrue((REPO_ROOT / rel_path).exists(), f"슬라이드에 없는 파일 경로 참조됨: {rel_path}")
 
         # 2) 모든 runCmd 내 python3 단원 CLI(단위테스트 제외, 단위테스트 디렉터리 실존) 검증
-        for m in re.finditer(r"runCmd:\s*'([^']+)'", slides_text):
-            raw_cmd = m.group(1).replace("\\n", "\n")
+        for m in re.finditer(r"buildLabSlide\(el,\s*A,\s*\{(.*?)\n\s*\}\);", slides_text, re.DOTALL):
+            block = m.group(1)
+            id_m = re.search(r"id:\s*'([^']+)'", block)
+            chap_hint = id_m.group(1) if id_m else ""
+            if chap_hint == "capstone":
+                chap_hint = "ch12"
+            cmd_m = re.search(r"runCmd:\s*'([^']+)'", block)
+            if not cmd_m:
+                continue
+            raw_cmd = cmd_m.group(1).replace("\\n", "\n")
             for line in raw_cmd.splitlines():
                 line = line.strip()
                 if not line:
                     continue
                 if " -m unittest discover -s " in line:
                     tdir = line.split(" -s ", 1)[1].split()[0]
-                    self.assertTrue((REPO_ROOT / tdir).is_dir(), f"없는 테스트 디렉터리 참조: {tdir}")
+                    resolved_tdir = self._resolve_repo_path(tdir, chap_hint)
+                    self.assertTrue(resolved_tdir.is_dir(), f"없는 테스트 디렉터리 참조: {tdir}")
                 elif "scripts/verify_chapters.py" in line:
                     self.assertTrue((REPO_ROOT / "scripts/verify_chapters.py").is_file())
                 elif line.startswith("python3 "):
                     parts = shlex.split(line)
-                    proc = subprocess.run(parts, cwd=REPO_ROOT, capture_output=True, text=True, check=False)
+                    resolved_parts = [
+                        str(self._resolve_repo_path(tok, chap_hint))
+                        if (i == 1 or (i > 1 and parts[i - 1] == "--root")) and not tok.startswith("-")
+                        else tok
+                        for i, tok in enumerate(parts)
+                    ]
+                    proc = subprocess.run(resolved_parts, cwd=REPO_ROOT, capture_output=True, text=True, check=False)
                     self.assertEqual(proc.returncode, 0, f"runCmd 실행 실패 ({line}): {proc.stderr}")
+
+    def test_lab_slides_exclude_chapter_folders_and_symlinks(self) -> None:
+        slides_text = "\n".join(
+            (DOCS_DIR / f"slides/{name}").read_text(encoding="utf-8")
+            for name in ("s0_opening.js", "s1_part1.js", "s2_part2.js", "s3_part3.js", "s4_part4_a.js", "s5_part4_b.js")
+        )
+        for m in re.finditer(r"buildLabSlide\(el,\s*A,\s*\{(.*?)\n\s*\}\);", slides_text, re.DOTALL):
+            body = m.group(1)
+            self.assertIsNone(re.search(r"\bch\d{2}(?:-[a-z0-9-]+)?/", body), f"실습 슬라이드에 챕터 폴더 경로 잔존: {body[:120]}")
+            self.assertNotIn("심볼릭", body)
+            self.assertNotIn("symlink", body.lower())
 
     def test_home_portal_and_dedicated_prologue_ppt(self) -> None:
         home = (DOCS_DIR / "index.html").read_text(encoding="utf-8")
@@ -204,6 +244,8 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertNotIn("PDF 인쇄", (DOCS_DIR / "engine.js").read_text(encoding="utf-8"))
         self.assertIn("사전 필요 지식", home)
         self.assertIn("DevOps", home)
+        self.assertIn("home-prereq-row", home)
+        self.assertLess(home.find("home-qr-row"), home.find("home-prereq-row"))
         self.assertLess(p_js.find("id: 'prologue-ebook'"), p_js.find("id: 'prologue-goal'"))
         ui_txt = (DOCS_DIR / "ui.js").read_text(encoding="utf-8")
         self.assertIn("btn-copy-prompt", ui_txt)
