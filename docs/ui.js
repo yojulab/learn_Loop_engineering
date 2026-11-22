@@ -123,7 +123,9 @@
     // 2) 좌측 기본 카드: 실습 미션 카드 (leftCol 전체 영역 차지)
     const left = h('section', 'lab-mission', leftCol);
     left.setAttribute('aria-label', spec.missionTitle || '실습 과제');
-    const missionHead = h('div', 'row', left, `<span class="chip" style="background:var(--blue-l);color:var(--blue-d)">실습 미션</span><span class="cap" style="margin-left:12px">${esc(spec.duration || '15분')}</span>`);
+    const durText = spec.duration === undefined ? '15분' : spec.duration;
+    const durHtml = durText ? `<span class="cap" style="margin-left:12px">${esc(durText)}</span>` : '';
+    const missionHead = h('div', 'row', left, `<span class="chip" style="background:var(--blue-l);color:var(--blue-d)">실습 미션</span>${durHtml}`);
     const openABtn = h('button', 'btn-lab-a no-advance', missionHead, '[A] 모범답안 &amp; 해결 프롬프트');
     openABtn.type = 'button';
     openABtn.title = '모범 답안과 해결 프롬프트 함께 보기 (단축키 A)';

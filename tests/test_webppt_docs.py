@@ -91,6 +91,7 @@ class WebPptDocsTests(unittest.TestCase):
             DOCS_DIR / "engine.js",
             DOCS_DIR / "ui.js",
             *sorted((DOCS_DIR / "slides").glob("*.js")),
+            *sorted((DOCS_DIR / "slides_workshop").glob("*.js")),
         ]
         for js in js_files:
             proc = subprocess.run([node_bin, "--check", str(js)], capture_output=True, text=True, check=False)
@@ -261,6 +262,30 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertLess(s5_txt.find("id: 'ch11-eval-methods'"), s5_txt.find("id: 'ch12-theory'"))
         self.assertLess(s5_txt.find("id: 'closing'"), s5_txt.find("id: 'capstone-agent-first'"))
         self.assertIn("height:250px;display:flex;flex-direction:column", s5_txt)
+
+
+    def test_cartoon_workshop_deck_without_time_concepts(self) -> None:
+        self.assertTrue((DOCS_DIR / "workshop.html").is_file())
+        home = (DOCS_DIR / "index.html").read_text(encoding="utf-8")
+        self.assertIn("workshop.html", home)
+        workshop_html = (DOCS_DIR / "workshop.html").read_text(encoding="utf-8")
+        self.assertIn("slides_workshop/00_manifest.js", workshop_html)
+
+        w_dir = DOCS_DIR / "slides_workshop"
+        w_all = "\n".join(f.read_text(encoding="utf-8") for f in sorted(w_dir.glob("*.js")))
+        for forbidden in ("5시간", "300분", "75분", "65분", "45분", "40분", "5-HOUR"):
+            self.assertNotIn(forbidden, w_all, f"워크숍 덱에 시간 문구 잔존: {forbidden}")
+        for img in (
+            "cap_00_in.jpg",
+            "cap_01_in.jpg",
+            "cap_05_in.jpg",
+            "cap_07_in.jpg",
+            "cap_09_in.jpg",
+            "cap_11_in.jpg",
+            "cap_12_out.jpg",
+        ):
+            self.assertTrue((DOCS_DIR / "assets/cartoons" / img).is_file(), f"카툰 이미지 누락: {img}")
+            self.assertIn(f"assets/cartoons/{img}", w_all, f"카툰 이미지 미배치: {img}")
 
 if __name__ == "__main__":
     unittest.main()
