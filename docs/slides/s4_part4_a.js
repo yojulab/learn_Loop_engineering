@@ -63,8 +63,8 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch09',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch09 모범 답안 재현 프롬프트]
-ch09 관련 파일이 전혀 없는 초기 상태에서 Maker!=Checker(Planner·Generator·Evaluator) 3-Agent 블라인드 합의 하네스 모범 답안을 처음부터 구현해줘.
+        userPrompt: `[ch09 3-Agent 블라인드 합의 & 루브릭 모범 답안 재현 프롬프트]
+Maker!=Checker(Planner·Generator·Evaluator) 역할 분리, touch 스코프 검증, 첫 줄 블라인드 합의 및 0~3점 루브릭 채점 하네스를 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 심볼릭 링크
    - ch09-orchestration/harness/run.py
@@ -154,8 +154,8 @@ ch09 관련 파일이 전혀 없는 초기 상태에서 Maker!=Checker(Planner·
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch10',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch10 모범 답안 재현 프롬프트]
-ch10 관련 디렉터리가 전혀 없는 백지 상태에서 5단계 아우터 루프(Outer Loop)와 7대 완료·중단 조건 모범 답안을 처음부터 작성해줘.
+        userPrompt: `[ch10 5단계 아우터 루프 & 7대 조건 제어기 모범 답안 재현 프롬프트]
+5단계(DISCOVER->PLAN->EXECUTE->VERIFY->ITERATE) 아우터 루프 상태 전이, 선택적 롤백, 7대 완료·중단 조건 제어기(loop.py) 모범 답안을 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 심볼릭 링크
    - ch10-outer-loop/todo-loop/models.py , workers.py , cost_logger.py , loop.py

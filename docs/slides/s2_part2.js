@@ -65,8 +65,8 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch04',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch04 모범 답안 재현 프롬프트]
-ch04 관련 파일이 전혀 없는 백지 상태에서 7항목 프롬프트·4대 지침 층위·컨텍스트 예산 시뮬레이터 모범 답안을 처음부터 구현해줘.
+        userPrompt: `[ch04 7항목 프롬프트 & 컨텍스트 예산 모범 답안 재현 프롬프트]
+7항목 구조화 프롬프트 템플릿과 4대 지침 층위, 컨텍스트 예산 분석기(context_budget.py) 및 단위 테스트를 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 도서 호환 심볼릭 링크
    - ch04-context-engineering/prompt_template.txt (Role, Goal, Context, Constraints, Few-shot, Format, Self-Check 7항목 템플릿)
@@ -169,8 +169,8 @@ ch04 관련 파일이 전혀 없는 백지 상태에서 7항목 프롬프트·4�
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch05',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch05 모범 답안 재현 프롬프트]
-ch05 관련 디렉터리가 전혀 없는 초기 상태에서 외부 벡터 DB 없이 순수 Python만으로 Top-K·발췌 필터링 Agentic RAG와 지속 메모리 모범 답안을 재현해줘.
+        userPrompt: `[ch05 Agentic RAG & 지속 메모리 모범 답안 재현 프롬프트]
+외부 벡터 DB 없이 순수 Python만으로 Top-K·발췌 필터링 Agentic RAG와 파일 기반 지속 메모리(TASKS.md/JOURNAL.md) 모범 답안을 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 심볼릭 링크
    - ch05-rag-and-memory/memory_pattern/agentic_rag.py

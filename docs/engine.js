@@ -1,7 +1,7 @@
 /* DECK 모션 슬라이드 엔진 — 1920×1080 순수 함수 렌더러 (revfactory/oss-lecture 패턴 기반)
  * 키보드: → Space PageDown Enter = 다음, ← PageUp Backspace = 이전,
  *         O = 목차, P = 발표자 창, F = 전체 화면, B = 블랙아웃, H = 하단 숨김, A = 현재 슬라이드 모범답안 토글
- * URL: #12 (12번 슬라이드), ?print (PDF 인쇄 모드, 모범 답안 전체 펼침)
+ * URL: #12 (12번 슬라이드)
  */
 (function () {
   'use strict';
@@ -309,7 +309,6 @@
       ['목차 (O)', () => toggleOverview()],
       ['모범답안 (A)', () => toggleCurrentAnswer()],
       ['발표자 창 (P)', () => openPresenter()],
-      ['PDF 인쇄', () => { window.open('?print', '_blank'); }],
     ];
     items.forEach(([label, fn]) => {
       const btn = h('button', 'hud-btn', hud, label);

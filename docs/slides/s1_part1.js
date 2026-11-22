@@ -70,8 +70,8 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch01',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch01 모범 답안 재현 프롬프트]
-ch01 관련 디렉터리와 파일이 전혀 없는 초기 상태에서 아래 모범 답안 Tree와 동작을 100% 재현해줘.
+        userPrompt: `[ch01 에이전트 코딩 루프 & Quote CLI 모범 답안 재현 프롬프트]
+명언 데이터와 태그 필터링, 결정론적 시드 기반 랜덤 추출을 지원하는 Quote CLI 및 단위 테스트를 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 도서 호환 심볼릭 링크
    - ch01-agentic-coding/README.md
@@ -174,8 +174,8 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch02',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch02 모범 답안 재현 프롬프트]
-ch02 관련 파일이 전혀 없는 백지 상태에서 MCP 서버와 PreToolUse/PostToolUse 훅 가드레일 모범 답안을 처음부터 재현해줘.
+        userPrompt: `[ch02 MCP & PreToolUse 훅 가드레일 모범 답안 재현 프롬프트]
+FastMCP 표준 프로토콜 기반 Quote MCP 서버와 위험 Bash 명령 차단 훅, 멀티 플랫폼 설정 및 단위 테스트를 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 호환 심볼릭 링크
    - ch02-mcp-and-hooks/quote-mcp/main.py
@@ -277,8 +277,8 @@ ch02 관련 파일이 전혀 없는 백지 상태에서 MCP 서버와 PreToolUse
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch03',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch03 모범 답안 재현 프롬프트]
-ch03 관련 디렉터리가 전혀 없는 초기 상태에서 3단계 Progressive Disclosure(1단계 Metadata -> 2단계 Instructions -> 3단계 Resources) 구조의 5종 GitHub 스킬 모범 답안을 처음부터 재현해줘.
+        userPrompt: `[ch03 3단계 Skills & GitHub 워크플로 모범 답안 재현 프롬프트]
+3단계 Progressive Disclosure(1단계 Metadata -> 2단계 Instructions -> 3단계 Resources) 구조의 5종 GitHub 스킬 및 검증 테스트를 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 심볼릭 링크
    - ch03-skills/github-workflow-skills/ 하위에 5종 스킬 디렉터리 각각 구성:

@@ -88,33 +88,7 @@
     },
   });
 
-  // p.3: 교육 마친 후 희망 사항 (이해의 부채의 늪 -> 진정한 검증자 추구)
-  DECK.slide({
-    id: 'prologue-goal',
-    part: 'prologue',
-    chap: '교육 목표 & 희망 사항',
-    theme: 'white',
-    title: '교육 마친 후 희망 사항: 이해의 부채를 넘어 진정한 검증자로',
-    notes: 'AI가 코드를 빨리 짜줄수록 이해의 부채(Comprehension Debt)가 쌓입니다. 과정 후에는 스스로 검증하는 진정한 검증자가 되는 것이 목표입니다.',
-    build(el, A) {
-      const T = title(el, 'AFTER THIS WORKSHOP', '교육을 마친 후: <span class="hr">이해의 부채</span>에서 <span class="hl">진정한 검증자</span>로', { y: 64 });
-      A(T.t, 'up', 0, { dur: 0.4 });
-
-      const c1 = card(el, { x: 100, y: 240, w: 830, h: 680, pad: 36 });
-      c1.innerHTML = `<span class="chip" style="background:var(--red-l);color:var(--red)">피해야 할 함정</span>
-      <div class="h3" style="margin-top:20px">이해의 부채(Comprehension Debt)의 늪</div>
-      <div class="b2" style="margin-top:20px">AI가 만든 코드를 이해하지 못한 채 복붙·배포만 반복하면, 장애 순간 아무것도 고치지 못하는 <b>기술·이해 부채의 늪</b>에 빠집니다.</div>`;
-      A(c1, 'up', 0.1, { dur: 0.45 });
-
-      const c2 = card(el, { x: 990, y: 240, w: 830, h: 680, pad: 36 });
-      c2.innerHTML = `<span class="chip" style="background:var(--green-l);color:var(--green-d)">우리가 추구하는 목표</span>
-      <div class="h3" style="margin-top:20px">진정한 검증자 (True Verifier)</div>
-      <div class="b2" style="margin-top:20px">작성자(Maker)와 검증자(Checker)를 분리하고, 테스트·린터·Trace·Eval로 근거를 확인하여 <b>AI를 신뢰 가능하게 통제하는 아키텍트</b>로 성장합니다.</div>`;
-      A(c2, 'up', 0.2, { dur: 0.45 });
-    },
-  });
-
-  // p.4: eBook 프롤로그 내용 정리
+  // p.3: eBook 프롤로그 내용 정리
   DECK.slide({
     id: 'prologue-ebook',
     part: 'prologue',
@@ -143,6 +117,32 @@
       const foot = card(el, { x: 100, y: 870, w: 1720, h: 95, pad: 22 });
       foot.innerHTML = `<div class="b3" style="color:var(--ink)"><b>탐험 순서:</b> Part 1(행동과 표준: Agent·MCP·Hooks·Skills) → Part 2(지식과 기억: Context·RAG·Memory) → Part 3~4(위임과 검증: Subagents·Loop·Orchestration·Eval)</div>`;
       A(foot, 'up', 0.42, { dur: 0.4 });
+    },
+  });
+
+  // p.4: 교육 마친 후 희망 사항 (이해의 부채의 늪 -> 진정한 검증자 추구)
+  DECK.slide({
+    id: 'prologue-goal',
+    part: 'prologue',
+    chap: '교육 목표 & 희망 사항',
+    theme: 'white',
+    title: '교육 마친 후 희망 사항: 이해의 부채를 넘어 진정한 검증자로',
+    notes: 'AI가 코드를 빨리 짜줄수록 이해의 부채(Comprehension Debt)가 쌓입니다. 과정 후에는 스스로 검증하는 진정한 검증자가 되는 것이 목표입니다.',
+    build(el, A) {
+      const T = title(el, 'AFTER THIS WORKSHOP', '교육을 마친 후: <span class="hr">이해의 부채</span>에서 <span class="hl">진정한 검증자</span>로', { y: 64 });
+      A(T.t, 'up', 0, { dur: 0.4 });
+
+      const c1 = card(el, { x: 100, y: 240, w: 830, h: 680, pad: 36 });
+      c1.innerHTML = `<span class="chip" style="background:var(--red-l);color:var(--red)">피해야 할 함정</span>
+      <div class="h3" style="margin-top:20px">이해의 부채(Comprehension Debt)의 늪</div>
+      <div class="b2" style="margin-top:20px">AI가 만든 코드를 이해하지 못한 채 복붙·배포만 반복하면, 장애 순간 아무것도 고치지 못하는 <b>기술·이해 부채의 늪</b>에 빠집니다.</div>`;
+      A(c1, 'up', 0.1, { dur: 0.45 });
+
+      const c2 = card(el, { x: 990, y: 240, w: 830, h: 680, pad: 36 });
+      c2.innerHTML = `<span class="chip" style="background:var(--green-l);color:var(--green-d)">우리가 추구하는 목표</span>
+      <div class="h3" style="margin-top:20px">진정한 검증자 (True Verifier)</div>
+      <div class="b2" style="margin-top:20px">작성자(Maker)와 검증자(Checker)를 분리하고, 테스트·린터·Trace·Eval로 근거를 확인하여 <b>AI를 신뢰 가능하게 통제하는 아키텍트</b>로 성장합니다.</div>`;
+      A(c2, 'up', 0.2, { dur: 0.45 });
     },
   });
 })();

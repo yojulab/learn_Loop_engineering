@@ -65,8 +65,8 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch06',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch06 모범 답안 재현 프롬프트]
-ch06 관련 파일이 전혀 없는 백지 상태에서 5종 전문 서브에이전트와 동적 병렬 워크플로 모범 답안을 처음부터 작성해줘.
+        userPrompt: `[ch06 전문 서브에이전트 & 동적 워크플로 모범 답안 재현 프롬프트]
+5종 전문 서브에이전트 역할 정의와 멀티 플랫폼 동적 병렬 워크플로 시뮬레이터(dynamic_workflow.py), 검색 확장 Quote CLI를 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 심볼릭 링크
    - ch06-subagents-workflow/.claude/agents/ 하위에 YAML Frontmatter(name, description, tools, model)를 포함한 5종 마크다운 에이전트 생성: api-reviewer.md , code-quality.md , doc-writer.md , security-scanner.md , test-runner.md
@@ -147,8 +147,8 @@ ch06 관련 파일이 전혀 없는 백지 상태에서 5종 전문 서브에이
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch07',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch07 모범 답안 재현 프롬프트]
-ch07 관련 파일이 전혀 없는 초기 상태에서 AST 계층 아키텍처 린터와 가드레일·문서 정원가꾸기 모범 답안을 처음부터 구현해줘.
+        userPrompt: `[ch07 AST 아키텍처 린터 & 하네스 가드레일 모범 답안 재현 프롬프트]
+100줄 이하 목차형 AGENTS.md와 AST 계층 의존성 린터(arch_linter.py), 보안·문서 가드레일 모범 답안을 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 심볼릭 링크
    - ch07-harness-engineering/harness-templates/AGENTS.md (100줄 이하 목차형 표준)
@@ -238,8 +238,8 @@ tree = ast.parse(path.read_text(encoding="utf-8"))
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch08',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch08 모범 답안 재현 프롬프트]
-ch08 관련 디렉터리가 전혀 없는 백지 상태에서 SQLite FTS5 RSS Wiki와 Ralph Loop(/goal 평가기) 모범 답안을 처음부터 작성해줘.
+        userPrompt: `[ch08 FTS5 RSS Wiki & Ralph Loop /goal 모범 답안 재현 프롬프트]
+SQLite FTS5 전문 검색 Wiki 데이터베이스(db.py)와 Ralph Loop 목표 달성 자동 판정기(goal_evaluator.py), 워커 셸 스크립트를 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 심볼릭 링크
    - ch08-inner-ralph-loop/rss-wiki/db.py

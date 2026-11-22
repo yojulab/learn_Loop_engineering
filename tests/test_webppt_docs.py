@@ -201,6 +201,10 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertIn("https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing", home)
         self.assertIn("https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing", p_js)
         self.assertIn("https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing", (DOCS_DIR / "engine.js").read_text(encoding="utf-8"))
+        self.assertNotIn("PDF 인쇄", (DOCS_DIR / "engine.js").read_text(encoding="utf-8"))
+        self.assertIn("사전 필요 지식", home)
+        self.assertIn("DevOps", home)
+        self.assertLess(p_js.find("id: 'prologue-ebook'"), p_js.find("id: 'prologue-goal'"))
         ui_txt = (DOCS_DIR / "ui.js").read_text(encoding="utf-8")
         self.assertIn("btn-copy-prompt", ui_txt)
         self.assertIn("show-prompt", ui_txt)
@@ -213,6 +217,7 @@ class WebPptDocsTests(unittest.TestCase):
         s5_txt = (DOCS_DIR / "slides/s5_part4_b.js").read_text(encoding="utf-8")
         self.assertLess(s5_txt.find("id: 'ch11-lab'"), s5_txt.find("id: 'ch11-eval-methods'"))
         self.assertLess(s5_txt.find("id: 'ch11-eval-methods'"), s5_txt.find("id: 'ch12-theory'"))
+        self.assertLess(s5_txt.find("id: 'closing'"), s5_txt.find("id: 'capstone-agent-first'"))
         self.assertIn("height:250px;display:flex;flex-direction:column", s5_txt)
 
 if __name__ == "__main__":

@@ -100,8 +100,8 @@ litellm_settings:
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch11',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch11 모범 답안 재현 프롬프트]
-ch11 관련 디렉터리가 전혀 없는 초기 상태에서 LiteLLM 무코드 프록시 + Langfuse Save as Prompt + 3종 Eval 모범 답안을 처음부터 구현해줘.
+        userPrompt: `[ch11 LiteLLM 무코드 프록시 & Langfuse Save as Prompt 모범 답안 재현 프롬프트]
+LiteLLM 무코드 관측 프록시, Trace->Prompt 승격(trace_to_prompt.py), 라벨 기반 프롬프트 조회(fetch_prompt.py), 3종 Eval 및 회귀 비교 모범 답안을 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조 및 심볼릭 링크
    - ch11-eval-and-llmops/support-assistant/litellm_proxy/ (litellm_config.yaml, zero_code_proxy_demo.py, client_claude.py, client_chatgpt.py, client_gemini.py)
@@ -259,8 +259,8 @@ $ python3 ch11/support-assistant/regression_compare.py`,
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch12',
-        userPrompt: `[해당 단계 구성 전무(백지) 전제 — ch12 모범 답안 재현 프롬프트]
-ch12 관련 파일이 전혀 없는 백지 상태에서 4계층 12대 스택 치트시트, Stage 1~4 성숙도 진단기, 전 단원 통합 검증 게이트 모범 답안을 처음부터 작성해줘.
+        userPrompt: `[ch12 Stage 1~4 준비도 진단 & 통합 게이트 모범 답안 재현 프롬프트]
+4계층 12대 스택 치트시트(README.md), Stage 1~4 성숙도 진단기(stage_readiness_check.py), 전 단원 통합 검증 게이트(verify_chapters.py --all) 모범 답안을 아래 명세에 맞게 구현하고 검증해줘.
 
 1. 생성할 파일 구조
    - ch12-epilogue/README.md (4계층 12대 스택 한눈에 보기 치트시트 & Stage 1~4 점진적 도입 로드맵)
@@ -309,7 +309,7 @@ ch12 관련 파일이 전혀 없는 백지 상태에서 4계층 12대 스택 치
     },
   });
 
-  // Closing
+  // Closing (p.38)
   DECK.slide({
     id: 'closing',
     part: 'p4b',
@@ -325,6 +325,80 @@ ch12 관련 파일이 전혀 없는 백지 상태에서 4계층 12대 스택 치
       chip(box, 'COMPLETED · 5-HOUR WORKSHOP', { bg: 'rgba(75,227,166,.18)', fg: '#4BE3A6' });
       h('div', 'h1', box, '이제 <span class="hl">신뢰할 수 있는 에이전트</span>를<br>직접 설계할 준비가 끝났습니다').style.cssText = 'margin-top:28px';
       A(box, 'up', 0, { dur: 0.55 });
+    },
+  });
+
+  // p.39 (p.38 Closing 다음): 3세대 에이전트 퍼스트 체험 실습 — 다중 프로젝트 관리 루프에이전트
+  DECK.slide({
+    id: 'capstone-agent-first',
+    part: 'p4b',
+    chap: '3세대 에이전트 퍼스트 실습',
+    theme: 'white',
+    title: '체험 실습: 3세대 에이전트 퍼스트 다중 프로젝트 관리 루프에이전트',
+    notes: '사용자 목표를 입력받아 스스로 판단·작업하는 3세대 에이전트 퍼스트 도구(Claude Code, Antigravity, ChatGPT Codex 등)를 활용하여 메타 하네스 루프에이전트(learn_LLM_Engineering) 구조를 자율 구축하는 체험 실습입니다.',
+    build(el, A) {
+      buildLabSlide(el, A, {
+        id: 'capstone',
+        userPrompt: `[3세대 에이전트 퍼스트 체험 실습: 다중 프로젝트 관리 루프에이전트 구축 프롬프트]
+사용자 목표를 자율적으로 판단·실행하는 3세대 에이전트 퍼스트 도구를 활용하여, 다음 5대 핵심 아키텍처 원칙에 따라 다중 프로젝트 관리 루프에이전트(learn_LLM_Engineering) 구조를 구축하고 검증해줘.
+
+1. 호스트-컨테이너 분리:
+   - 호스트 환경에서 복수 Docker 컨테이너를 통합 제어하는 어댑터 패턴 기반의 단일 에이전틱 오케스트레이션 상태 머신(run.py 및 orchestrator/) 구축.
+
+2. 파일 매개 협업 (대화 컨텍스트 부패 차단):
+   - 에이전트 간 대화 내역 직접 전달을 전면 배제하고, projects/<id>/docs/ 내 7종 표준 파일(CLIENT_BRIEF.md, PRD.md, PLAN.md, TASKS.md, IMPL.md, REVIEW.md, GIT_STATE.md, AUDIT.md)을 매개로 역할별 최소 컨텍스트만 주입(python3 run.py --project <id> --action context --role <role>).
+
+3. Maker × Checker 1:1 분리 (자가 평가 편향 차단):
+   - 작성자(Maker: specifier, planner, generator, git_manager)와 검증자(Checker: auditor, evaluator)를 1:1로 엄격 격리하여 자가 평가 편향을 원천 차단하고 블라인드 합의 및 품질 게이트 적용.
+
+4. 5단계 운영 루프 & 계층별 선택적 롤백 (Selective Rollback):
+   - DISCOVER(발견) -> PLAN(계획) -> EXECUTE(실행) -> VERIFY(검증) -> ITERATE(반복) 5단계 운영.
+   - 검증 실패 시 전체 재시작 대신 실패 원인 계층별로 롤백: 구현/테스트 오류는 EXECUTE(07_IMPL_CODE), 계획/범위 모호성은 PLAN(05_PLAN_TASKS), 요구사항 결함은 DISCOVER(01_INTAKE_SPEC)로 선택적 되돌림.
+   - 7대 완료·중단 조건(종료코드 0, 린트/테스트 통과, N회 연속 성공, 동일 오류 Stall 감지 차단, 비가역 작업 docs/HALT).
+
+5. 통합 제어 표준화:
+   - 컨테이너 제어 올인원 스크립트(run_port.sh) 및 프로젝트 레지스트리(project.yaml)를 표준화해 단일 명령으로 개발·배포·에이전트 실행 환경을 제어.
+
+검증 명령 (전부 exit 0 통과 필수)
+- python3 ch12-epilogue/stage_readiness_check.py --format json
+- python3 scripts/verify_chapters.py --all`,
+        kicker: 'CAPSTONE · AGENT-FIRST HANDS-ON (자율 체험)',
+        heading: '체험 실습: 3세대 에이전트 퍼스트 <span class="hl">다중 프로젝트 관리 루프에이전트</span>',
+        duration: '자율 실습',
+        missionTitle: '사용자 목표 입력 → 스스로 판단·작업 수행하는 3세대 루프에이전트 체험',
+        steps: [
+          '<code>3세대 에이전트 퍼스트 CLI 기동</code><br>Claude Code, ChatGPT/Codex, Gemini/Antigravity 등 최신 에이전트 실행 환경 준비.',
+          '<code>단축키 A로 해결 프롬프트 복사 & 투입</code><br>좌측 오버레이의 5대 핵심 아키텍처 원칙이 담긴 사용자 프롬프트를 에이전트에 입력.',
+          '<code>learn_LLM_Engineering 구조 자동 형성 확인</code><br>호스트-컨테이너 분리, 7종 문서 허브, Maker×Checker 1:1 격리 워크스페이스 구축 결과를 검증.',
+        ],
+        runCmd: 'python3 ch12-epilogue/stage_readiness_check.py --format json\npython3 scripts/verify_chapters.py --all',
+        answerLabel: '루프에이전트 아키텍처 & 구조 확인 (클릭하여 열기)',
+        answerType: 'Tree + Architecture',
+        answerSummary: '3세대 에이전트 퍼스트 도구는 모호한 사용자 목표를 받아 스스로 판단하며, 호스트-컨테이너 분리·파일 매개 협업·Maker×Checker 분리·선택적 롤백 구조를 완결합니다.',
+        tree: `learn_LLM_Engineering/
+├── AGENTS.md / project.yaml   # 프로젝트 레지스트리 & 하네스 규칙
+├── run.py                     # 단일 에이전틱 오케스트레이션 상태 머신
+├── run_port.sh                # 컨테이너 제어 올인원 스크립트
+├── orchestrator/              # Maker x Checker, 선택적 롤백 제어기
+├── fleet/                     # 전문 에이전트 플릿 매니페스트
+└── projects/<project_id>/
+    └── docs/                  # 7종 파일 매개 협업 허브
+        ├── CLIENT_BRIEF.md · PRD.md · PLAN.md
+        ├── TASKS.md (touch 지정) · IMPL.md
+        ├── REVIEW.md (PASS/FAIL) · GIT_STATE.md
+        └── decisions/ (*.planner.md, *.evaluator.md)`,
+        codeCaption: '5단계 운영 루프 & 계층별 선택적 되돌림(Selective Rollback) 전이',
+        answerCode: `# 검증 실패 시 원인 계층별 선택적 되돌림 규칙
+if verify_result == "FAIL":
+    if fail_cause == "implementation_or_test_error":
+        next_step = "07_IMPL_CODE"      # EXECUTE 단계로 즉시 롤백
+    elif fail_cause == "plan_ambiguity":
+        next_step = "05_PLAN_TASKS"     # PLAN 단계로 롤백
+    elif fail_cause == "requirement_defect":
+        next_step = "01_INTAKE_SPEC"    # DISCOVER 단계로 롤백
+elif verify_result == "PASS":
+    next_step = "09_GIT_COMMIT_PUSH"    # 정상 릴리스 진행`,
+      });
     },
   });
 })();
