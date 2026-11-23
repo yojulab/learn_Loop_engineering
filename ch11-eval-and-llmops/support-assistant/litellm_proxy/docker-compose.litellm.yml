@@ -6,6 +6,7 @@ services:
       - "4000:4000"
     volumes:
       - ./litellm_config.yaml:/app/config.yaml:ro
+      - ./langfuse_v2_callback.py:/app/langfuse_v2_callback.py:ro
     command: ["--config", "/app/config.yaml", "--port", "4000", "--host", "0.0.0.0"]
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
@@ -14,4 +15,5 @@ services:
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY:-sk-litellm-local}
       - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY:-pk-lf-loop-engineering-public}
       - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY:-sk-lf-loop-engineering-secret}
+      - PYTHONPATH=/app
       - LANGFUSE_HOST=${LANGFUSE_HOST:-http://host.docker.internal:30000}

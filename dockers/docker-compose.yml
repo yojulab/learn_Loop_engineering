@@ -53,6 +53,7 @@ services:
       - "${LITELLM_PORT:-4000}:4000"
     volumes:
       - ./litellm_config.yaml:/app/config.yaml:ro
+      - ./langfuse_v2_callback.py:/app/langfuse_v2_callback.py:ro
     command: ["--config", "/app/config.yaml", "--port", "4000", "--host", "0.0.0.0"]
     depends_on:
       - langfuse
@@ -63,6 +64,7 @@ services:
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-litellm-local}
       LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-pk-lf-loop-engineering-public}
       LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-sk-lf-loop-engineering-secret}
+      PYTHONPATH: /app
       LANGFUSE_HOST: ${LANGFUSE_HOST:-http://langfuse:3000}
 
   # 실습 앱 컨테이너: Python 3.13 + Claude Code CLI + Antigravity CLI + langfuse SDK
@@ -79,6 +81,7 @@ services:
       - .env
     volumes:
       - ${APP_PROJECTS_DIR:-./apps}:/apps
+      - ./volumes/gemini:/root/.gemini
     depends_on:
       - langfuse
       - litellm-proxy
