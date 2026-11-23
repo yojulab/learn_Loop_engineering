@@ -1,4 +1,4 @@
-# AGENTS.md — Hermes Engineering 범용 규칙서 (목차형, 멀티 플랫폼)
+# AGENTS.md — Loop Engineering 범용 규칙서 (목차형, 멀티 플랫폼)
 
 > 본 문서는 제7장 하네스 엔지니어링 원칙에 따라 **100줄 이하 목차형**으로 유지하며, **Claude · ChatGPT(Codex) · Gemini(Antigravity)** 모든 플랫폼에서 공통 적용됩니다.
 

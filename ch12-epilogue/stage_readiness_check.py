@@ -8,9 +8,9 @@ from pathlib import Path
 def inspect_stages(repo_root: str | Path) -> dict[str, object]:
     root = Path(repo_root)
     s1 = (root / "AGENTS.md").is_file() and (root / "CLAUDE.md").is_file() and (root / "scripts" / "verify_chapters.py").is_file()
-    s2 = (root / "ch09-orchestration" / "harness" / "src" / "harness" / "permissions.py").is_file() and (root / "ch09-orchestration" / "harness" / "src" / "harness" / "rubric.py").is_file()
-    s3 = (root / "ch10-outer-loop" / "todo-loop" / "loop.py").is_file() and (root / "ch10-outer-loop" / "todo-loop" / "cost_logger.py").is_file()
-    s4 = (root / "ch11-eval-and-llmops" / "support-assistant" / "evaluator.py").is_file() and (root / "ch11-eval-and-llmops" / "support-assistant" / "langfuse_ops.py").is_file()
+    s2 = (root / "ch09-orchestration" / "src" / "harness" / "permissions.py").is_file() and (root / "ch09-orchestration" / "src" / "harness" / "rubric.py").is_file()
+    s3 = (root / "ch10-outer-loop" / "loop.py").is_file() and (root / "ch10-outer-loop" / "cost_logger.py").is_file()
+    s4 = (root / "ch11-eval-and-llmops" / "evaluator.py").is_file() and (root / "ch11-eval-and-llmops" / "langfuse_ops.py").is_file()
 
     stages = {
         "stage_1_foundation": s1,
@@ -28,7 +28,7 @@ def inspect_stages(repo_root: str | Path) -> dict[str, object]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Epilogue Stage 1~4 Readiness Checker")
-    default_root = "." if Path("AGENTS.md").is_file() else str(Path(__file__).resolve().parent.parent)
+    default_root = "." if Path("scripts/verify_chapters.py").is_file() else str(Path(__file__).resolve().parent.parent)
     parser.add_argument("--path", default=default_root)
     parser.add_argument("--format", choices=["text", "json"], default="text")
     args = parser.parse_args(argv)

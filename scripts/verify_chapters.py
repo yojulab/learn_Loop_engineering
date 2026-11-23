@@ -21,6 +21,7 @@ LEGACY_DOCS_PATHS: tuple[str, ...] = (
     "docs/user_prompt_history.md",
 )
 ROOT_DOCS: tuple[str, ...] = ("README.md", "AGENTS.md", "CLAUDE.md", "CHATGPT.md", "GEMINI.md")
+CHAPTER_AI_FILES: tuple[str, ...] = ("AGENTS.md", "CLAUDE.md", "GEMINI.md", ".claude", ".gemini")
 TEXT_SCAN_SKIP_DIRS: frozenset[str] = frozenset({".git", "__pycache__", ".pytest_cache"})
 
 
@@ -85,7 +86,7 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         phase=1,
         canonical_dir="ch00-prologue",
         title="프롤로그: 4계층 12대 스택 환경 진단",
-        required_files=("README.md", "stack_check.py", "tests/test_stack_check.py"),
+        required_files=(*CHAPTER_AI_FILES, "README.md", "stack_check.py", "agent_check.py", "tests/test_stack_check.py"),
         test_dirs=("ch00-prologue/tests",),
         cli_commands=(
             ("ch00-prologue/stack_check.py",),
@@ -98,18 +99,19 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch01-agentic-coding",
         title="제1장: 바이브 코딩과 에이전틱 코딩의 탄생",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "quote-cli/quotes.json",
-            "quote-cli/quote_cli.py",
-            "quote-cli/interactive_demo.py",
-            "quote-cli/tests/test_quote_cli.py",
+            "quotes.json",
+            "quote_cli.py",
+            "interactive_demo.py",
+            "tests/test_quote_cli.py",
         ),
-        test_dirs=("ch01-agentic-coding/quote-cli/tests",),
+        test_dirs=("ch01-agentic-coding/tests",),
         cli_commands=(
-            ("ch01-agentic-coding/quote-cli/quote_cli.py", "--all"),
-            ("ch01-agentic-coding/quote-cli/quote_cli.py", "--tag", "engineering"),
+            ("ch01-agentic-coding/quote_cli.py", "--all"),
+            ("ch01-agentic-coding/quote_cli.py", "--tag", "engineering"),
         ),
-        symlinks=(("ch01/quote-cli", "ch01-agentic-coding/quote-cli"),),
+        symlinks=(("ch01/quote-cli", "ch01-agentic-coding"),),
     ),
     ChapterSpec(
         chapter_id="ch02",
@@ -117,28 +119,29 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch02-mcp-and-hooks",
         title="제2장: MCP와 훅(Hooks)",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "quote-mcp/main.py",
-            "quote-mcp/quotes.json",
-            "quote-mcp/.mcp.json",
-            "quote-mcp/.claude/settings.json",
-            "quote-mcp/hooks/block_dangerous_bash.py",
-            "quote-mcp/hooks/audit_logger.py",
-            "quote-mcp/tests/test_quote_mcp_and_hooks.py",
-            "quote-mcp/mcp_config_claude.json",
-            "quote-mcp/mcp_config_chatgpt.json",
-            "quote-mcp/mcp_config_gemini.json",
-            "quote-mcp/hooks/platform_hook_bridge.py",
+            "main.py",
+            "quotes.json",
+            ".mcp.json",
+            ".claude/settings.json",
+            "hooks/block_dangerous_bash.py",
+            "hooks/audit_logger.py",
+            "tests/test_quote_mcp_and_hooks.py",
+            "mcp_config_claude.json",
+            "mcp_config_chatgpt.json",
+            "mcp_config_gemini.json",
+            "hooks/platform_hook_bridge.py",
             "../ch04/quote-cli/README.md",
         ),
-        test_dirs=("ch02-mcp-and-hooks/quote-mcp/tests",),
+        test_dirs=("ch02-mcp-and-hooks/tests",),
         symlinks=(
-            ("ch02/quote-mcp", "ch02-mcp-and-hooks/quote-mcp"),
-            ("ch04/quote-cli/main.py", "ch02-mcp-and-hooks/quote-mcp/main.py"),
-            ("ch04/quote-cli/quotes.json", "ch02-mcp-and-hooks/quote-mcp/quotes.json"),
-            ("ch04/quote-cli/.mcp.json", "ch02-mcp-and-hooks/quote-mcp/.mcp.json"),
-            ("ch04/quote-cli/.claude", "ch02-mcp-and-hooks/quote-mcp/.claude"),
-            ("ch04/quote-cli/cli", "ch01-agentic-coding/quote-cli"),
+            ("ch02/quote-mcp", "ch02-mcp-and-hooks"),
+            ("ch04/quote-cli/main.py", "ch02-mcp-and-hooks/main.py"),
+            ("ch04/quote-cli/quotes.json", "ch02-mcp-and-hooks/quotes.json"),
+            ("ch04/quote-cli/.mcp.json", "ch02-mcp-and-hooks/.mcp.json"),
+            ("ch04/quote-cli/.claude", "ch02-mcp-and-hooks/.claude"),
+            ("ch04/quote-cli/cli", "ch01-agentic-coding"),
         ),
     ),
     ChapterSpec(
@@ -147,34 +150,35 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch03-skills",
         title="제3장: 온디맨드 노하우 모듈: 스킬(Skills)",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "github-workflow-skills/gh-issue/SKILL.md",
-            "github-workflow-skills/gh-issue/reference.md",
-            "github-workflow-skills/gh-issue/examples/sample_issue.md",
-            "github-workflow-skills/gh-issue/scripts/validate_issue.py",
-            "github-workflow-skills/git-commit/SKILL.md",
-            "github-workflow-skills/git-commit/reference.md",
-            "github-workflow-skills/git-commit/examples/sample_commit.txt",
-            "github-workflow-skills/git-commit/scripts/validate_commit.py",
-            "github-workflow-skills/gh-pr/SKILL.md",
-            "github-workflow-skills/gh-pr/reference.md",
-            "github-workflow-skills/gh-pr/examples/sample_pr.md",
-            "github-workflow-skills/gh-pr/scripts/validate_pr.py",
-            "github-workflow-skills/gh-review/SKILL.md",
-            "github-workflow-skills/gh-review/reference.md",
-            "github-workflow-skills/gh-review/examples/sample_review.md",
-            "github-workflow-skills/gh-review/scripts/validate_review.py",
-            "github-workflow-skills/gh-address-review/SKILL.md",
-            "github-workflow-skills/gh-address-review/reference.md",
-            "github-workflow-skills/gh-address-review/examples/sample_address_review.md",
-            "github-workflow-skills/gh-address-review/scripts/validate_address_review.py",
-            "github-workflow-skills/tests/test_github_workflow_skills.py",
-            "github-workflow-skills/skills_claude.md",
-            "github-workflow-skills/skills_chatgpt.md",
-            "github-workflow-skills/skills_gemini.md",
+            "gh-issue/SKILL.md",
+            "gh-issue/reference.md",
+            "gh-issue/examples/sample_issue.md",
+            "gh-issue/scripts/validate_issue.py",
+            "git-commit/SKILL.md",
+            "git-commit/reference.md",
+            "git-commit/examples/sample_commit.txt",
+            "git-commit/scripts/validate_commit.py",
+            "gh-pr/SKILL.md",
+            "gh-pr/reference.md",
+            "gh-pr/examples/sample_pr.md",
+            "gh-pr/scripts/validate_pr.py",
+            "gh-review/SKILL.md",
+            "gh-review/reference.md",
+            "gh-review/examples/sample_review.md",
+            "gh-review/scripts/validate_review.py",
+            "gh-address-review/SKILL.md",
+            "gh-address-review/reference.md",
+            "gh-address-review/examples/sample_address_review.md",
+            "gh-address-review/scripts/validate_address_review.py",
+            "tests/test_github_workflow_skills.py",
+            "skills_claude.md",
+            "skills_chatgpt.md",
+            "skills_gemini.md",
         ),
-        test_dirs=("ch03-skills/github-workflow-skills/tests",),
-        symlinks=(("ch03/github-workflow-skills", "ch03-skills/github-workflow-skills"),),
+        test_dirs=("ch03-skills/tests",),
+        symlinks=(("ch03/github-workflow-skills", "ch03-skills"),),
     ),
     ChapterSpec(
         chapter_id="ch04",
@@ -182,14 +186,12 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch04-context-engineering",
         title="제4장: 컨텍스트 엔지니어링과 윈도우의 한계",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
             "prompt_template.txt",
             "few_shot_reference.txt",
             "claude_working_guidelines.md",
-            "CLAUDE.md",
             ".claude/rules/api.md",
-            "AGENTS.md",
-            "GEMINI.md",
             "context_budget.py",
             "guidelines_claude.md",
             "guidelines_chatgpt.md",
@@ -213,18 +215,19 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch05-rag-and-memory",
         title="제5장: 외부 지식(RAG)과 세션 너머의 기억(Memory)",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "memory_pattern/memory_manager.py",
-            "memory_pattern/agentic_rag.py",
-            "memory_pattern/TASKS.md",
-            "memory_pattern/JOURNAL.md",
-            "memory_pattern/corpus/01_context_budget.md",
-            "memory_pattern/corpus/02_agentic_rag.md",
-            "memory_pattern/corpus/03_durable_memory.md",
-            "memory_pattern/tests/test_memory_pattern.py",
+            "memory_manager.py",
+            "agentic_rag.py",
+            "TASKS.md",
+            "JOURNAL.md",
+            "corpus/01_context_budget.md",
+            "corpus/02_agentic_rag.md",
+            "corpus/03_durable_memory.md",
+            "tests/test_memory_pattern.py",
         ),
-        test_dirs=("ch05-rag-and-memory/memory_pattern/tests",),
-        symlinks=(("ch05/memory_pattern", "ch05-rag-and-memory/memory_pattern"),),
+        test_dirs=("ch05-rag-and-memory/tests",),
+        symlinks=(("ch05/memory_pattern", "ch05-rag-and-memory"),),
     ),
     ChapterSpec(
         chapter_id="ch06",
@@ -232,21 +235,17 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch06-subagents-workflow",
         title="제6장: 서브에이전트와 워크플로",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "quote-cli/quote_cli.py",
+            "quote_cli.py",
             "dynamic_workflow.py",
             "agents_chatgpt.json",
             "agents_gemini.json",
             "tests/test_dynamic_workflow.py",
+            "tests/test_quote_cli_search.py",
         ),
-        test_dirs=(
-            "ch06-subagents-workflow/quote-cli/tests",
-            "ch06-subagents-workflow/tests",
-        ),
-        symlinks=(
-            ("ch06/quote-cli", "ch06-subagents-workflow/quote-cli"),
-            ("ch06-subagents-workflow/quote-cli/.claude", "ch06-subagents-workflow/.claude"),
-        ),
+        test_dirs=("ch06-subagents-workflow/tests",),
+        symlinks=(("ch06/quote-cli", "ch06-subagents-workflow"),),
     ),
     ChapterSpec(
         chapter_id="ch07",
@@ -254,15 +253,15 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch07-harness-engineering",
         title="제7장: 하네스 엔지니어링",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "harness-templates/AGENTS.md",
-            "harness-templates/arch_linter.py",
-            "harness-templates/guardrails.py",
-            "harness-templates/doc_gardening.py",
-            "harness-templates/tests/test_harness_templates.py",
+            "arch_linter.py",
+            "guardrails.py",
+            "doc_gardening.py",
+            "tests/test_harness_templates.py",
         ),
-        test_dirs=("ch07-harness-engineering/harness-templates/tests",),
-        symlinks=(("ch07/harness-templates", "ch07-harness-engineering/harness-templates"),),
+        test_dirs=("ch07-harness-engineering/tests",),
+        symlinks=(("ch07/harness-templates", "ch07-harness-engineering"),),
     ),
     ChapterSpec(
         chapter_id="ch08",
@@ -270,19 +269,20 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch08-inner-ralph-loop",
         title="제8장: 이너 루프와 랄프 루프",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "rss-wiki/db.py",
-            "rss-wiki/collector.py",
-            "rss-wiki/app.py",
-            "rss-wiki/ralph_loop.sh",
-            "rss-wiki/worker_claude.sh",
-            "rss-wiki/worker_chatgpt.sh",
-            "rss-wiki/worker_gemini.sh",
-            "rss-wiki/goal_evaluator.py",
-            "rss-wiki/tests/test_rss_wiki.py",
+            "db.py",
+            "collector.py",
+            "app.py",
+            "ralph_loop.sh",
+            "worker_claude.sh",
+            "worker_chatgpt.sh",
+            "worker_gemini.sh",
+            "goal_evaluator.py",
+            "tests/test_rss_wiki.py",
         ),
-        test_dirs=("ch08-inner-ralph-loop/rss-wiki/tests",),
-        symlinks=(("ch08/rss-wiki", "ch08-inner-ralph-loop/rss-wiki"),),
+        test_dirs=("ch08-inner-ralph-loop/tests",),
+        symlinks=(("ch08/rss-wiki", "ch08-inner-ralph-loop"),),
     ),
     ChapterSpec(
         chapter_id="ch09",
@@ -290,13 +290,14 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch09-orchestration",
         title="제9장: 다중 에이전트 오케스트레이션",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "harness/pyproject.toml",
-            "harness/run.py",
-            "harness/tests/test_orchestration_harness.py",
+            "pyproject.toml",
+            "run.py",
+            "tests/test_orchestration_harness.py",
         ),
-        test_dirs=("ch09-orchestration/harness/tests",),
-        symlinks=(("ch09/harness", "ch09-orchestration/harness"),),
+        test_dirs=("ch09-orchestration/tests",),
+        symlinks=(("ch09/harness", "ch09-orchestration"),),
     ),
     ChapterSpec(
         chapter_id="ch10",
@@ -304,15 +305,16 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch10-outer-loop",
         title="제10장: 아우터 루프 엔지니어링",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "todo-loop/loop.py",
-            "todo-loop/models.py",
-            "todo-loop/workers.py",
-            "todo-loop/cost_logger.py",
-            "todo-loop/tests/test_todo_loop.py",
+            "loop.py",
+            "models.py",
+            "workers.py",
+            "cost_logger.py",
+            "tests/test_todo_loop.py",
         ),
-        test_dirs=("ch10-outer-loop/todo-loop/tests",),
-        symlinks=(("ch10/todo-loop", "ch10-outer-loop/todo-loop"),),
+        test_dirs=("ch10-outer-loop/tests",),
+        symlinks=(("ch10/todo-loop", "ch10-outer-loop"),),
     ),
     ChapterSpec(
         chapter_id="ch11",
@@ -320,31 +322,32 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch11-eval-and-llmops",
         title="제11장: 평가(Eval)와 LLMOps",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
-            "support-assistant/models.py",
-            "support-assistant/seed_prompts.py",
-            "support-assistant/prompting.py",
-            "support-assistant/evaluator.py",
-            "support-assistant/langfuse_ops.py",
-            "support-assistant/trace_to_prompt.py",
-            "support-assistant/fetch_prompt.py",
-            "support-assistant/regression_compare.py",
-            "support-assistant/litellm_proxy/litellm_config.yaml",
-            "support-assistant/litellm_proxy/docker-compose.litellm.yml",
-            "support-assistant/litellm_proxy/.env.example",
-            "support-assistant/litellm_proxy/zero_code_proxy_demo.py",
-            "support-assistant/litellm_proxy/client_claude.py",
-            "support-assistant/litellm_proxy/client_chatgpt.py",
-            "support-assistant/litellm_proxy/client_gemini.py",
-            "support-assistant/tests/test_support_assistant.py",
+            "models.py",
+            "seed_prompts.py",
+            "prompting.py",
+            "evaluator.py",
+            "langfuse_ops.py",
+            "trace_to_prompt.py",
+            "fetch_prompt.py",
+            "regression_compare.py",
+            "litellm_proxy/litellm_config.yaml",
+            "litellm_proxy/docker-compose.litellm.yml",
+            "litellm_proxy/.env.example",
+            "litellm_proxy/zero_code_proxy_demo.py",
+            "litellm_proxy/client_claude.py",
+            "litellm_proxy/client_chatgpt.py",
+            "litellm_proxy/client_gemini.py",
+            "tests/test_support_assistant.py",
         ),
-        test_dirs=("ch11-eval-and-llmops/support-assistant/tests",),
+        test_dirs=("ch11-eval-and-llmops/tests",),
         cli_commands=(
-            ("ch11-eval-and-llmops/support-assistant/litellm_proxy/zero_code_proxy_demo.py",),
-            ("ch11-eval-and-llmops/support-assistant/trace_to_prompt.py", "--demo", "--json"),
-            ("ch11-eval-and-llmops/support-assistant/fetch_prompt.py", "--demo", "--json"),
+            ("ch11-eval-and-llmops/litellm_proxy/zero_code_proxy_demo.py",),
+            ("ch11-eval-and-llmops/trace_to_prompt.py", "--demo", "--json"),
+            ("ch11-eval-and-llmops/fetch_prompt.py", "--demo", "--json"),
         ),
-        symlinks=(("ch11/support-assistant", "ch11-eval-and-llmops/support-assistant"),),
+        symlinks=(("ch11/support-assistant", "ch11-eval-and-llmops"),),
     ),
     ChapterSpec(
         chapter_id="ch12",
@@ -352,6 +355,7 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         canonical_dir="ch12-epilogue",
         title="에필로그: 도입 체크리스트 & Stage 1~4 진단",
         required_files=(
+            *CHAPTER_AI_FILES,
             "README.md",
             "stage_readiness_check.py",
             "tests/test_stage_readiness.py",
@@ -369,8 +373,8 @@ def discover_test_runner() -> list[str]:
     return [sys.executable, "-m", "unittest", "discover"]
 
 
-def check_readme_five_sections(readme_path: Path) -> tuple[bool, list[str]]:
-    """표준 5단 README.md 구성(1~5 섹션 및 mermaid 블록)을 검증한다."""
+def check_readme_five_sections(readme_path: Path, require_prompts: bool = False) -> tuple[bool, list[str]]:
+    """표준 5단 README.md 구성(1~5 섹션, mermaid 블록, 3개 이상 프롬프트 예시)을 검증한다."""
     if not readme_path.is_file():
         return False, ["missing README.md"]
     content = readme_path.read_text(encoding="utf-8", errors="ignore")
@@ -380,6 +384,10 @@ def check_readme_five_sections(readme_path: Path) -> tuple[bool, list[str]]:
             missing.append(f"section ## {idx}.")
     if "```mermaid" not in content:
         missing.append("mermaid diagram block")
+    if require_prompts:
+        for p_idx in range(1, 4):
+            if f"프롬프트 예시 {p_idx}" not in content:
+                missing.append(f"프롬프트 예시 {p_idx}")
     return len(missing) == 0, missing
 
 
@@ -488,7 +496,7 @@ def _verify_root_phase1(repo_root: Path, runner: list[str]) -> list[CheckResult]
         )
     )
 
-    readme_ok, readme_missing = check_readme_five_sections(repo_root / "README.md")
+    readme_ok, readme_missing = check_readme_five_sections(repo_root / "README.md", require_prompts=True)
     results.append(
         CheckResult(
             name="root_readme_five_sections",
@@ -516,7 +524,8 @@ def _verify_single_chapter(repo_root: Path, spec: ChapterSpec, runner: list[str]
         )
     )
 
-    readme_ok, readme_missing = check_readme_five_sections(chap_dir / "README.md")
+    is_chapter = spec.chapter_id.startswith("ch")
+    readme_ok, readme_missing = check_readme_five_sections(chap_dir / "README.md", require_prompts=is_chapter)
     results.append(
         CheckResult(
             name=f"{spec.chapter_id}:readme_five_sections",

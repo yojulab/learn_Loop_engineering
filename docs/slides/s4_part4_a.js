@@ -63,30 +63,34 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch09',
-        userPrompt: `[실습 결과 실행 프롬프트 — harness/ 폴더에서 AI CLI에 입력]
-현재 harness 프로젝트 폴더에서 3-Agent(Planner·Generator·Evaluator) 오케스트레이션과 블라인드 합의를 실행해 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더에서 3-Agent(Planner·Generator·Evaluator) 파일 매개 오케스트레이션과 블라인드 합의를 실행해 결과를 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 run.py, orchestrator.py, consensus.py, rubric.py, permissions.py를 먼저 구성)
-   - python3 harness/run.py --mode sim --platform chatgpt
-   - python3 -m unittest discover -s harness/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - 블라인드 합의 결과, 0~3점 루브릭 채점 판정(PASS/FAIL), 단위 테스트 통과 건수를 JSON과 함께 요약 출력할 것.`,
+1) 프롬프트 1 (3-Agent 합의 시뮬레이션): python3 run.py --mode sim --platform chatgpt 를 실행해 블라인드 합의와 루브릭 채점 판정 JSON을 출력해줘.
+2) 프롬프트 2 (권한 매트릭스 & 채점표 점검): src/harness/permissions.py 의 역할별 권한 분리와 rubric.py 의 0~3점 채점 기준을 요약해줘.
+3) 프롬프트 3 (HALT 에스컬레이션 & 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 3회 합의 불일치 docs/HALT 생성과 전체 테스트를 검증해줘.`,
         kicker: 'CH09 · HANDS-ON LAB (20분)',
         heading: '제9장 실습: <span class="hl">3-Agent 합의</span> &amp; 루브릭 채점 출력',
         duration: '20분',
-        missionTitle: 'harness/ 폴더에 3-Agent 파일 협업·루브릭 작성 후 AI CLI로 합의 결과 출력',
+        missionTitle: '챕터 루트에 3-Agent 파일 협업·루브릭 구성 후 AI CLI로 합의 결과 출력',
         steps: [
-          '<code>src/harness/prompts/</code> · <code>permissions.py</code><br>Planner·Generator·Evaluator 역할 분리 프롬프트와 도구 권한 매트릭스를 작성.',
-          '<code>consensus.py</code> · <code>rubric.py</code> · <code>run.py</code><br>첫 줄(<code>선택: X</code>) 블라인드 합의기와 0~3점 루브릭 컷오프 판정기를 구현.',
-          '<code>harness/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 <code>consensus: agreed</code>와 <code>PASS</code> 결과를 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서와 <code>run.py</code>, <code>src/harness/</code>(<code>orchestrator</code>, <code>consensus</code>, <code>rubric</code>, <code>permissions</code>)를 구성.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br>챕터 루트로 이동해 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속하여 Maker≠Checker 규칙을 로드.',
+          '<code>사용자 입력 프롬프트로 합의·채점 실행</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 <code>consensus: agreed</code>와 <code>PASS</code> 결과를 확인.',
         ],
-        runCmd: 'python3 harness/run.py --mode sim --platform chatgpt\npython3 -m unittest discover -s harness/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "python3 run.py --mode sim --platform chatgpt를 실행해 3-Agent 합의 JSON을 출력해줘."',
+          '2) "src/harness/permissions.py와 rubric.py의 역할 권한 분리 및 0~3점 채점 기준을 점검해줘."',
+          '3) "tests/test_orchestration_harness.py로 3회 불일치 docs/HALT 생성을 검증해줘."',
+        ],
+        runCmd: 'python3 run.py --mode sim --platform chatgpt\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '<code>harness/</code>에서 AI CLI가 3-Agent 파이프라인을 실행해 블라인드 합의 및 0~3점 루브릭 <code>PASS</code> 판정 JSON을 출력합니다.',
-        tree: `harness/
-├── run.py              # --mode sim|dry-run --platform claude|chatgpt|gemini
+        answerSummary: '챕터 루트에서 AI CLI가 3-Agent 파이프라인을 실행해 블라인드 합의 및 0~3점 루브릭 <code>PASS</code> 판정 JSON을 출력합니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/orchestration.md · .gemini/settings.json
+├── run.py · pyproject.toml   # --mode sim|dry-run --platform claude|chatgpt|gemini
 ├── src/harness/
 │   ├── orchestrator.py · consensus.py · rubric.py · permissions.py
 │   └── prompts/ (planner.md, generator.md, evaluator.md)
@@ -148,37 +152,41 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch10',
-        userPrompt: `[실습 결과 실행 프롬프트 — todo-loop/ 폴더에서 AI CLI에 입력]
-현재 todo-loop 프로젝트 폴더에서 CALC-001~004 계약 태스크를 5단계 아우터 루프로 실행하고 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더에서 CALC-001~004 계약 태스크를 5단계 아우터 루프로 실행하고 7대 완료·중단 조건 검증 결과를 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 loop.py, workers.py, cost_logger.py, sample_tasks/를 먼저 구성)
-   - python3 todo-loop/loop.py --platform claude
-   - python3 -m unittest discover -s todo-loop/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - completed_tasks(CALC-001~004), stop_reason, turns_executed, total_cost_usd 및 Stall/롤백 테스트 통과 결과를 출력할 것.`,
+1) 프롬프트 1 (5단계 아우터 루프 실행): python3 loop.py --platform claude 를 실행해 completed_tasks, halted_tasks, stop_reason, total_cost_usd 를 출력해줘.
+2) 프롬프트 2 (독립 검증기 & 재시도 점검): sample_tasks/tasks_contract.json 과 calc_verifier.py 의 CALC-002 재시도 및 CALC-003 HALT 조건을 설명해줘.
+3) 프롬프트 3 (비용 로거 & 단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 실행 결과를 출력해줘.`,
         kicker: 'CH10 · HANDS-ON LAB (25분)',
         heading: '제10장 실습: <span class="hl">아우터 루프</span> &amp; 7대 중단 조건 실행',
         duration: '25분',
-        missionTitle: 'todo-loop/ 폴더에 5단계 루프·예산 제어기 작성 후 AI CLI로 완주 결과 출력',
+        missionTitle: '챕터 루트에 5단계 루프·예산 제어기 구성 후 AI CLI로 완주 결과 출력',
         steps: [
-          '<code>sample_tasks/tasks_contract.json</code> · <code>calc_verifier.py</code><br><code>CALC-001~004</code> 계약 명세와 결정적 검증 함수를 작성.',
-          '<code>loop.py</code> · <code>workers.py</code> · <code>cost_logger.py</code><br>5단계 상태 전이, 7대 완료/중단 조건, 토큰 비용 로거를 구현.',
-          '<code>todo-loop/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 <code>all_tasks_completed</code>와 비용 JSON을 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서, <code>loop.py</code>, <code>workers.py</code>, <code>cost_logger.py</code>, <code>sample_tasks/</code>를 배치.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br>챕터 루트에서 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속해 5단계 아우터 루프 지침을 로드.',
+          '<code>사용자 입력 프롬프트로 아우터 루프 실행</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 태스크 완료/중단 상태와 비용 JSON을 확인.',
         ],
-        runCmd: 'python3 todo-loop/loop.py --platform claude\npython3 -m unittest discover -s todo-loop/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "python3 loop.py --platform claude를 실행해 CALC-001~004 상태 전이와 비용 JSON을 출력해줘."',
+          '2) "sample_tasks/calc_verifier.py의 독립 검증 규칙과 CALC-003 HALT 조건을 점검해줘."',
+          '3) "tests/test_todo_loop.py를 실행해 재시도·의존성 순서·비용 로깅 테스트를 검증해줘."',
+        ],
+        runCmd: 'python3 loop.py --platform claude\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '<code>todo-loop/</code>에서 AI CLI가 아우터 루프를 구동해 <code>CALC-001~004</code> 완료 내역, 중단 사유, 누적 비용 JSON을 출력합니다.',
-        tree: `todo-loop/
+        answerSummary: '챕터 루트에서 AI CLI가 아우터 루프를 구동해 <code>CALC-001~004</code> 완료 내역, 중단 사유, 누적 비용 JSON을 출력합니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/outer-loop.md · .gemini/settings.json
 ├── loop.py · workers.py · cost_logger.py · models.py
 ├── sample_tasks/ (tasks_contract.json, calc_verifier.py)
 └── tests/test_todo_loop.py`,
         codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (loop.py --platform claude)',
         answerCode: `{
   "stop_reason": "all_tasks_completed",
-  "completed_tasks": ["CALC-001", "CALC-002", "CALC-003", "CALC-004"],
-  "halted_tasks": [],
+  "completed_tasks": ["CALC-001", "CALC-002", "CALC-004"],
+  "halted_tasks": ["CALC-003"],
   "turns_executed": 4,
   "total_cost_usd": 0.0024
 }`,

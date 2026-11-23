@@ -1,0 +1,10 @@
+{
+  "chapter": "ch02-mcp-and-hooks",
+  "title": "제2장: 도구를 쥐여주는 표준 — MCP와 훅(Hooks)",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 main.py && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

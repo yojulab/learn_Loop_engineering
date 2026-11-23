@@ -28,7 +28,7 @@ seed_ch11_prompts() {
   local host="${LANGFUSE_HOST:-}"
   local pk="${LANGFUSE_PUBLIC_KEY:-}"
   local sk="${LANGFUSE_SECRET_KEY:-}"
-  local support_dir="${APP_DIR}/ch11-eval-and-llmops/support-assistant"
+  local support_dir="${APP_DIR}/ch11-eval-and-llmops"
 
   if [ -z "${host}" ] || [ -z "${pk}" ] || [ -z "${sk}" ]; then
     echo "[entrypoint] LANGFUSE_HOST/KEY 미설정 — ch11 seed_prompts 건너뜀"
@@ -79,7 +79,7 @@ if not ready:
     sys.exit(1)
 
 # 2) Run ch11 seed_prompts idempotently
-support_dir = "/apps/learn_Loop_engineering/ch11-eval-and-llmops/support-assistant"
+support_dir = "/apps/learn_Loop_engineering/ch11-eval-and-llmops"
 sys.path.insert(0, support_dir)
 from langfuse_ops import LangfuseOpsClient  # noqa: E402
 from seed_prompts import seed_default_prompts  # noqa: E402
@@ -128,7 +128,7 @@ PY
 }
 
 start_cli_bridges() {
-  local proxy_dir="${APP_DIR}/ch11-eval-and-llmops/support-assistant/litellm_proxy"
+  local proxy_dir="${APP_DIR}/ch11-eval-and-llmops/litellm_proxy"
   if [ -f "${proxy_dir}/gemini_openai_bridge.py" ] && ! pgrep -f "gemini_openai_bridge.py" >/dev/null 2>&1; then
     nohup python3 "${proxy_dir}/gemini_openai_bridge.py" --host 0.0.0.0 --port "${GEMINI_BRIDGE_PORT:-4010}" >/tmp/gemini_bridge.log 2>&1 &
     echo "[entrypoint] gemini_openai_bridge 백그라운드 기동 완료 (port=${GEMINI_BRIDGE_PORT:-4010})"

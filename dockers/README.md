@@ -32,8 +32,8 @@ claude --version                                  # Claude Code CLI
 agy --version                                     # Antigravity CLI
 claude                                            # 최초 1회 로그인 (또는 .env 의 ANTHROPIC_API_KEY)
 python3 scripts/verify_chapters.py --all          # 전 단원 통합 검증
-python3 ch11-eval-and-llmops/support-assistant/trace_to_prompt.py --demo --json
-python3 ch11-eval-and-llmops/support-assistant/seed_langfuse_dashboard.py      # 대시보드 전체 항목 AI 폴백 초기화
+python3 ch11-eval-and-llmops/trace_to_prompt.py --demo --json
+python3 ch11-eval-and-llmops/seed_langfuse_dashboard.py      # 대시보드 전체 항목 AI 폴백 초기화
 ```
 
 종료/정리:
@@ -66,5 +66,5 @@ docker compose down -v         # 동일 + 익명 볼륨 제거 (bind 경로 데�
 
 ## 5. 참고
 
-- `ch11-eval-and-llmops/support-assistant/litellm_proxy/docker-compose.litellm.yml`로 LiteLLM Proxy만 단독 실행할 수도 있습니다.
+- `ch11-eval-and-llmops/litellm_proxy/docker-compose.litellm.yml`로 LiteLLM Proxy만 단독 실행할 수도 있습니다.
 - 앱 컨테이너는 `PYTHONDONTWRITEBYTECODE=1`로 실행되어 호스트 저장소에 `__pycache__`를 만들지 않습니다.

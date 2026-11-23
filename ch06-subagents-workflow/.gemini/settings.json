@@ -1,0 +1,10 @@
+{
+  "chapter": "ch06-subagents-workflow",
+  "title": "제6장: 서브에이전트와 동적 병렬 워크플로",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 dynamic_workflow.py --task-type api_change --json && python3 quote_cli.py --search \"harness\" --json && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

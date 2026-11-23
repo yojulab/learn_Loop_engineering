@@ -104,31 +104,33 @@ litellm_settings:
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch11',
-        userPrompt: `[실습 결과 실행 프롬프트 — support-assistant/ 폴더에서 AI CLI에 입력]
-현재 support-assistant 폴더에서 Trace->Prompt 승격, 프롬프트 Fetch, 3종 Eval 회귀 비교를 실행해 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더에서 Trace->Prompt 승격(Save as Prompt), 프롬프트 Fetch, 3종 Eval 회귀 비교를 실행해 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 trace_to_prompt.py, fetch_prompt.py, evaluator.py, regression_compare.py를 먼저 구성)
-   - python3 support-assistant/trace_to_prompt.py --demo --json
-   - python3 support-assistant/fetch_prompt.py --demo --json
-   - python3 support-assistant/regression_compare.py
-   - python3 -m unittest discover -s support-assistant/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - 승격된 {{var}} 프롬프트 템플릿, production 라벨 컴파일 결과, v1 vs v2 회귀 점수 비교 JSON을 출력할 것.`,
+1) 프롬프트 1 (Save as Prompt & Fetch): python3 trace_to_prompt.py --demo --json 과 python3 fetch_prompt.py --demo --json 을 실행해 {{var}} 템플릿 승격과 컴파일 결과를 보여줘.
+2) 프롬프트 2 (3종 Eval 회귀 비교): python3 regression_compare.py 를 실행해 production(v1) vs candidate(v2) 점수와 통과율을 비교해줘.
+3) 프롬프트 3 (무코드 프록시 & 통합 테스트): python3 litellm_proxy/zero_code_proxy_demo.py 와 python3 -m unittest discover -s tests -p "test_*.py" -v 결과를 출력해줘.`,
         kicker: 'CH11 · HANDS-ON LAB',
         heading: '제11장 실습: <span class="hl">Save as Prompt</span> &amp; 3종 Eval 출력',
         duration: '',
-        missionTitle: 'support-assistant/ 폴더에 프록시·Eval 작성 후 AI CLI로 회귀 평가 출력',
+        missionTitle: '챕터 루트에 프록시·Eval 구성 후 AI CLI 프롬프트로 회귀 평가 출력',
         steps: [
-          '<code>litellm_proxy/</code> · <code>langfuse_ops.py</code><br>무코드 프록시(<code>OPENAI_BASE_URL</code>)와 Langfuse v2 API/오프라인 폴백 클라이언트를 구성.',
-          '<code>trace_to_prompt.py</code> · <code>fetch_prompt.py</code> · <code>evaluator.py</code> · <code>regression_compare.py</code><br>Trace 승격, 라벨 조회, 3종 Eval(규칙·참조/Judge·안전) 회귀 비교기를 작성.',
-          '<code>support-assistant/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 프롬프트 컴파일 및 버전별 <code>avg_score</code>·<code>pass_rate</code>를 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서, <code>litellm_proxy/</code>, <code>langfuse_ops.py</code>, <code>trace_to_prompt.py</code>, <code>evaluator.py</code>를 배치.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br>챕터 루트에서 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속해 LLMOps 평가 규칙을 로드.',
+          '<code>사용자 입력 프롬프트로 승격·회귀 평가 실행</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 프롬프트 컴파일 및 버전별 <code>avg_score</code>·<code>pass_rate</code>를 확인.',
         ],
-        runCmd: 'python3 support-assistant/trace_to_prompt.py --demo --json\npython3 support-assistant/fetch_prompt.py --demo --json\npython3 support-assistant/regression_compare.py\npython3 -m unittest discover -s support-assistant/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "trace_to_prompt.py --demo --json과 fetch_prompt.py --demo --json으로 승격·컴파일을 확인해줘."',
+          '2) "python3 regression_compare.py를 실행해 production vs candidate 3종 Eval 점수를 비교해줘."',
+          '3) "litellm_proxy/zero_code_proxy_demo.py와 tests/test_support_assistant.py를 실행해 검증해줘."',
+        ],
+        runCmd: 'python3 trace_to_prompt.py --demo --json\npython3 fetch_prompt.py --demo --json\npython3 regression_compare.py\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '<code>support-assistant/</code>에서 AI CLI가 프롬프트 승격·컴파일과 <code>production</code> vs <code>candidate</code> 3종 Eval 회귀 비교 결과를 출력합니다.',
-        tree: `support-assistant/
+        answerSummary: '챕터 루트에서 AI CLI가 프롬프트 승격·컴파일과 <code>production</code> vs <code>candidate</code> 3종 Eval 회귀 비교 결과를 출력합니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/eval-llmops.md · .gemini/settings.json
 ├── litellm_proxy/ (litellm_config.yaml, zero_code_proxy_demo.py, cli_openai_bridge.py)
 ├── langfuse_ops.py · cli_litellm_eval.py · seed_langfuse_dashboard.py
 ├── trace_to_prompt.py · fetch_prompt.py · prompting.py
@@ -253,35 +255,35 @@ $ python3 ch11/support-assistant/regression_compare.py`,
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch12',
-        userPrompt: `[실습 결과 실행 프롬프트 — 프로젝트 루트/에필로그 폴더에서 AI CLI에 입력]
-현재 저장소의 Stage 1~4 도입 성숙도를 진단하고 전체 통합 검증 게이트 실행 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더에서 저장소의 Stage 1~4 도입 성숙도를 진단하고 전체 통합 검증 게이트 실행 결과를 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 stage_readiness_check.py와 tests/test_stage_readiness.py를 먼저 구성)
-   - python3 stage_readiness_check.py --format json
-   - python3 -m unittest discover -s tests -p "test_*.py" -v
-   - python3 scripts/verify_chapters.py --all
-
-2. 출력 요구사항
-   - Stage 1~4 완료 상태(completed_stages: 4/4) JSON과 verify_chapters.py --all 전체 통과 요약(71/71 PASS)을 출력할 것.`,
+1) 프롬프트 1 (Stage 1~4 성숙도 진단): python3 stage_readiness_check.py --format json 을 실행해 completed_stages: 4/4 달성 여부를 출력해줘.
+2) 프롬프트 2 (진단기 단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 Stage 누락/완비 시나리오를 검증해줘.
+3) 프롬프트 3 (전 단원 통합 게이트): python3 scripts/verify_chapters.py --all 을 실행해 전 단원 71/71 PASS 요약을 출력해줘.`,
         kicker: 'CH12 · FINAL CAPSTONE LAB',
         heading: '제12장 실습: <span class="hl">Stage 1~4 성숙도</span> 진단 &amp; 통합 게이트',
         duration: '',
-        missionTitle: '에필로그 폴더에 Stage 1~4 진단기 작성 후 AI CLI로 전체 게이트 결과 출력',
+        missionTitle: '챕터 루트에 Stage 1~4 진단기 구성 후 AI CLI로 전체 게이트 결과 출력',
         steps: [
-          '<code>README.md</code> · <code>stage_readiness_check.py</code><br>4계층 치트시트와 Stage 1~4 파일 기반 성숙도 진단 CLI를 작성.',
-          '<code>tests/test_stage_readiness.py</code><br>각 Stage 누락/완비 시나리오를 검증하는 단위 테스트를 구성.',
-          '<code>프로젝트 루트에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 <code>completed_stages: 4/4</code> 및 <code>71/71 PASS</code>를 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서, 4계층 치트시트(<code>README.md</code>), <code>stage_readiness_check.py</code>를 배치.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br>챕터 루트에서 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속해 도입 체크리스트 지침을 로드.',
+          '<code>사용자 입력 프롬프트로 최종 게이트 검증</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 <code>completed_stages: 4/4</code> 및 <code>71/71 PASS</code>를 확인.',
+        ],
+        promptExamples: [
+          '1) "python3 stage_readiness_check.py --format json으로 Stage 1~4 성숙도(4/4)를 진단해줘."',
+          '2) "tests/test_stage_readiness.py 단위 테스트를 실행해 Stage별 판정 로직을 검증해줘."',
+          '3) "verify_chapters.py --all을 실행해 전 단원 통합 게이트 71/71 PASS 리포트를 출력해줘."',
         ],
         runCmd: 'python3 stage_readiness_check.py --format json\npython3 scripts/verify_chapters.py --all',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: 'AI CLI가 <code>stage_readiness_check.py</code>와 <code>verify_chapters.py --all</code>을 순차 실행해 전 단원 100% PASS 성숙도 리포트를 출력합니다.',
-        tree: `learn_Loop_engineering/
-├── docs/                  # GitHub Pages 웹 PPT 포털
-├── platforms/             # claude / chatgpt / gemini 어댑터
-├── scripts/verify_chapters.py
-├── README.md              # 4계층 치트시트
-├── stage_readiness_check.py
+        answerSummary: '챕터 루트에서 AI CLI가 <code>stage_readiness_check.py</code>와 <code>verify_chapters.py --all</code>을 순차 실행해 전 단원 100% PASS 리포트를 출력합니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/readiness.md · .gemini/settings.json
+├── README.md                  # 4계층 아키텍처 치트시트 & 프롬프트 예시 3선
+├── stage_readiness_check.py   # Stage 1~4 성숙도 진단 CLI
 └── tests/test_stage_readiness.py`,
         codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (Stage 1~4 + 71/71 PASS)',
         answerCode: `{
@@ -355,20 +357,24 @@ $ python3 ch11/support-assistant/regression_compare.py`,
         kicker: 'CAPSTONE · AGENT-FIRST HANDS-ON (자율 체험)',
         heading: '체험 실습: 3세대 에이전트 퍼스트 <span class="hl">다중 프로젝트 관리 루프에이전트</span>',
         duration: '',
-        missionTitle: '신규 프로젝트 폴더에서 3세대 AI CLI에 5대 원칙 프롬프트 입력 → 루프에이전트 구축·결과 출력',
+        missionTitle: '신규 프로젝트 폴더에서 3세대 AI CLI 접속 → 사용자 프롬프트로 루프에이전트 구축',
         steps: [
-          '<code>3세대 에이전트 퍼스트 도구 실행</code><br>신규 작업 폴더에서 Claude Code, ChatGPT/Codex, Gemini/Antigravity 등 자율 실행 CLI 기동.',
-          '<code>5대 핵심 아키텍처 원칙 프롬프트 입력</code><br>호스트-컨테이너 분리, 7종 파일 매개 협업, Maker×Checker 1:1 격리, 선택적 롤백, <code>run_port.sh</code>·<code>project.yaml</code> 표준화를 지시.',
-          '<code>구축된 구조 및 검증 결과 출력 확인</code><br>생성된 상태 머신·문서 허브(<code>CLIENT_BRIEF.md</code>~<code>REVIEW.md</code>)와 검증 게이트 통과 결과를 확인.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>신규 작업 폴더에서 Claude Code, ChatGPT/Codex, Gemini/Antigravity 등 3세대 AI CLI를 기동.',
+          '<code>5대 핵심 아키텍처 원칙 프롬프트 입력</code><br>호스트-컨테이너 분리, 7종 파일 매개 협업, Maker×Checker 1:1 격리, 선택적 롤백, <code>project.yaml</code> 표준화를 지시.',
+          '<code>구축된 구조 및 검증 결과 출력 확인</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 상태 머신·문서 허브와 검증 게이트 통과 결과를 확인.',
+        ],
+        promptExamples: [
+          '1) "5대 원칙(호스트-컨테이너 분리, 7종 파일 협업, Maker×Checker 1:1 격리)으로 run.py와 orchestrator/를 구축해줘."',
+          '2) "검증 실패 원인별로 EXECUTE(07)·PLAN(05)·DISCOVER(01)로 되돌리는 선택적 롤백 상태 머신을 시뮬레이션해줘."',
+          '3) "stage_readiness_check.py --format json과 verify_chapters.py --all을 실행해 구축 결과를 검증해줘."',
         ],
         runCmd: 'python3 stage_readiness_check.py --format json\npython3 scripts/verify_chapters.py --all',
         answerLabel: '루프에이전트 아키텍처 & AI CLI 결과 확인 (클릭하여 열기)',
         answerType: 'Tree + Architecture',
         answerSummary: '3세대 에이전트 퍼스트 도구는 모호한 사용자 목표를 받아 스스로 판단하며, 호스트-컨테이너 분리·파일 매개 협업·Maker×Checker 분리·선택적 롤백 구조를 완결해 출력합니다.',
         tree: `learn_LLM_Engineering/
-├── AGENTS.md / project.yaml   # 프로젝트 레지스트리 & 하네스 규칙
-├── run.py                     # 단일 에이전틱 오케스트레이션 상태 머신
-├── run_port.sh                # 컨테이너 제어 올인원 스크립트
+├── AGENTS.md · CLAUDE.md · GEMINI.md · .claude/ · .gemini/
+├── project.yaml · run.py · run_port.sh
 ├── orchestrator/              # Maker x Checker, 선택적 롤백 제어기
 ├── fleet/                     # 전문 에이전트 플릿 매니페스트
 └── projects/<project_id>/

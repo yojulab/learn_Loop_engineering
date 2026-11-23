@@ -337,37 +337,36 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch00',
-        userPrompt: `[실습 결과 실행 프롬프트 — 프로젝트 루트 폴더에서 AI CLI에 입력]
-현재 프로젝트 폴더의 4계층 12대 스택 환경과 플랫폼 어댑터 동작을 점검하고 실습 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더의 AGENTS.md · CLAUDE.md · GEMINI.md 지침을 확인하고 4계층 12대 스택 환경 및 플랫폼 어댑터 진단 결과를 출력해줘.
 
-1. 실행할 항목 (미작성 시 4계층 12대 스택 진단기 stack_check.py와 platforms/ 어댑터를 먼저 구성)
-   - python3 stack_check.py --json
-   - AGENT_PLATFORM=offline python3 agent_check.py --json
-   - python3 -m unittest discover -s platforms/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - Python 버전, sqlite3 FTS5 가용성, 4계층(4)/12대 요소(12), overall_ready: true 여부와 플랫폼 폴백 응답 JSON을 요약 출력할 것.`,
+1) 프롬프트 1 (스택 진단): python3 stack_check.py --json 을 실행해 Python 버전, SQLite FTS5 지원, 4계층(4)/12대 요소(12) 준비 상태를 요약해줘.
+2) 프롬프트 2 (플랫폼 점검): AGENT_PLATFORM=offline python3 agent_check.py --json 으로 claude/chatgpt/gemini 오프라인 폴백 응답을 확인해줘.
+3) 프롬프트 3 (단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 를 실행해 전체 테스트 통과 여부를 출력해줘.`,
         kicker: 'CH00 PROLOGUE · HANDS-ON LAB',
         heading: '프롤로그 실습: 4계층 스택 진단 & <span class="hl">플랫폼 감지</span>',
         duration: '15분',
-        missionTitle: '프로젝트 루트에서 12대 스택 진단기 & 플랫폼 어댑터 작성 후 AI CLI로 실행',
+        missionTitle: '챕터 폴더 이동 후 AI CLI 접속 → 사용자 프롬프트로 스택·플랫폼 진단',
         steps: [
-          '<code>AGENTS.md</code> · <code>platforms/</code><br>루트 지침서(100줄 이하)와 3대 플랫폼 공용 어댑터(<code>base.py</code>)를 구성.',
-          '<code>stack_check.py</code> · <code>agent_check.py</code><br>4계층 12대 스택 진단기와 폴백 실행기를 작성해 프로젝트 폴더에 배치.',
-          '<code>AI CLI에 단축키 A 프롬프트 입력</code><br><code>claude</code>·<code>agy</code>·<code>codex</code>에서 프롬프트를 입력해 <code>overall_ready: true</code> JSON 결과를 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서와 플랫폼 폴더, <code>stack_check.py</code> · <code>agent_check.py</code>를 구성.',
+          '<code>해당 챕터 폴더로 이동 후 AI CLI 접속</code><br>터미널에서 챕터 폴더로 이동한 뒤 <code>claude</code> · <code>agy</code> · <code>codex</code> CLI를 실행.',
+          '<code>사용자 입력 프롬프트로 진단 결과 출력</code><br>아래 3가지 프롬프트 예시(또는 단축키 A 통합 프롬프트)를 입력해 JSON 결과를 확인.',
         ],
-        runCmd: 'python3 stack_check.py --json\npython3 -m unittest discover -s platforms/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "현재 폴더의 stack_check.py --json을 실행해 4계층 12대 스택과 FTS5 준비 상태를 요약해줘."',
+          '2) "agent_check.py로 claude·chatgpt·gemini·offline 폴백 동작을 점검하고 JSON으로 보여줘."',
+          '3) "tests/ 단위 테스트를 전체 실행해 모든 항목이 OK인지 검증 리포트를 출력해줘."',
+        ],
+        runCmd: 'python3 stack_check.py --json\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '프로젝트 루트에서 AI CLI에 프롬프트를 입력하면 <code>stack_check.py</code>와 어댑터 테스트를 실행해 <code>overall_ready: true</code> 결과를 출력합니다.',
-        tree: `learn_Loop_engineering/
-├── AGENTS.md (<= 100줄) · CLAUDE.md · CHATGPT.md · GEMINI.md
-├── platforms/
-│   ├── base.py (get_adapter)
-│   ├── adapter_claude.py · adapter_chatgpt.py · adapter_gemini.py
+        answerSummary: '챕터 루트에서 AI CLI에 사용자 프롬프트를 입력하면 <code>stack_check.py</code>와 단위 테스트를 실행해 <code>overall_ready: true</code> 결과를 출력합니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/prologue.md · .gemini/settings.json
 ├── stack_check.py
 ├── agent_check.py
-└── tests/test_stack_check.py`,
+└── tests/ (test_stack_check.py, test_agent_check.py)`,
         codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (stack_check.py --json)',
         answerCode: `{
   "python_version": "3.13.16",

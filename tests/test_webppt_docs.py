@@ -291,5 +291,24 @@ class WebPptDocsTests(unittest.TestCase):
             self.assertTrue((DOCS_DIR / "assets/cartoons" / img).is_file(), f"카툰 이미지 누락: {img}")
             self.assertIn(f"assets/cartoons/{img}", w_all, f"카툰 이미지 미배치: {img}")
 
+
+    def test_lab_slides_have_three_or_more_user_prompt_examples(self) -> None:
+        ui_txt = (DOCS_DIR / "ui.js").read_text(encoding="utf-8")
+        self.assertIn("사용자 입력 프롬프트 예시", ui_txt)
+        self.assertNotIn("컨테이너 실행 명령", ui_txt)
+        for deck_sub in ("slides", "slides_workshop"):
+            slides_text = "\n".join(
+                (DOCS_DIR / f"{deck_sub}/{name}").read_text(encoding="utf-8")
+                for name in ("s0_opening.js", "s1_part1.js", "s2_part2.js", "s3_part3.js", "s4_part4_a.js", "s5_part4_b.js")
+            )
+            blocks = re.findall(r"buildLabSlide\(el,\s*A,\s*\{(.*?)\n\s*\}\);", slides_text, re.DOTALL)
+            self.assertEqual(len(blocks), 14, f"{deck_sub} 실습 슬라이드 개수 불일치")
+            for block in blocks:
+                pe_m = re.search(r"promptExamples:\s*\[(.*?)\]", block, re.DOTALL)
+                self.assertIsNotNone(pe_m, f"{deck_sub} promptExamples 누락: {block[:80]}")
+                assert pe_m is not None
+                items = [line.strip() for line in pe_m.group(1).splitlines() if line.strip().startswith("'")]
+                self.assertGreaterEqual(len(items), 3, f"{deck_sub} 사용자 입력 프롬프트 예시 3개 미만: {items}")
+
 if __name__ == "__main__":
     unittest.main()

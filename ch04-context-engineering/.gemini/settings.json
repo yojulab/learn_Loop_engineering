@@ -1,0 +1,10 @@
+{
+  "chapter": "ch04-context-engineering",
+  "title": "제4장: 컨텍스트 엔지니어링과 윈도우의 한계",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 context_budget.py --json && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

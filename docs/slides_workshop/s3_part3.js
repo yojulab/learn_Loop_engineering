@@ -69,40 +69,42 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch06',
-        userPrompt: `[실습 결과 실행 프롬프트 — quote-cli/ 서브에이전트 프로젝트 폴더에서 AI CLI에 입력]
-현재 폴더의 5종 커스텀 서브에이전트와 동적 워크플로로 확장된 quote_cli.py 검색 기능을 교차 검증하고 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더의 5종 커스텀 서브에이전트(.claude/agents/*.md)와 동적 병렬 워크플로(dynamic_workflow.py), 확장된 quote_cli.py 검색 기능을 교차 검증하고 결과를 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 .claude/agents/*.md 5종, dynamic_workflow.py, quote-cli/quote_cli.py를 먼저 구성)
-   - python3 dynamic_workflow.py --platform gemini --json
-   - python3 quote-cli/quote_cli.py --search "harness" --json
-   - python3 -m unittest discover -s tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - 동적 선택·병렬 실행된 서브에이전트 요약, --search "harness" JSON 결과, 테스트 통과 여부를 출력할 것.`,
+1) 프롬프트 1 (동적 병렬 워크플로): python3 dynamic_workflow.py --task-type api_change --platform gemini --json 을 실행해 선택된 서브에이전트와 병합 요약을 출력해줘.
+2) 프롬프트 2 (확장 Quote CLI 검색): python3 quote_cli.py --search "harness" --json 실행 결과를 확인해줘.
+3) 프롬프트 3 (권한 분리 & 단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 읽기 전용 제약과 검색 테스트 통과 여부를 출력해줘.`,
         kicker: 'CH06 · HANDS-ON LAB',
         heading: '제6장 실습: <span class="hl">서브에이전트</span> 병렬 위임 &amp; 교차 검증',
         duration: '',
-        missionTitle: '.claude/agents/ 5종 정의·워크플로 작성 후 AI CLI로 병렬 위임 결과 출력',
+        missionTitle: '챕터 루트에 5종 서브에이전트·워크플로 구성 후 AI CLI로 병렬 위임 출력',
         steps: [
-          '<code>.claude/agents/*.md</code> · <code>agents_*.json</code><br>읽기 전용 리뷰어와 실행형 테스터 등 5종 서브에이전트 역할을 정의.',
-          '<code>dynamic_workflow.py</code> · <code>quote-cli/quote_cli.py</code><br><code>ThreadPoolExecutor</code> 병렬 위임기와 <code>--search</code>·<code>--author</code> 확장을 구현.',
-          '<code>프로젝트 폴더에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 서브에이전트 병렬 실행 결과와 검색 JSON을 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/agents/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서와 읽기 전용 리뷰어·실행형 테스터 등 5종 서브에이전트 정의를 배치.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br><code>dynamic_workflow.py</code>와 <code>quote_cli.py</code>가 위치한 챕터 루트에서 AI CLI로 접속.',
+          '<code>사용자 입력 프롬프트로 병렬 위임 실행</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 서브에이전트 병렬 실행 결과와 검색 JSON을 확인.',
         ],
-        runCmd: 'python3 dynamic_workflow.py --platform gemini --json\npython3 quote-cli/quote_cli.py --search "harness" --json',
+        promptExamples: [
+          '1) "dynamic_workflow.py --task-type api_change --platform gemini --json 실행 결과를 출력해줘."',
+          '2) "quote_cli.py --search harness --json으로 키워드 검색 확장 기능을 검증해줘."',
+          '3) "tests/ 내 서브에이전트 권한 분리 및 검색 단위 테스트를 전체 실행해 결과를 보여줘."',
+        ],
+        runCmd: 'python3 dynamic_workflow.py --platform gemini --json\npython3 quote_cli.py --search "harness" --json\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: 'AI CLI가 <code>.claude/agents/</code>에 정의된 서브에이전트를 활용해 격리된 병렬 리뷰·검색 테스트 결과를 하나로 병합 출력합니다.',
+        answerSummary: '챕터 루트에서 AI CLI가 <code>.claude/agents/</code>에 정의된 서브에이전트를 활용해 격리된 병렬 리뷰·검색 테스트 결과를 병합 출력합니다.',
         tree: `project/
-├── .claude/agents/ (api-reviewer, code-quality, doc-writer, security-scanner, test-runner)
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/ (agents/*.md 5종, rules/subagents.md) · .gemini/
 ├── agents_chatgpt.json · agents_gemini.json
 ├── dynamic_workflow.py       # 동적 선택 + ThreadPoolExecutor 병렬 실행
-├── quote-cli/quote_cli.py    # --search, --author, --tag 확장
-└── tests/test_dynamic_workflow.py`,
+├── quote_cli.py · quotes.json # --search, --author, --tag 확장
+└── tests/ (test_dynamic_workflow.py, test_quote_cli_search.py)`,
         codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (dynamic_workflow.py --json)',
         answerCode: `{
   "platform": "gemini",
-  "selected_agents": ["api-reviewer", "security-scanner", "test-runner"],
-  "parallel_status": "ALL_PASSED",
+  "selected_agents": ["api-reviewer", "security-scanner", "test-runner", "doc-writer"],
+  "cross_verified": true,
   "search_hits": [{"id": 3, "tags": ["harness", "engineering"]}]
 }`,
       });
@@ -146,42 +148,43 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch07',
-        userPrompt: `[실습 결과 실행 프롬프트 — harness-templates/ 폴더에서 AI CLI에 입력]
-현재 harness-templates 폴더의 아키텍처 린터와 가드레일·문서 감사 도구를 실행해 검증 리포트를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더의 100줄 이하 AGENTS.md(4대 질문)와 아키텍처 린터·가드레일·문서 정원 가꾸기 도구를 실행해 검증 리포트를 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 AGENTS.md, arch_linter.py, guardrails.py, doc_gardening.py를 먼저 구성)
-   - python3 harness-templates/arch_linter.py --root harness-templates/samples/valid_app --json
-   - python3 harness-templates/arch_linter.py --root harness-templates/samples/invalid_app --json (위반 탐지 확인)
-   - python3 harness-templates/guardrails.py --cmd "ls -la" --json
-   - python3 -m unittest discover -s harness-templates/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - valid_app(passed: true) vs invalid_app(UI -> Repo 위반 탐지) 비교와 가드레일/테스트 통과 결과를 출력할 것.`,
+1) 프롬프트 1 (AST 아키텍처 린터 비교): arch_linter.py 로 samples/valid_app 과 samples/invalid_app 을 각각 검사(--json)해 계층 위반과 수정 가이드를 비교해줘.
+2) 프롬프트 2 (5줄 파괴 명령 가드레일): python3 guardrails.py --cmd "ls -la" --json 과 위험 명령 차단 여부를 점검해줘.
+3) 프롬프트 3 (문서 정원 가꾸기 & 테스트): doc_gardening.py 점검 및 python3 -m unittest discover -s tests -p "test_*.py" -v 실행 결과를 출력해줘.`,
         kicker: 'CH07 · HANDS-ON LAB',
         heading: '제7장 실습: <span class="hl">AST 린터</span> &amp; 하네스 가드레일 검증',
         duration: '',
-        missionTitle: 'harness-templates/ 폴더에 린터·가드레일 작성 후 AI CLI로 위반 탐지 결과 출력',
+        missionTitle: '챕터 루트에 린터·가드레일 구성 후 AI CLI 프롬프트로 위반 탐지 결과 출력',
         steps: [
-          '<code>AGENTS.md</code> (100줄 이하 목차형)<br>상시 로딩 가능한 계층 의존성 규칙과 금지 패턴 지침을 작성.',
-          '<code>arch_linter.py</code> · <code>guardrails.py</code> · <code>doc_gardening.py</code><br>AST 레이어 검사기, 파괴 명령 차단기(<code>--json</code>), 문서 드리프트 탐지기를 구현.',
-          '<code>harness-templates/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 정상 vs 위반 샘플 진단 JSON을 출력.',
+          '<code>AGENTS.md</code>(100줄 이하) · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>하네스 4대 질문을 담은 목차형 지침서와 <code>arch_linter.py</code> · <code>guardrails.py</code> · <code>doc_gardening.py</code>를 배치.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br>챕터 루트로 이동해 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속하여 하네스 규칙을 로드.',
+          '<code>사용자 입력 프롬프트로 린터·가드레일 실행</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 정상 vs 위반 샘플 진단 JSON을 확인.',
         ],
-        runCmd: 'python3 harness-templates/arch_linter.py --root harness-templates/samples/valid_app --json\npython3 harness-templates/guardrails.py --cmd "ls -la" --json\npython3 -m unittest discover -s harness-templates/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "arch_linter.py로 samples/valid_app과 invalid_app을 각각 검사해 계층 위반을 비교해줘."',
+          '2) "guardrails.py --cmd ls --json과 파괴 명령(rm -rf) 차단 결과를 확인해줘."',
+          '3) "doc_gardening.py와 tests/test_harness_templates.py 전체 테스트 결과를 출력해줘."',
+        ],
+        runCmd: 'python3 arch_linter.py --root samples/valid_app --json\npython3 guardrails.py --cmd "ls -la" --json\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '<code>harness-templates/</code>에서 AI CLI가 AST 린터와 가드레일을 실행해 <code>valid_app</code> 통과 및 <code>invalid_app</code> 계층 위반을 즉시 출력합니다.',
-        tree: `harness-templates/
-├── AGENTS.md                  # <= 100줄 목차형 표준
-├── arch_linter.py             # AST 레이어 의존성 검증
-├── guardrails.py              # 파괴 명령/시크릿 차단 (--json)
-├── doc_gardening.py           # 문서-코드 드리프트 탐지
+        answerSummary: '챕터 루트에서 AI CLI가 AST 린터와 가드레일을 실행해 <code>valid_app</code> 통과 및 <code>invalid_app</code> 계층 위반 수정 가이드를 즉시 출력합니다.',
+        tree: `project/
+├── AGENTS.md (<= 100줄 목차형) · CLAUDE.md · GEMINI.md
+├── .claude/rules/harness.md · .gemini/settings.json
+├── arch_linter.py             # 6계층 AST 의존성 린터
+├── guardrails.py              # 5줄 파괴 명령 차단 (--json)
+├── doc_gardening.py           # 문서 드리프트·고아 문서 탐지
 ├── samples/ (valid_app, invalid_app)
 └── tests/test_harness_templates.py`,
         codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (valid vs invalid 진단)',
         answerCode: `// valid_app:
 {"passed": true, "violations": []}
 // invalid_app:
-{"passed": false, "violations": ["ui/screen.py -> repo.user_repo (UI cannot import Repo directly)"]}
+{"passed": false, "violations": ["ui/screen.py -> repo.user_repo (여기가 틀렸으니 이렇게 고쳐라: Service 계층을 경유하세요)"]}
 // guardrails.py --cmd "ls -la" --json:
 {"safe": true, "violations": []}`,
       });
@@ -231,29 +234,33 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch08',
-        userPrompt: `[실습 결과 실행 프롬프트 — rss-wiki/ 폴더에서 AI CLI에 입력]
-현재 rss-wiki 프로젝트 폴더에서 PROMPT.md 목표 기준에 따라 수집·FTS5 색인·목표 달성 판정 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더에서 PROMPT.md 목표 기준에 따라 RSS 수집·SQLite FTS5 색인·/goal 독립 목표 달성 판정 결과를 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 db.py, collector.py, app.py, goal_evaluator.py, ralph_loop.sh를 먼저 구성)
-   - python3 rss-wiki/goal_evaluator.py
-   - python3 -m unittest discover -s rss-wiki/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - goal_evaluator.py의 5대 조건 점검 JSON(status: "MET", passed_count: 5/5)과 FTS5 테스트 통과 결과를 출력할 것.`,
+1) 프롬프트 1 (/goal 독립 목표 판정): python3 goal_evaluator.py 를 실행해 5대 완료 조건(status: "MET", passed_count: 5/5) 달성 JSON을 출력해줘.
+2) 프롬프트 2 (SQLite FTS5 & 수집기 점검): sample_feed.xml 수집 및 FTS5 전문 검색(db.py), 웹 뷰(app.py) 동작을 점검해줘.
+3) 프롬프트 3 (서킷 브레이커 & 단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 3회 연속 실패 BLOCKED 서킷 브레이커와 전체 테스트를 검증해줘.`,
         kicker: 'CH08 · HANDS-ON LAB',
         heading: '제8장 실습: <span class="hl">FTS5 RSS Wiki</span> &amp; /goal 판정 출력',
         duration: '',
-        missionTitle: 'rss-wiki/ 폴더에 SQLite FTS5·목표 판정기 작성 후 AI CLI로 MET 결과 출력',
+        missionTitle: '챕터 루트에 SQLite FTS5·목표 판정기 구성 후 AI CLI로 MET 결과 출력',
         steps: [
-          '<code>rss-wiki/db.py</code> · <code>collector.py</code> · <code>app.py</code><br>SQLite FTS5 전문 검색 DB, XML 수집기, 웹 뷰를 작성.',
-          '<code>PROMPT.md</code> · <code>goal_evaluator.py</code> · <code>ralph_loop.sh</code><br>종료 조건 검증기(5대 체크리스트)와 3대 플랫폼 워커 루프를 구성.',
-          '<code>rss-wiki/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 <code>status: "MET"</code> (5/5) 판정 JSON을 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서, <code>db.py</code>(FTS5), <code>collector.py</code>, <code>app.py</code>, <code>goal_evaluator.py</code>를 배치.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br><code>PROMPT.md</code>와 <code>ralph_loop.sh</code>가 있는 챕터 루트에서 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속.',
+          '<code>사용자 입력 프롬프트로 /goal 판정 실행</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 <code>status: "MET"</code> (5/5) 판정 JSON을 확인.',
         ],
-        runCmd: 'python3 rss-wiki/goal_evaluator.py\npython3 -m unittest discover -s rss-wiki/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "python3 goal_evaluator.py를 실행해 5대 목표 조건(status: MET) 달성 JSON을 출력해줘."',
+          '2) "sample_feed.xml 수집 후 db.py(SQLite FTS5) 전문 검색과 app.py 응답을 검증해줘."',
+          '3) "ralph_loop.sh 3회 연속 실패 BLOCKED 서킷 브레이커를 포함한 tests/ 전체를 실행해줘."',
+        ],
+        runCmd: 'python3 goal_evaluator.py\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '<code>rss-wiki/</code>에서 AI CLI가 <code>goal_evaluator.py</code>와 FTS5 테스트를 실행해 <code>status: "MET"</code> 객관적 달성 판정을 출력합니다.',
-        tree: `rss-wiki/
+        answerSummary: '챕터 루트에서 AI CLI가 <code>goal_evaluator.py</code>와 FTS5 테스트를 실행해 <code>status: "MET"</code> 객관적 달성 판정을 출력합니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/ralph-loop.md · .gemini/settings.json
 ├── PROMPT.md                 # 이너 루프 목표 명세
 ├── db.py (FTS5) · collector.py · app.py
 ├── goal_evaluator.py         # 5대 조건 독립 판정기 (JSON)

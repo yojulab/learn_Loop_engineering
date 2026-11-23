@@ -15,7 +15,7 @@
 - **비가역 작업 금지**: `Dockerfile*`, `docker-compose*.yml` 및 보호 브랜치 직접 수정은 금지한다.
 
 ## 3. 컨테이너 실행 및 검증 명령
-- 실행 대상: `graphrag_agent_app_fullstack:/apps/learn_hermes_engineering`
+- 실행 대상: `graphrag_agent_app_fullstack:/apps/learn_Loop_engineering`
 ```bash
 python3 ch00-prologue/stack_check.py --json
 python3 scripts/verify_chapters.py --phase 1

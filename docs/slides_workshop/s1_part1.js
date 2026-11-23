@@ -74,33 +74,36 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch01',
-        userPrompt: `[실습 결과 실행 프롬프트 — quote-cli/ 폴더에서 AI CLI에 입력]
-현재 quote-cli 프로젝트 폴더에서 에이전트 루프(수집 -> 실행 -> 검증)를 거쳐 아래 실습 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더에서 AGENTS.md · CLAUDE.md · GEMINI.md 규칙에 따라 에이전트 루프(수집 -> 실행 -> 검증)를 수행하고 결과를 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 quotes.json, quote_cli.py, tests/test_quote_cli.py를 먼저 작성)
-   - python3 quote-cli/quote_cli.py --tag engineering --json
-   - python3 quote-cli/quote_cli.py --seed 42 --json
-   - python3 -m unittest discover -s quote-cli/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - engineering 태그 필터링 JSON 결과, 시드 42 결정론적 출력, 단위 테스트 통과 건수를 함께 출력할 것.`,
+1) 프롬프트 1 (태그 필터링): python3 quote_cli.py --tag engineering --json 을 실행해 engineering 태그 명언 JSON을 출력해줘.
+2) 프롬프트 2 (결정론적 시드 & 루프): python3 quote_cli.py --seed 42 --json 과 python3 interactive_demo.py --task "engineering 태그 명언 조회" 결과를 요약해줘.
+3) 프롬프트 3 (단위 테스트 검증): python3 -m unittest discover -s tests -p "test_*.py" -v 를 실행해 6개 테스트 통과 결과를 출력해줘.`,
         kicker: 'CH01 · HANDS-ON LAB',
         heading: '제1장 실습: <span class="hl">Quote CLI</span> 루프 작성 &amp; 결과 출력',
         duration: '',
-        missionTitle: 'quote-cli/ 폴더에 명언 CLI 작성 후 AI CLI 프롬프트로 실행·검증 결과 출력',
+        missionTitle: '챕터 루트에 Quote CLI·지침 구성 후 AI CLI 프롬프트로 실행·검증 출력',
         steps: [
-          '<code>quote-cli/quotes.json</code> · <code>quote_cli.py</code><br>명언 데이터와 <code>--tag</code>·<code>--seed</code>·<code>--json</code> 지원 CLI를 작성.',
-          '<code>quote-cli/interactive_demo.py</code> · <code>tests/</code><br>대화형 REPL 데모와 표준 <code>unittest</code> 검증 스위트를 구성.',
-          '<code>quote-cli/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 태그 필터 JSON과 테스트 통과 결과를 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서와 <code>quotes.json</code> · <code>quote_cli.py</code> · <code>interactive_demo.py</code>를 배치.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br>챕터 루트로 이동해 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속하여 상시 지침을 자동 로드.',
+          '<code>사용자 입력 프롬프트로 루프 실행</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 태그 필터 JSON과 테스트 통과 결과를 확인.',
         ],
-        runCmd: 'python3 quote-cli/quote_cli.py --tag engineering --json\npython3 -m unittest discover -s quote-cli/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "quote_cli.py --tag engineering --json을 실행해 engineering 태그 명언 JSON을 출력해줘."',
+          '2) "quote_cli.py --seed 42 --json과 interactive_demo.py 3단계 에이전트 루프 결과를 요약해줘."',
+          '3) "tests/test_quote_cli.py 단위 테스트를 실행해 전체 통과 여부를 검증해줘."',
+        ],
+        runCmd: 'python3 quote_cli.py --tag engineering --json\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '<code>quote-cli/</code> 폴더에서 AI CLI가 코드를 읽고 실행·검증 루프를 돌아 태그 필터 JSON과 테스트 결과를 반환합니다.',
-        tree: `quote-cli/
+        answerSummary: '챕터 루트에서 AI CLI가 지침과 코드를 읽고 실행·검증 루프를 돌아 태그 필터 JSON과 테스트 결과를 반환합니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/agent-loop.md · .gemini/settings.json
 ├── quotes.json               # 명언 데이터 (engineering 태그 포함)
 ├── quote_cli.py              # --all / --tag / --seed / --json
-├── interactive_demo.py       # REPL 대화형 루프 데모
+├── interactive_demo.py       # 3단계 에이전트 루프 데모
 └── tests/test_quote_cli.py   # 단위 테스트`,
         codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (quote_cli.py --tag engineering --json)',
         answerCode: `[
@@ -164,37 +167,37 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch02',
-        userPrompt: `[실습 결과 실행 프롬프트 — quote-mcp/ 폴더에서 AI CLI에 입력]
-현재 quote-mcp 프로젝트 폴더에서 MCP 서버와 PreToolUse 가드레일 훅을 점검하고 실습 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더의 MCP 서버(main.py, .mcp.json)와 PreToolUse/PostToolUse 훅(.claude/settings.json, hooks/)을 점검하고 실습 결과를 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 main.py, hooks/block_dangerous_bash.py, .claude/settings.json을 먼저 구성)
-   - python3 quote-mcp/main.py
-   - echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | python3 quote-mcp/hooks/block_dangerous_bash.py
-   - python3 -m unittest discover -s quote-mcp/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - MCP 서버 메타데이터(Tools/Resources/Prompts) JSON, 위험 명령 차단 JSON(exit 2 확인), 단위 테스트 통과 결과를 출력할 것.`,
+1) 프롬프트 1 (MCP 서버 점검): python3 main.py 를 실행해 등록된 Tools, Resources, Prompts 메타데이터 JSON을 출력해줘.
+2) 프롬프트 2 (위험 명령 차단 훅): echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | python3 hooks/block_dangerous_bash.py 실행 결과(exit 2 차단 JSON)를 확인해줘.
+3) 프롬프트 3 (멀티 플랫폼 & 감사 로그 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 3대 플랫폼 훅 브리지와 감사 로거 테스트를 검증해줘.`,
         kicker: 'CH02 · HANDS-ON LAB',
         heading: '제2장 실습: <span class="hl">MCP 서버</span> &amp; <span class="hb">PreToolUse</span> 훅 검증',
         duration: '',
-        missionTitle: 'quote-mcp/ 폴더에 MCP 서버·차단 훅 구성 후 AI CLI로 차단/통과 결과 출력',
+        missionTitle: '챕터 루트에 MCP 서버·차단 훅 구성 후 AI CLI 프롬프트로 차단/통과 출력',
         steps: [
-          '<code>quote-mcp/main.py</code> · <code>.mcp.json</code><br>Tools·Resources·Prompts를 노출하는 MCP 서버와 설정을 작성.',
-          '<code>hooks/block_dangerous_bash.py</code> · <code>.claude/settings.json</code><br>위험 Bash 명령을 exit code <code>2</code>로 차단하는 훅과 감사 로그를 연결.',
-          '<code>quote-mcp/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 MCP 메타데이터와 <code>rm -rf</code> 차단 JSON을 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.mcp.json</code> · <code>.claude/settings.json</code><br>챕터 루트에 AI 지침서, MCP 서버(<code>main.py</code>), 훅(<code>hooks/</code>), <code>.gemini/</code>를 구성.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br>챕터 루트에서 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속해 MCP 및 훅 설정을 자동 로드.',
+          '<code>사용자 입력 프롬프트로 MCP·훅 검증</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 MCP 메타데이터와 <code>rm -rf</code> 차단 JSON을 확인.',
         ],
-        runCmd: 'python3 quote-mcp/main.py\npython3 -m unittest discover -s quote-mcp/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "python3 main.py를 실행해 quote-mcp 서버의 Tools·Resources·Prompts JSON을 출력해줘."',
+          '2) "hooks/block_dangerous_bash.py에 rm -rf / 페이로드를 넣어 exit 2 차단 JSON을 확인해줘."',
+          '3) "tests/test_quote_mcp_and_hooks.py를 실행해 3대 플랫폼 훅 브리지와 감사 로그를 검증해줘."',
+        ],
+        runCmd: 'python3 main.py\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '<code>quote-mcp/</code>에서 AI CLI가 MCP 메타데이터와 <code>PreToolUse</code> 위험 명령 차단(<code>exit 2</code>) 동작을 직접 검증해 출력합니다.',
-        tree: `quote-mcp/
-├── main.py                        # MCP 서버 (Tools/Resources/Prompts)
+        answerSummary: '챕터 루트에서 AI CLI가 MCP 메타데이터와 <code>PreToolUse</code> 위험 명령 차단(<code>exit 2</code>) 동작을 직접 검증해 출력합니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
 ├── .mcp.json · mcp_config_*.json  # 3대 플랫폼 MCP 설정
-├── .claude/settings.json          # PreToolUse / PostToolUse 훅 등록
-└── hooks/
-    ├── block_dangerous_bash.py    # exit 2 위험 명령 차단기
-    ├── audit_logger.py            # 감사 로그 기록기
-    └── platform_hook_bridge.py`,
+├── .claude/ (settings.json, rules/mcp-hooks.md) · .gemini/
+├── main.py · quotes.json          # MCP 서버 (Tools/Resources/Prompts)
+├── hooks/ (block_dangerous_bash.py, audit_logger.py, platform_hook_bridge.py)
+└── tests/test_quote_mcp_and_hooks.py`,
         codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (MCP + PreToolUse 차단)',
         answerCode: `{"server": "quote-mcp", "transport": "stdio", "tools": ["add_quote", "get_random_quote"], "resources": ["quote://all"], "prompts": ["quote_post"]}
 
@@ -254,34 +257,35 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch03',
-        userPrompt: `[실습 결과 실행 프롬프트 — github-workflow-skills/ 폴더에서 AI CLI에 입력]
-현재 github-workflow-skills 폴더의 3단계 Progressive Disclosure 스킬을 적용해 검증하고 실습 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더의 3단계 Progressive Disclosure 스킬 5종을 적용해 산출물을 검증하고 실습 결과를 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 5종 스킬 SKILL.md, reference.md, scripts/validate_*.py를 먼저 구성)
-   - git-commit/SKILL.md 규칙에 맞춰 Conventional Commit 메시지 1건 생성 후 validate_commit.py --text 로 검증
-   - python3 -m unittest discover -s github-workflow-skills/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - 생성된 커밋 메시지, [OK] valid Conventional Commit 검증 출력, 5종 스킬 단위 테스트 통과 결과를 출력할 것.`,
+1) 프롬프트 1 (git-commit 스킬 적용): git-commit/SKILL.md 규칙에 맞춰 Conventional Commit 메시지를 검증(python3 git-commit/scripts/validate_commit.py --text "feat: add workflow skill")해줘.
+2) 프롬프트 2 (gh-issue · gh-pr 검증): gh-issue/examples/sample_issue.md 와 gh-pr/examples/sample_pr.md 를 각 validate_*.py 스크립트로 검증해줘.
+3) 프롬프트 3 (5종 스킬 통합 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 를 실행해 5종 스킬의 3단계 구조를 전수 검증해줘.`,
         kicker: 'CH03 · HANDS-ON LAB',
         heading: '제3장 실습: <span class="hl">5종 GitHub 스킬</span> 작성 &amp; 트리거 출력',
         duration: '',
-        missionTitle: 'github-workflow-skills/ 폴더에 3단계 스킬 작성 후 AI CLI로 스킬 적용 결과 출력',
+        missionTitle: '챕터 루트에 3단계 스킬 5종 구성 후 AI CLI 프롬프트로 스킬 적용 결과 출력',
         steps: [
-          '<code>SKILL.md</code> (YAML Frontmatter + 절차)<br>1단계 최소 메타데이터와 2단계 핵심 워크플로를 5종 스킬 폴더에 작성.',
-          '<code>reference.md</code> · <code>examples/</code> · <code>scripts/validate_*.py</code><br>3단계 세부 기준과 결정론적 형식 검증 스크립트를 배치.',
-          '<code>github-workflow-skills/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 스킬 기반 산출물과 <code>validate_commit.py</code> 통과 결과를 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서와 5종 스킬 폴더(<code>SKILL.md</code>, <code>reference.md</code>, <code>scripts/</code>)를 구성.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br>챕터 루트에서 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속해 스킬 메타데이터를 로드.',
+          '<code>사용자 입력 프롬프트로 스킬 트리거·검증</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 스킬 산출물과 <code>validate_*.py</code> 통과 결과를 확인.',
         ],
-        runCmd: 'python3 github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"\npython3 -m unittest discover -s github-workflow-skills/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "git-commit/SKILL.md 규칙에 맞춰 커밋 메시지를 생성하고 validate_commit.py로 검증해줘."',
+          '2) "gh-issue와 gh-pr의 sample_issue.md, sample_pr.md를 각 validate_*.py로 검사해줘."',
+          '3) "tests/test_github_workflow_skills.py를 실행해 5종 스킬 3단계 구조를 전체 검증해줘."',
+        ],
+        runCmd: 'python3 git-commit/scripts/validate_commit.py --text "feat: add workflow skill"\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + YAML',
-        answerSummary: '<code>github-workflow-skills/</code>에서 AI CLI가 <code>SKILL.md</code>를 온디맨드로 로드해 규칙에 맞는 산출물을 만들고 검증 스크립트까지 통과시킵니다.',
-        tree: `github-workflow-skills/
+        answerSummary: '챕터 루트에서 AI CLI가 <code>SKILL.md</code>를 온디맨드로 로드해 규칙에 맞는 산출물을 만들고 검증 스크립트까지 통과시킵니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/skills.md · .gemini/settings.json
 ├── git-commit/ (SKILL.md, reference.md, examples/, scripts/validate_commit.py)
-├── gh-issue/   (SKILL.md, reference.md, examples/, scripts/validate_issue.py)
-├── gh-pr/      (SKILL.md, reference.md, examples/, scripts/validate_pr.py)
-├── gh-review/  (SKILL.md, reference.md, examples/, scripts/validate_review.py)
-├── gh-address-review/ (SKILL.md, reference.md, scripts/validate_address_review.py)
+├── gh-issue/ · gh-pr/ · gh-review/ · gh-address-review/
 └── tests/test_github_workflow_skills.py`,
         codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (스킬 적용 + 검증)',
         answerCode: `---

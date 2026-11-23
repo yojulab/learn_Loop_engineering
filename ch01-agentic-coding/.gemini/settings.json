@@ -1,0 +1,10 @@
+{
+  "chapter": "ch01-agentic-coding",
+  "title": "제1장: 바이브 코딩과 에이전틱 코딩의 탄생 (Quote CLI)",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 quote_cli.py --tag engineering --json && python3 quote_cli.py --seed 42 --json && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

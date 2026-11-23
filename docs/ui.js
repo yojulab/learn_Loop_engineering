@@ -132,13 +132,16 @@
     h('h3', 'h4', left, esc(spec.missionTitle));
     const ul = h('ul', 'lab-steps', left);
     (spec.steps || []).forEach(st => h('li', '', ul, st));
-    if (spec.runCmd) {
-      h('div', 'cap', left, '컨테이너 실행 명령');
+    const promptList = Array.isArray(spec.promptExamples) && spec.promptExamples.length
+      ? spec.promptExamples.join('\n')
+      : (spec.promptExamples || '');
+    if (promptList) {
+      h('div', 'cap', left, '사용자 입력 프롬프트 예시 (AI CLI 3선)');
       const cmdPre = h('pre', 'lab-cmd', left);
       cmdPre.setAttribute('role', 'region');
-      cmdPre.setAttribute('aria-label', '실습 실행 명령어');
+      cmdPre.setAttribute('aria-label', '사용자 입력 프롬프트 예시');
       cmdPre.setAttribute('tabindex', '0');
-      h('code', '', cmdPre, esc(spec.runCmd));
+      h('code', '', cmdPre, esc(promptList));
     }
 
     A(leftCol, 'up', 0.12, { dur: 0.45 });

@@ -1,0 +1,10 @@
+{
+  "chapter": "ch00-prologue",
+  "title": "프롤로그: 4계층 12대 스택 & Any-Platform 환경 진단",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 stack_check.py --json && AGENT_PLATFORM=offline python3 agent_check.py --json && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

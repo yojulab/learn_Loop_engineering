@@ -1,0 +1,10 @@
+{
+  "chapter": "ch03-skills",
+  "title": "제3장: 온디맨드 노하우 모듈 — 3단계 확장형 스킬(Skills)",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 git-commit/scripts/validate_commit.py git-commit/examples/sample_commit.txt && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

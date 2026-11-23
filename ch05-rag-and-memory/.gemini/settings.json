@@ -1,0 +1,10 @@
+{
+  "chapter": "ch05-rag-and-memory",
+  "title": "제5장: 외부 지식(RAG)과 세션 너머의 기억(Memory)",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 agentic_rag.py && python3 memory_manager.py --status --json && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

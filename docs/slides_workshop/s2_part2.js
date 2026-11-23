@@ -69,34 +69,36 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch04',
-        userPrompt: `[실습 결과 실행 프롬프트 — context-engineering 폴더에서 AI CLI에 입력]
-현재 폴더의 상시 지침과 7항목 프롬프트 템플릿을 적용하고 컨텍스트 예산 분석 결과를 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더의 4대 층위 지침(CLAUDE.md, .claude/rules/api.md, AGENTS.md, GEMINI.md)과 7항목 프롬프트 템플릿을 적용하고 컨텍스트 예산 분석 결과를 출력해줘.
 
-1. 참조 및 실행할 항목 (미작성 시 prompt_template.txt, few_shot_reference.txt, context_budget.py를 먼저 구성)
-   - .claude/rules/api.md 와 few_shot_reference.txt, prompt_template.txt(7항목 구조) 확인
-   - python3 context_budget.py --json
-   - python3 -m unittest discover -s tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - 7항목(Role~Self-Check) 기반 점검 요약과 context_budget.py --json(80% 압축 경보 포함) 결과를 출력할 것.`,
+1) 프롬프트 1 (7항목 템플릿 & 4대 층위 점검): prompt_template.txt(7항목)와 .claude/rules/api.md, few_shot_reference.txt 구성을 확인해 요약해줘.
+2) 프롬프트 2 (컨텍스트 예산 & 압축 임계치 진단): python3 context_budget.py --json 과 --history-tokens 135000 실행 결과를 비교해 /compact 시점을 설명해줘.
+3) 프롬프트 3 (단위 테스트 검증): python3 -m unittest discover -s tests -p "test_*.py" -v 실행 결과를 출력해줘.`,
         kicker: 'CH04 · HANDS-ON LAB',
         heading: '제4장 실습: <span class="hl">7항목 프롬프트</span> &amp; 컨텍스트 예산 진단',
         duration: '',
-        missionTitle: '컨텍스트 엔지니어링 폴더에 7항목 템플릿·지침 작성 후 AI CLI로 예산 분석 출력',
+        missionTitle: '챕터 루트에 7항목 템플릿·4대 층위 지침 구성 후 AI CLI로 예산 분석 출력',
         steps: [
-          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>.claude/rules/api.md</code><br>지속 지침과 경로 한정 규칙 파일, <code>few_shot_reference.txt</code>를 작성.',
-          '<code>prompt_template.txt</code> · <code>context_budget.py</code><br>Role~Self-Check 7항목 프롬프트와 토큰 예산(80% 경보) 분석기를 구성.',
-          '<code>폴더 내에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 7항목 점검 결과와 예산 JSON 출력을 확인.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/rules/api.md</code> · <code>.gemini/</code><br>4대 층위 지속 지침과 경로 한정 규칙 파일, <code>few_shot_reference.txt</code>를 작성.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br><code>prompt_template.txt</code>(7항목)와 <code>context_budget.py</code>가 있는 챕터 루트에서 AI CLI를 실행.',
+          '<code>사용자 입력 프롬프트로 예산 진단 출력</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 7항목 점검 결과와 예산 JSON 출력을 확인.',
+        ],
+        promptExamples: [
+          '1) "prompt_template.txt 7항목 구조와 .claude/rules/api.md 조건부 규칙을 점검해 요약해줘."',
+          '2) "context_budget.py --json과 --history-tokens 135000을 실행해 압축 권고 시점을 비교해줘."',
+          '3) "tests/test_context_engineering.py 단위 테스트를 실행해 전체 통과 결과를 출력해줘."',
         ],
         runCmd: 'python3 context_budget.py --json\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '프로젝트 폴더의 상시 지침과 7항목 프롬프트를 AI CLI가 자동 참조해 규칙 준수 및 토큰 점유율(80% 임계치 경보) JSON을 출력합니다.',
+        answerSummary: '챕터 루트의 상시 지침과 7항목 프롬프트를 AI CLI가 자동 참조해 규칙 준수 및 토큰 점유율 임계치 경보 JSON을 출력합니다.',
         tree: `project/
-├── prompt_template.txt         # Role~Self-Check 7항목
-├── few_shot_reference.txt      # 입출력 예시
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/api.md · .gemini/settings.json
+├── prompt_template.txt         # [목표]~[보고 형식] 7항목
+├── few_shot_reference.txt      # 입출력 참조 구현
 ├── context_budget.py           # 토큰 예산·압축 경보 분석기
-├── AGENTS.md · CLAUDE.md · GEMINI.md · .claude/rules/api.md
 └── tests/test_context_engineering.py`,
         codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (context_budget.py --json)',
         answerCode: `{
@@ -104,7 +106,7 @@
   "used_tokens": 6840,
   "usage_ratio": 0.855,
   "compression_recommended": true,
-  "warning": "Context usage >= 80%: compact or /clear with TASKS.md"
+  "warning": "Context usage >= 75%: compact or /clear with TASKS.md"
 }`,
       });
     },
@@ -153,36 +155,39 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch05',
-        userPrompt: `[실습 결과 실행 프롬프트 — memory_pattern/ 폴더에서 AI CLI에 입력]
-현재 memory_pattern 프로젝트 폴더에서 Agentic RAG 하이브리드 검색과 지속 메모리 상태를 조회해 출력해줘.
+        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
+현재 챕터 폴더에서 AGENTS.md · CLAUDE.md · GEMINI.md 지침에 따라 Agentic RAG 발췌 검색과 지속 메모리(TASKS.md, JOURNAL.md) 상태를 조회해 출력해줘.
 
-1. 실행 및 검증할 항목 (미작성 시 corpus/, agentic_rag.py, memory_manager.py, TASKS.md, JOURNAL.md를 먼저 구성)
-   - python3 memory_pattern/agentic_rag.py
-   - python3 memory_pattern/memory_manager.py --status --json
-   - python3 -m unittest discover -s memory_pattern/tests -p "test_*.py" -v
-
-2. 출력 요구사항
-   - corpus/ 대상 하이브리드 RRF 검색 상위 결과와 TASKS.md / JOURNAL.md 상태 요약을 출력할 것.`,
+1) 프롬프트 1 (Agentic RAG 발췌 검색): python3 agentic_rag.py 를 실행해 corpus/ 문서 대상 질의 재작성 및 상위 발췌 결과를 출력해줘.
+2) 프롬프트 2 (지속 메모리 상태 조회): python3 memory_manager.py --status --json 으로 TASKS.md 완료/대기 건수와 JOURNAL.md 기록 상태를 출력해줘.
+3) 프롬프트 3 (단위 테스트 검증): python3 -m unittest discover -s tests -p "test_*.py" -v 를 실행해 발췌 상한 및 상태 전이 테스트를 검증해줘.`,
         kicker: 'CH05 · HANDS-ON LAB',
         heading: '제5장 실습: <span class="hv">Agentic RAG</span> &amp; 지속 메모리 실행',
         duration: '',
-        missionTitle: 'memory_pattern/ 폴더에 RRF 검색·지속 메모리 작성 후 AI CLI로 조회 결과 출력',
+        missionTitle: '챕터 루트에 RAG·지속 메모리 구성 후 AI CLI 프롬프트로 조회 결과 출력',
         steps: [
-          '<code>memory_pattern/corpus/</code> · <code>agentic_rag.py</code><br>지식 문서 4종과 Query Rewrite + Hybrid RRF 검색기를 작성.',
-          '<code>TASKS.md</code> · <code>JOURNAL.md</code> · <code>memory_manager.py</code><br>세션 너머 상태를 기록할 지속 메모리 파일과 <code>--status --json</code> CLI를 구현.',
-          '<code>memory_pattern/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 RRF 순위 점수와 메모리 상태 JSON을 출력.',
+          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서, <code>corpus/</code> 4종 문서, <code>agentic_rag.py</code>, <code>memory_manager.py</code>를 배치.',
+          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br><code>TASKS.md</code> · <code>JOURNAL.md</code>가 있는 챕터 루트로 이동해 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속.',
+          '<code>사용자 입력 프롬프트로 RAG·메모리 검증</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 RAG 검색 결과와 메모리 상태 JSON을 확인.',
         ],
-        runCmd: 'python3 memory_pattern/agentic_rag.py\npython3 memory_pattern/memory_manager.py --status --json\npython3 -m unittest discover -s memory_pattern/tests -p "test_*.py" -v',
+        promptExamples: [
+          '1) "python3 agentic_rag.py를 실행해 corpus/ 대상 하이브리드 검색 상위 발췌 결과를 보여줘."',
+          '2) "python3 memory_manager.py --status --json으로 TASKS.md와 JOURNAL.md 상태를 출력해줘."',
+          '3) "tests/test_memory_pattern.py 단위 테스트를 실행해 발췌 길이 상한과 상태 전이를 검증해줘."',
+        ],
+        runCmd: 'python3 agentic_rag.py\npython3 memory_manager.py --status --json\npython3 -m unittest discover -s tests -p "test_*.py" -v',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '<code>memory_pattern/</code>에서 AI CLI가 <code>corpus/</code> 하이브리드 RRF 검색과 <code>TASKS.md</code>/<code>JOURNAL.md</code> 상태를 함께 조회·검증합니다.',
-        tree: `memory_pattern/
+        answerSummary: '챕터 루트에서 AI CLI가 <code>corpus/</code> Agentic RAG 검색과 <code>TASKS.md</code>/<code>JOURNAL.md</code> 상태를 함께 조회·검증합니다.',
+        tree: `project/
+├── AGENTS.md · CLAUDE.md · GEMINI.md
+├── .claude/rules/rag-memory.md · .gemini/settings.json
 ├── corpus/ (01~04_*.md)      # 외부 지식 저장소 (RAG)
-├── agentic_rag.py            # Query Rewrite + Hybrid RRF
+├── agentic_rag.py            # Query Rewrite + Top-K 발췌 검색
 ├── memory_manager.py         # --status --json 지속 메모리 관리
 ├── TASKS.md · JOURNAL.md     # 세션 간 지속 상태 파일
 └── tests/test_memory_pattern.py`,
-        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (RRF 검색 + 메모리 상태)',
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (RAG 검색 + 메모리 상태)',
         answerCode: `{"query": "컨텍스트 오염 방어", "top_doc": "01_context_budget.md", "rrf_score": 0.0328}
 {
   "tasks_total": 3,

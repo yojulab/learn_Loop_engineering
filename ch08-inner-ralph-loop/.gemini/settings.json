@@ -1,0 +1,10 @@
+{
+  "chapter": "ch08-inner-ralph-loop",
+  "title": "제8장: 이너 루프와 랄프 루프 (SQLite FTS5 RSS Wiki & /goal)",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 goal_evaluator.py && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

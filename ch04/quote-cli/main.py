@@ -1,1 +1,1 @@
-../../ch02-mcp-and-hooks/quote-mcp/main.py
+../../ch02-mcp-and-hooks/main.py
