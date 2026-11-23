@@ -89,11 +89,13 @@ def run_zero_code_demo(store_dir: str | Path | None = None) -> dict[str, Any]:
                 base_url=proxy_url,
             )
             traces = ops.list_traces()
+            matched = [t for t in traces if t.get("id") == "litellm-trace-001"]
+            latest_id = matched[0]["id"] if matched else (traces[0]["id"] if ops.remote_enabled and traces else (traces[-1]["id"] if traces else None))
             return {
                 "proxy_url": proxy_url,
                 "assistant_reply": resp["choices"][0]["message"]["content"],
                 "captured_trace_count": len(traces),
-                "latest_trace_id": traces[-1]["id"] if traces else None,
+                "latest_trace_id": latest_id,
             }
         finally:
             server.shutdown()

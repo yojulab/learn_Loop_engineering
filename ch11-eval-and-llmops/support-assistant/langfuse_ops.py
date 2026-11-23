@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import datetime as dt
 import json
 import os
 import urllib.error
@@ -154,7 +155,8 @@ class LangfuseOpsClient:
             "latency_ms": latency_ms,
         }
         if self.remote_enabled:
-            self._http_json(
+            ts = dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z")
+            res = self._http_json(
                 "POST",
                 "/api/public/ingestion",
                 {
@@ -162,9 +164,11 @@ class LangfuseOpsClient:
                         {
                             "id": f"evt-{trace_id}",
                             "type": "trace-create",
+                            "timestamp": ts,
                             "body": {
                                 "id": trace_id,
                                 "name": prompt_name,
+                                "timestamp": ts,
                                 "input": input_payload,
                                 "output": output,
                                 "metadata": {"prompt_version": prompt_version, "score": score, "latency_ms": latency_ms},
@@ -173,6 +177,8 @@ class LangfuseOpsClient:
                     ]
                 },
             )
+            if res.get("errors"):
+                raise RuntimeError(f"Langfuse ingestion failed: {res['errors']}")
             return
 
         with self.traces_file.open("a", encoding="utf-8") as f:

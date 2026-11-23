@@ -38,3 +38,14 @@ RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r /tmp/requirements.txt
 
 WORKDIR /apps
+
+RUN git clone https://github.com/yojulab/learn_Loop_engineering.git \
+    && cp -a /apps/learn_Loop_engineering /opt/learn_Loop_engineering
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+WORKDIR /apps/learn_Loop_engineering
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["sleep", "infinity"]

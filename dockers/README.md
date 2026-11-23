@@ -7,9 +7,9 @@ Langfuse 웹 대시보드(`LANGFUSE_PORT=30000`)만 호스트에 게시하며, �
 
 | 서비스 | 이미지 / 빌드 | 역할 |
 | :--- | :--- | :--- |
-| `db_postgres` | `postgres:16` | Langfuse 전용 DB (`POSTGRES_DATA_DIR`에 영속화) |
+| `db_postgres` | `postgres:16` | Langfuse 전용 DB |
 | `langfuse` | `langfuse/langfuse:2` (Docker Hub) | Trace 수집 · 프롬프트 관리 (조직·프로젝트·API Key 자동 생성) |
-| `app` | `Dockerfile` (Python 3.13 + Node.js) | `claude` · `agy` CLI, `langfuse` SDK, 저장소 코드 실행 환경 |
+| `app` | `Dockerfile` (Python 3.13 + Node.js) | `claude` · `agy` CLI, `langfuse` SDK, `/apps/learn_Loop_engineering` (`git clone` 포함) 및 `/apps/*` 마운트 실행 환경 |
 
 `app`에서 Langfuse 접속 주소는 `http://langfuse:3000`(내부 네트워크)입니다.
 
@@ -45,9 +45,7 @@ docker compose down -v         # 동일 + 익명 볼륨 제거 (bind 경로 데�
 
 | 항목 | 설명 | 기본값 |
 | :--- | :--- | :--- |
-| `APP_SOURCE_DIR` | 실습 코드 마운트 경로 (`dockers/` 기준 상대 경로 가능) | `..` |
-| `POSTGRES_DATA_DIR` | Langfuse DB 데이터 경로 | `./volumes/postgres` |
-| `CLAUDE_HOST_DIR` | Claude CLI 로그인·설정 영속화 경로 | `./volumes/claude` |
+| `APP_PROJECTS_DIR` | `/apps`에 마운트할 호스트 프로젝트 루트 경로 (기동 시 `./apps/learn_Loop_engineering` 자동 연계 및 `/apps/*` 확장) | `./apps` |
 | `POSTGRES_USER` / `POSTGRES_PASSWORD` | DB 계정 | `admin` / `admin123` |
 | `LANGFUSE_NEXTAUTH_SECRET` / `LANGFUSE_SALT` | Langfuse 시크릿 (필수) | `.env.example`의 안내값 교체 |
 | `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` | 초기 프로젝트 API Key 이자 SDK 접속 키 | `pk-lf-loop-engineering-public` / `sk-lf-loop-engineering-secret` |

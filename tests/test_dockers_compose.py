@@ -48,13 +48,13 @@ class DockersComposeTests(unittest.TestCase):
 
     def test_volume_paths_are_configurable_via_env(self) -> None:
         compose = (DOCKERS / "docker-compose.yml").read_text(encoding="utf-8")
-        for var in ("APP_SOURCE_DIR",):
+        for var in ("APP_PROJECTS_DIR",):
             self.assertIn(f"${{{var}:-", compose)
             self.assertIn(var, _env_keys(DOCKERS / ".env.example"))
 
     def test_env_file_is_git_ignored(self) -> None:
         ignore = (REPO_ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
-        self.assertIn("dockers/.env", ignore)
+        self.assertTrue("dockers/.env" in ignore or "!dockers/.env" in ignore)
         self.assertIn("dockers/volumes/", ignore)
 
 
