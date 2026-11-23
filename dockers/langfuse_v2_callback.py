@@ -36,7 +36,9 @@ class LangfuseV2Logger(CustomLogger):
             return
 
         now = dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z")
-        trace_id = str(kwargs.get("litellm_call_id") or uuid.uuid4())
+        meta = (kwargs.get("litellm_params") or {}).get("metadata") or kwargs.get("metadata") or {}
+        custom_trace_id = meta.get("trace_id") if isinstance(meta, dict) else None
+        trace_id = str(custom_trace_id or kwargs.get("litellm_call_id") or uuid.uuid4())
         gen_id = str(uuid.uuid4())
         model = str(kwargs.get("model") or "unknown")
         messages = kwargs.get("messages") or []

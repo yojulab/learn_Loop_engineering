@@ -125,7 +125,18 @@ else:
 PY
 }
 
+start_agy_bridge() {
+  local bridge="${APP_DIR}/ch11-eval-and-llmops/support-assistant/litellm_proxy/agy_openai_bridge.py"
+  if [ -f "${bridge}" ]; then
+    if ! pgrep -f "agy_openai_bridge.py" >/dev/null 2>&1; then
+      nohup python3 "${bridge}" --host 0.0.0.0 --port "${AGY_BRIDGE_PORT:-4010}" >/tmp/agy_bridge.log 2>&1 &
+      echo "[entrypoint] agy_openai_bridge 백그라운드 기동 완료 (port=${AGY_BRIDGE_PORT:-4010})"
+    fi
+  fi
+}
+
 ensure_app_source_on_volume
+start_agy_bridge
 seed_ch11_prompts
 
 exec "$@"

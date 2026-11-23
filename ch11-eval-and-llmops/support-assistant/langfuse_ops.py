@@ -184,6 +184,39 @@ class LangfuseOpsClient:
         with self.traces_file.open("a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
+    def log_score(
+        self,
+        trace_id: str,
+        name: str,
+        value: float,
+        data_type: str = "NUMERIC",
+        comment: str = "",
+    ) -> None:
+        if self.remote_enabled:
+            self._http_json(
+                "POST",
+                "/api/public/scores",
+                {
+                    "traceId": trace_id,
+                    "name": name,
+                    "value": float(value),
+                    "dataType": data_type,
+                    **({"comment": comment} if comment else {}),
+                },
+            )
+            return
+
+        scores_file = self.store_dir / "scores.jsonl"
+        entry = {
+            "trace_id": trace_id,
+            "name": name,
+            "value": float(value),
+            "data_type": data_type,
+            "comment": comment,
+        }
+        with scores_file.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
     def list_traces(self, limit: int = 20) -> list[dict[str, Any]]:
         if self.remote_enabled:
             res = self._http_json("GET", f"/api/public/traces?limit={limit}")

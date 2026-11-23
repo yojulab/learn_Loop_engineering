@@ -16,4 +16,5 @@ services:
       - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY:-pk-lf-loop-engineering-public}
       - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY:-sk-lf-loop-engineering-secret}
       - PYTHONPATH=/app
+      - AGY_BRIDGE_BASE_URL=${AGY_BRIDGE_BASE_URL:-http://host.docker.internal:4010/v1}
       - LANGFUSE_HOST=${LANGFUSE_HOST:-http://host.docker.internal:30000}
