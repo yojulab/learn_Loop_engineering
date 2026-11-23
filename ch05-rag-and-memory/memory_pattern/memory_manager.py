@@ -103,3 +103,32 @@ class MemoryManager:
             "decision": clean_decision,
             "evidence": clean_evidence,
         }
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+    import json
+    parser = argparse.ArgumentParser(description="TASKS.md / JOURNAL.md 지속 메모리 상태 조회기")
+    parser.add_argument("--dir", default=str(Path(__file__).resolve().parent))
+    parser.add_argument("--status", action="store_true", help="현재 TASKS/JOURNAL 상태 출력")
+    parser.add_argument("--json", action="store_true", help="JSON 형식으로 출력")
+    args = parser.parse_args(argv)
+    base = Path(args.dir)
+    mgr = MemoryManager(base / "TASKS.md", base / "JOURNAL.md")
+    tasks_lines = mgr.tasks_path.read_text(encoding="utf-8").splitlines() if mgr.tasks_path.is_file() else []
+    journal_lines = mgr.journal_path.read_text(encoding="utf-8").splitlines() if mgr.journal_path.is_file() else []
+    report = {
+        "tasks_total": sum(1 for ln in tasks_lines if ln.strip().startswith("- [")),
+        "tasks_done": sum(1 for ln in tasks_lines if ln.strip().startswith("- [x]")),
+        "tasks_pending": sum(1 for ln in tasks_lines if ln.strip().startswith("- [ ]")),
+        "journal_entries": sum(1 for ln in journal_lines if ln.strip().startswith("- ")),
+    }
+    if args.json:
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+    else:
+        print(f"TASKS: {report['tasks_done']}/{report['tasks_total']} done | JOURNAL entries: {report['journal_entries']}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

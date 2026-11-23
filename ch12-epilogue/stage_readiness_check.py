@@ -28,7 +28,8 @@ def inspect_stages(repo_root: str | Path) -> dict[str, object]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Epilogue Stage 1~4 Readiness Checker")
-    parser.add_argument("--path", default=".")
+    default_root = "." if Path("AGENTS.md").is_file() else str(Path(__file__).resolve().parent.parent)
+    parser.add_argument("--path", default=default_root)
     parser.add_argument("--format", choices=["text", "json"], default="text")
     args = parser.parse_args(argv)
     report = inspect_stages(args.path)

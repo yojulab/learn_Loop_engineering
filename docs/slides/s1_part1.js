@@ -70,57 +70,44 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch01',
-        userPrompt: `[에이전트 코딩 루프 & Quote CLI 모범 답안 재현 프롬프트]
-명언 데이터와 태그 필터링, 결정론적 시드 기반 랜덤 추출을 지원하는 Quote CLI 및 단위 테스트를 아래 명세에 맞게 구현하고 검증해줘.
+        userPrompt: `[실습 결과 실행 프롬프트 — quote-cli/ 폴더에서 AI CLI에 입력]
+현재 quote-cli 프로젝트 폴더에서 에이전트 루프(수집 -> 실행 -> 검증)를 거쳐 아래 실습 결과를 출력해줘.
 
-1. 생성할 파일 구조
-   - README.md
-   - quote-cli/quotes.json (id, text, author, tags 배열을 포함한 최소 5건 이상의 엔지니어링 명언 데이터, engineering 태그 포함)
-   - quote-cli/quote_cli.py
-   - quote-cli/interactive_demo.py (REPL 대화형 루프 데모)
-   - quote-cli/tests/test_quote_cli.py
-
-2. 핵심 구현 명세 (표준 라이브러리 argparse, json, random, pathlib만 사용)
-   - load_quotes(path): quotes.json을 파싱하며 list가 아니면 ValueError 발생
-   - filter_by_tag(quotes, tag): 대소문자 무시 정확 일치(t.lower() == tag.strip().lower()) 필터링
-   - get_random_quote(quotes, rng=None): 빈 목록이면 ValueError, rng(random.Random(seed)) 전달 시 결정론적 1건 선택
-   - format_quotes(quotes, as_json=False): JSON 문자열 또는 '[id] "text" — author (tags: ...)' 텍스트 반환
-   - CLI 옵션: --all, --tag, --json, --seed, --data
-
-3. 검증 명령 (전부 exit 0 통과 필수)
+1. 실행 및 검증할 항목 (미작성 시 quotes.json, quote_cli.py, tests/test_quote_cli.py를 먼저 작성)
    - python3 quote-cli/quote_cli.py --tag engineering --json
    - python3 quote-cli/quote_cli.py --seed 42 --json
-   - python3 -m unittest discover -s quote-cli/tests -p "test_*.py" -v`,
+   - python3 -m unittest discover -s quote-cli/tests -p "test_*.py" -v
+
+2. 출력 요구사항
+   - engineering 태그 필터링 JSON 결과, 시드 42 결정론적 출력, 단위 테스트 통과 건수를 함께 출력할 것.`,
         kicker: 'CH01 · HANDS-ON LAB (20분)',
-        heading: '제1장 실습: <span class="hb">Quote CLI</span> 필터 &amp; 단위 테스트',
+        heading: '제1장 실습: <span class="hl">Quote CLI</span> 루프 작성 &amp; 결과 출력',
         duration: '20분',
-        missionTitle: '태그·저자 검색 및 JSON 출력을 지원하는 Quote CLI 검증',
+        missionTitle: 'quote-cli/ 폴더에 명언 CLI 작성 후 AI CLI 프롬프트로 실행·검증 결과 출력',
         steps: [
-          '<code>quote-cli/quote_cli.py --tag engineering --json</code><br>태그 필터링과 JSON 구조화 출력 결과를 확인.',
-          '<code>--author "Loop Handbook"</code> / <code>--seed 42</code><br>저자 검색과 결정론적 랜덤 추출 동작을 검증.',
-          '<code>test_quote_cli.py</code><br>단위 테스트 스위트를 실행해 전 케이스 통과를 확인.',
+          '<code>quote-cli/quotes.json</code> · <code>quote_cli.py</code><br>명언 데이터와 <code>--tag</code>·<code>--seed</code>·<code>--json</code> 지원 CLI를 작성.',
+          '<code>quote-cli/interactive_demo.py</code> · <code>tests/</code><br>대화형 REPL 데모와 표준 <code>unittest</code> 검증 스위트를 구성.',
+          '<code>quote-cli/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 태그 필터 JSON과 테스트 통과 결과를 출력.',
         ],
         runCmd: 'python3 quote-cli/quote_cli.py --tag engineering --json\npython3 -m unittest discover -s quote-cli/tests -p "test_*.py" -v',
-        answerLabel: '모범 답안 열기 (Tree + 구현 코드)',
-        answerType: 'Tree + Python',
-        answerSummary: '<code>quote_cli.py</code>는 표준 라이브러리(<code>argparse</code>, <code>json</code>, <code>random</code>)만으로 CLI·JSON·시드 랜덤을 지원합니다.',
-        tree: `project/
-├── README.md
-└── quote-cli/
-    ├── quotes.json
-    ├── quote_cli.py
-    ├── interactive_demo.py
-    └── tests/test_quote_cli.py`,
-        codeCaption: 'quote_cli.py 핵심 필터 & 시드 랜덤 로직',
-        answerCode: `def filter_quotes(quotes, tag=None, author=None):
-    items = quotes
-    if tag:
-        items = [q for q in items if tag.lower() in [t.lower() for t in q.get("tags", [])]]
-    if author:
-        items = [q for q in items if author.lower() in q.get("author", "").lower()]
-    return items
-
-# 실행 예: python3 quote-cli/quote_cli.py --all --json`,
+        answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
+        answerType: 'Tree + JSON',
+        answerSummary: '<code>quote-cli/</code> 폴더에서 AI CLI가 코드를 읽고 실행·검증 루프를 돌아 태그 필터 JSON과 테스트 결과를 반환합니다.',
+        tree: `quote-cli/
+├── quotes.json               # 명언 데이터 (engineering 태그 포함)
+├── quote_cli.py              # --all / --tag / --seed / --json
+├── interactive_demo.py       # REPL 대화형 루프 데모
+└── tests/test_quote_cli.py   # 단위 테스트`,
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (quote_cli.py --tag engineering --json)',
+        answerCode: `[
+  {
+    "id": 1,
+    "text": "Tests are the compass of agentic coding.",
+    "author": "Loop Handbook",
+    "tags": ["engineering", "testing"]
+  }
+]
+# Ran 6 tests in 0.01s — OK`,
       });
     },
   });
@@ -173,54 +160,42 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch02',
-        userPrompt: `[MCP & PreToolUse 훅 가드레일 모범 답안 재현 프롬프트]
-FastMCP 표준 프로토콜 기반 Quote MCP 서버와 위험 Bash 명령 차단 훅, 멀티 플랫폼 설정 및 단위 테스트를 아래 명세에 맞게 구현하고 검증해줘.
+        userPrompt: `[실습 결과 실행 프롬프트 — quote-mcp/ 폴더에서 AI CLI에 입력]
+현재 quote-mcp 프로젝트 폴더에서 MCP 서버와 PreToolUse 가드레일 훅을 점검하고 실습 결과를 출력해줘.
 
-1. 생성할 파일 구조
-   - quote-mcp/main.py
-   - quote-mcp/mcp_config_claude.json , mcp_config_chatgpt.json , mcp_config_gemini.json
-   - quote-mcp/hooks/block_dangerous_bash.py
-   - quote-mcp/hooks/audit_logger.py
-   - quote-mcp/hooks/platform_hook_bridge.py
-   - quote-mcp/tests/test_quote_mcp_and_hooks.py
-
-2. 핵심 구현 명세
-   - main.py: 외부 mcp.server.fastmcp 미설치 시 동일 데코레이터 계약을 제공하는 LocalFastMCP 폴백 클래스 포함. @mcp.tool() get_random_quote / add_quote, @mcp.resource("quote://all"), @mcp.prompt() quote_post 등록. run("stdio") 실행 시 {"server": "quote-mcp", "transport": "stdio", "tools": [...], "resources": ["quote://all"], "prompts": ["quote_post"]} 메타데이터 출력.
-   - hooks/block_dangerous_bash.py: evaluate_command(command)로 rm -rf, git push --force/-f, git reset --hard, DROP TABLE, find ... -delete, mkfs 정규식 탐지. --command 인자 또는 stdin JSON(platform_hook_bridge.normalize_hook_event() 호환)을 받아 차단 시 {"decision": "block", "reason": ...} 출력 후 sys.exit(2), 안전 명령은 exit 0.
-   - hooks/audit_logger.py: 도구 실행 이벤트를 JSONL 감사 로그로 기록.
-
-3. 검증 명령 (전부 통과 필수)
+1. 실행 및 검증할 항목 (미작성 시 main.py, hooks/block_dangerous_bash.py, .claude/settings.json을 먼저 구성)
    - python3 quote-mcp/main.py
-   - echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | python3 quote-mcp/hooks/block_dangerous_bash.py  # exit=2 확인
-   - python3 -m unittest discover -s quote-mcp/tests -p "test_*.py" -v`,
+   - echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | python3 quote-mcp/hooks/block_dangerous_bash.py
+   - python3 -m unittest discover -s quote-mcp/tests -p "test_*.py" -v
+
+2. 출력 요구사항
+   - MCP 서버 메타데이터(Tools/Resources/Prompts) JSON, 위험 명령 차단 JSON(exit 2 확인), 단위 테스트 통과 결과를 출력할 것.`,
         kicker: 'CH02 · HANDS-ON LAB (25분)',
-        heading: '제2장 실습: <span class="hl">MCP 서버</span> &amp; <span class="hb">PreToolUse</span> 차단 검증',
+        heading: '제2장 실습: <span class="hl">MCP 서버</span> &amp; <span class="hb">PreToolUse</span> 훅 검증',
         duration: '25분',
-        missionTitle: 'Quote MCP 도구 실행과 위험 Bash 차단 훅 동작 검증',
+        missionTitle: 'quote-mcp/ 폴더에 MCP 서버·차단 훅 구성 후 AI CLI로 차단/통과 결과 출력',
         steps: [
-          '<code>quote-mcp/main.py</code><br>실행 후 MCP 서버 메타데이터와 도구·리소스 목록을 확인.',
-          '<code>block_dangerous_bash.py</code><br><code>rm -rf</code>와 안전 명령을 전달해 exit code <code>2</code> vs <code>0</code>을 검증.',
-          '<code>mcp_config_claude.json</code> · <code>chatgpt</code> · <code>gemini</code><br>3대 플랫폼 설정 스키마 차이를 비교.',
+          '<code>quote-mcp/main.py</code> · <code>.mcp.json</code><br>Tools·Resources·Prompts를 노출하는 MCP 서버와 설정을 작성.',
+          '<code>hooks/block_dangerous_bash.py</code> · <code>.claude/settings.json</code><br>위험 Bash 명령을 exit code <code>2</code>로 차단하는 훅과 감사 로그를 연결.',
+          '<code>quote-mcp/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 MCP 메타데이터와 <code>rm -rf</code> 차단 JSON을 출력.',
         ],
         runCmd: 'python3 quote-mcp/main.py\npython3 -m unittest discover -s quote-mcp/tests -p "test_*.py" -v',
-        answerLabel: '모범 답안 열기 (Tree + 훅·MCP 코드)',
-        answerType: 'Tree + Config',
-        answerSummary: '<code>block_dangerous_bash.py</code>는 exit code <code>2</code>를 반환해 Claude Code / 범용 브리지에서 도구 실행 자체를 사전 차단하며, <code>audit_logger.py</code>가 실행 이력을 남깁니다.',
+        answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
+        answerType: 'Tree + JSON',
+        answerSummary: '<code>quote-mcp/</code>에서 AI CLI가 MCP 메타데이터와 <code>PreToolUse</code> 위험 명령 차단(<code>exit 2</code>) 동작을 직접 검증해 출력합니다.',
         tree: `quote-mcp/
-├── main.py                    # MCP JSON-RPC / self-test
-├── mcp_config_claude.json     # Claude MCP 스키마
-├── mcp_config_chatgpt.json    # ChatGPT MCP/Tool 스키마
-├── mcp_config_gemini.json     # Gemini MCP 스키마
+├── main.py                        # MCP 서버 (Tools/Resources/Prompts)
+├── .mcp.json · mcp_config_*.json  # 3대 플랫폼 MCP 설정
+├── .claude/settings.json          # PreToolUse / PostToolUse 훅 등록
 └── hooks/
-    ├── block_dangerous_bash.py
-    ├── audit_logger.py
+    ├── block_dangerous_bash.py    # exit 2 위험 명령 차단기
+    ├── audit_logger.py            # 감사 로그 기록기
     └── platform_hook_bridge.py`,
-        codeCaption: '위험 명령 훅 검사 & MCP 메타데이터 결과',
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (MCP + PreToolUse 차단)',
         answerCode: `{"server": "quote-mcp", "transport": "stdio", "tools": ["add_quote", "get_random_quote"], "resources": ["quote://all"], "prompts": ["quote_post"]}
 
-# PreToolUse 검사 흐름:
-# stdin JSON -> platform_hook_bridge.normalize_hook_event()
-# -> regex match(rm -rf / mkfs / force push) -> sys.exit(2) 차단`,
+# 위험 명령 입력 시 block_dangerous_bash.py 응답 (exit code: 2):
+{"decision": "block", "reason": "Dangerous command pattern detected: rm -rf"}`,
       });
     },
   });
@@ -275,49 +250,36 @@ FastMCP 표준 프로토콜 기반 Quote MCP 서버와 위험 Bash 명령 차단
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch03',
-        userPrompt: `[3단계 Skills & GitHub 워크플로 모범 답안 재현 프롬프트]
-3단계 Progressive Disclosure(1단계 Metadata -> 2단계 Instructions -> 3단계 Resources) 구조의 5종 GitHub 스킬 및 검증 테스트를 아래 명세에 맞게 구현하고 검증해줘.
+        userPrompt: `[실습 결과 실행 프롬프트 — github-workflow-skills/ 폴더에서 AI CLI에 입력]
+현재 github-workflow-skills 폴더의 3단계 Progressive Disclosure 스킬을 적용해 검증하고 실습 결과를 출력해줘.
 
-1. 생성할 파일 구조
-   - github-workflow-skills/ 하위에 5종 스킬 디렉터리 각각 구성:
-     * git-commit/ : SKILL.md, reference.md, examples/, scripts/validate_commit.py
-     * gh-issue/   : SKILL.md, reference.md, examples/, scripts/validate_issue.py
-     * gh-pr/      : SKILL.md, reference.md, examples/, scripts/validate_pr.py
-     * gh-review/  : SKILL.md, reference.md, examples/, scripts/validate_review.py
-     * gh-address-review/ : SKILL.md, reference.md, examples/, scripts/validate_address_review.py
-   - 3대 플랫폼 가이드: skills_claude.md , skills_chatgpt.md , skills_gemini.md
-   - 단위 테스트: github-workflow-skills/tests/test_github_workflow_skills.py
+1. 실행 및 검증할 항목 (미작성 시 5종 스킬 SKILL.md, reference.md, scripts/validate_*.py를 먼저 구성)
+   - git-commit/SKILL.md 규칙에 맞춰 Conventional Commit 메시지 1건 생성 후 validate_commit.py --text 로 검증
+   - python3 -m unittest discover -s github-workflow-skills/tests -p "test_*.py" -v
 
-2. 핵심 구현 명세
-   - 각 SKILL.md 상단에 '---\\nname: <스킬명>\\ndescription: <활성화 조건 설명>\\n---' YAML Frontmatter를 반드시 배치(1단계 로딩 최소화).
-   - 본문(2단계)에는 절차와 규칙을 간결하게(<5KB) 적고, 상세 체크리스트는 reference.md(3단계)로 분리.
-   - validate_commit.py: --text 인자를 받아 Conventional Commits 패턴(^(feat|fix|docs|style|refactor|test|chore)(\\(.+\\))?: .+)을 검증해 유효 시 exit 0("[OK] valid Conventional Commit"), 위반 시 exit 1 반환. 나머지 4개 validate_*.py도 동일 패턴으로 구현.
-
-3. 검증 명령 (전부 exit 0 통과 필수)
-   - python3 github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"
-   - python3 -m unittest discover -s github-workflow-skills/tests -p "test_*.py" -v`,
+2. 출력 요구사항
+   - 생성된 커밋 메시지, [OK] valid Conventional Commit 검증 출력, 5종 스킬 단위 테스트 통과 결과를 출력할 것.`,
         kicker: 'CH03 · HANDS-ON LAB (30분)',
-        heading: '제3장 실습: <span class="hl">5종 GitHub 스킬</span> 검증 스크립트 &amp; 테스트',
+        heading: '제3장 실습: <span class="hl">5종 GitHub 스킬</span> 작성 &amp; 트리거 출력',
         duration: '30분',
-        missionTitle: '3단계 Progressive Disclosure 스킬 구조 및 커밋/PR 검증 스크립트 실행',
+        missionTitle: 'github-workflow-skills/ 폴더에 3단계 스킬 작성 후 AI CLI로 스킬 적용 결과 출력',
         steps: [
-          '<code>github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"</code><br>Conventional Commits 메시지 검증 스크립트 동작을 확인.',
-          '<code>skills_claude.md</code> · <code>skills_chatgpt.md</code> · <code>skills_gemini.md</code><br>3대 플랫폼용 스킬 적용 가이드를 비교.',
-          '<code>tests/test_github_workflow_skills.py</code><br>5종 스킬 Frontmatter·스크립트 단위 테스트를 실행.',
+          '<code>SKILL.md</code> (YAML Frontmatter + 절차)<br>1단계 최소 메타데이터와 2단계 핵심 워크플로를 5종 스킬 폴더에 작성.',
+          '<code>reference.md</code> · <code>examples/</code> · <code>scripts/validate_*.py</code><br>3단계 세부 기준과 결정론적 형식 검증 스크립트를 배치.',
+          '<code>github-workflow-skills/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 스킬 기반 산출물과 <code>validate_commit.py</code> 통과 결과를 출력.',
         ],
         runCmd: 'python3 github-workflow-skills/git-commit/scripts/validate_commit.py --text "feat: add workflow skill"\npython3 -m unittest discover -s github-workflow-skills/tests -p "test_*.py" -v',
-        answerLabel: '모범 답안 열기 (Tree + SKILL.md 구조)',
+        answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + YAML',
-        answerSummary: '모든 스킬은 <code>SKILL.md</code> 상단에 <code>name</code>과 <code>description</code>이 있는 YAML Frontmatter를 가지며, 각 하위 <code>scripts/validate_*.py</code>로 형식을 자동 검증합니다.',
+        answerSummary: '<code>github-workflow-skills/</code>에서 AI CLI가 <code>SKILL.md</code>를 온디맨드로 로드해 규칙에 맞는 산출물을 만들고 검증 스크립트까지 통과시킵니다.',
         tree: `github-workflow-skills/
 ├── git-commit/ (SKILL.md, reference.md, examples/, scripts/validate_commit.py)
 ├── gh-issue/   (SKILL.md, reference.md, examples/, scripts/validate_issue.py)
 ├── gh-pr/      (SKILL.md, reference.md, examples/, scripts/validate_pr.py)
 ├── gh-review/  (SKILL.md, reference.md, examples/, scripts/validate_review.py)
 ├── gh-address-review/ (SKILL.md, reference.md, scripts/validate_address_review.py)
-├── skills_claude.md · skills_chatgpt.md · skills_gemini.md
 └── tests/test_github_workflow_skills.py`,
-        codeCaption: 'validate_commit.py & 스킬 테스트 기대 결과',
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (스킬 적용 + 검증)',
         answerCode: `---
 name: git-commit
 description: 변경 사항을 Conventional Commits 규칙으로 정리합니다.

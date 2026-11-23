@@ -39,13 +39,18 @@ def check_script_file(path: Path | str) -> tuple[bool, list[str]]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    import json
     parser = argparse.ArgumentParser(description="5줄 파괴 명령 가드레일 검증기")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--cmd", help="검사할 명령 문자열")
     group.add_argument("--file", help="검사할 스크립트 파일 경로")
+    parser.add_argument("--json", action="store_true", help="JSON 형식으로 출력")
     args = parser.parse_args(argv)
 
     ok, msgs = check_command_safety(args.cmd) if args.cmd is not None else check_script_file(args.file)
+    if args.json:
+        print(json.dumps({"safe": ok, "violations": msgs}, ensure_ascii=False, indent=2))
+        return 0 if ok else 1
     if not ok:
         for m in msgs:
             print(f"[BLOCKED] {m}")

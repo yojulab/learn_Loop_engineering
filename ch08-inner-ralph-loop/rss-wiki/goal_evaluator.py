@@ -33,7 +33,7 @@ def evaluate_goal(target_dir: str | Path) -> dict:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="/goal 독립 완료 판정 시뮬레이터")
-    parser.add_argument("--target", default="ch08-inner-ralph-loop/rss-wiki")
+    parser.add_argument("--target", default=str(Path(__file__).resolve().parent))
     args = parser.parse_args(argv)
     report = evaluate_goal(args.target)
     print(json.dumps(report, ensure_ascii=False, indent=2))

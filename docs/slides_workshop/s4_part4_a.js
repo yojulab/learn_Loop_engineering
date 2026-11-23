@@ -67,46 +67,41 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch09',
-        userPrompt: `[3-Agent 블라인드 합의 & 루브릭 모범 답안 재현 프롬프트]
-Maker!=Checker(Planner·Generator·Evaluator) 역할 분리, touch 스코프 검증, 첫 줄 블라인드 합의 및 0~3점 루브릭 채점 하네스를 아래 명세에 맞게 구현하고 검증해줘.
+        userPrompt: `[실습 결과 실행 프롬프트 — harness/ 폴더에서 AI CLI에 입력]
+현재 harness 프로젝트 폴더에서 3-Agent(Planner·Generator·Evaluator) 오케스트레이션과 블라인드 합의를 실행해 결과를 출력해줘.
 
-1. 생성할 파일 구조
-   - harness/run.py
-   - harness/src/harness/orchestrator.py , consensus.py , rubric.py , permissions.py
-   - harness/src/harness/prompts/ 하위에 planner, generator, evaluator 마크다운 프롬프트
-   - harness/tests/test_orchestration_harness.py
-
-2. 핵심 구현 명세
-   - permissions.py: Generator가 TASKS.md에 명시된 touch 허용 경로 외 파일을 수정하지 않도록 검증.
-   - consensus.py: CHOICE_RE = r"^선택\\s*:\\s*([A-Z])\\b", parse_choice_line(), evaluate_consensus(docs_dir, topic, attempt, max_attempts=3, irreversible=False) 구현. Planner(.planner.md)와 Evaluator(.evaluator.md)가 상호 문서를 열람하지 않은 채 첫 줄만 비교해 일치 시 ConsensusOutcome(status="AGREED"), max_attempts(3회) 불일치 또는 irreversible=True 시 docs/HALT 파일 생성 후 status="HALTED" 반환.
-   - rubric.py: BASE_CRITERIA = ("spec_fit", "module_boundary", "test_rigor", "ops_readiness") 각 0~3점 채점(max_score=12 또는 ui_polish 포함 시 15, total>=9 PASS) 후 score_evaluation() 반환.
-   - run.py & orchestrator.py: --mode sim|dry-run --platform claude|chatgpt|gemini CLI 지원.
-
-3. 검증 명령 (전부 exit 0 통과 필수)
+1. 실행 및 검증할 항목 (미작성 시 run.py, orchestrator.py, consensus.py, rubric.py, permissions.py를 먼저 구성)
    - python3 harness/run.py --mode sim --platform chatgpt
-   - python3 -m unittest discover -s harness/tests -p "test_*.py" -v`,
+   - python3 -m unittest discover -s harness/tests -p "test_*.py" -v
+
+2. 출력 요구사항
+   - 블라인드 합의 결과, 0~3점 루브릭 채점 판정(PASS/FAIL), 단위 테스트 통과 건수를 JSON과 함께 요약 출력할 것.`,
         kicker: 'CH09 · HANDS-ON LAB',
-        heading: '제9장 실습: <span class="hb">3-Agent 합의</span> &amp; 채점표(Rubric) 검증',
+        heading: '제9장 실습: <span class="hl">3-Agent 합의</span> &amp; 루브릭 채점 출력',
         duration: '',
-        missionTitle: 'Planner-Generator-Evaluator 분리 실행 및 블라인드 합의 확인',
+        missionTitle: 'harness/ 폴더에 3-Agent 파일 협업·루브릭 작성 후 AI CLI로 합의 결과 출력',
         steps: [
-          '<code>harness/run.py --mode sim --platform chatgpt</code><br>3-Agent 오케스트레이션 시뮬레이터를 <code>claude|chatgpt|gemini</code> 모드로 실행.',
-          '<code>harness/src/harness/consensus.py</code><br>첫 줄(<code>선택: X</code>) 비교 로직과 3회 불일치 시 <code>HALT</code> 생성을 검증.',
-          '<code>harness/tests/test_orchestration_harness.py</code><br>0~3점 채점표(Rubric) 컷오프 판정 테스트를 실행.',
+          '<code>src/harness/prompts/</code> · <code>permissions.py</code><br>Planner·Generator·Evaluator 역할 분리 프롬프트와 도구 권한 매트릭스를 작성.',
+          '<code>consensus.py</code> · <code>rubric.py</code> · <code>run.py</code><br>첫 줄(<code>선택: X</code>) 블라인드 합의기와 0~3점 루브릭 컷오프 판정기를 구현.',
+          '<code>harness/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 <code>consensus: agreed</code>와 <code>PASS</code> 결과를 출력.',
         ],
         runCmd: 'python3 harness/run.py --mode sim --platform chatgpt\npython3 -m unittest discover -s harness/tests -p "test_*.py" -v',
-        answerLabel: '모범 답안 열기 (Tree + 합의·채점표)',
-        answerType: 'Tree + Python',
-        answerSummary: '오케스트레이터(<code>run.py</code>)는 Planner의 선택안과 Evaluator의 선택안 첫 줄(<code>선택: X</code>)만 파싱해 일치 시 PASS, 불일치 누적 시 HALT를 트리거합니다.',
+        answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
+        answerType: 'Tree + JSON',
+        answerSummary: '<code>harness/</code>에서 AI CLI가 3-Agent 파이프라인을 실행해 블라인드 합의 및 0~3점 루브릭 <code>PASS</code> 판정 JSON을 출력합니다.',
         tree: `harness/
 ├── run.py              # --mode sim|dry-run --platform claude|chatgpt|gemini
-├── src/harness/ (orchestrator.py, consensus.py, rubric.py, permissions.py, prompts/)
+├── src/harness/
+│   ├── orchestrator.py · consensus.py · rubric.py · permissions.py
+│   └── prompts/ (planner.md, generator.md, evaluator.md)
 └── tests/test_orchestration_harness.py`,
-        codeCaption: '블라인드 합의 & 0~3점 채점표 요약',
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (run.py --mode sim)',
         answerCode: `{
-  "consensus": {"planner": "A", "evaluator": "A", "agreed": true},
-  "rubric_score": {"correctness": 3, "tests": 3, "scope": 3, "total": 9},
-  "verdict": "PASS"
+  "mode": "sim",
+  "platform": "chatgpt",
+  "consensus": "agreed",
+  "rubric_avg": 2.5,
+  "status": "PASS"
 }`,
       });
     },
@@ -157,43 +152,40 @@ Maker!=Checker(Planner·Generator·Evaluator) 역할 분리, touch 스코프 검
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch10',
-        userPrompt: `[5단계 아우터 루프 & 7대 조건 제어기 모범 답안 재현 프롬프트]
-5단계(DISCOVER->PLAN->EXECUTE->VERIFY->ITERATE) 아우터 루프 상태 전이, 선택적 롤백, 7대 완료·중단 조건 제어기(loop.py) 모범 답안을 아래 명세에 맞게 구현하고 검증해줘.
+        userPrompt: `[실습 결과 실행 프롬프트 — todo-loop/ 폴더에서 AI CLI에 입력]
+현재 todo-loop 프로젝트 폴더에서 CALC-001~004 계약 태스크를 5단계 아우터 루프로 실행하고 결과를 출력해줘.
 
-1. 생성할 파일 구조
-   - todo-loop/models.py , workers.py , cost_logger.py , loop.py
-   - todo-loop/sample_tasks/ 하위에 tasks_contract.json (CALC-001~CALC-004 계약 정의) 및 calc_verifier.py
-   - todo-loop/tests/test_todo_loop.py
-
-2. 핵심 구현 명세
-   - models.py: TaskContract, LoopBudget(max_turns, max_retries_per_task, max_cost_usd), LoopResult, StopReason Enum(DONE, HALT_HUMAN_DECISION, HALT_BUDGET_EXCEEDED, HALT_MAX_RETRIES 등).
-   - workers.py & cost_logger.py: BaseWorker, DeterministicTestWorker, LLMWorker(platform 지원) 및 토큰·비용 JSONL 기록기 CostLogger(total_cost_usd 계산).
-   - loop.py: OuterLoopController(tasks, worker, budget, cost_logger). 의존성(_dependencies_done) 확인 -> 사람 승인 필요(requires_human_decision) 시 HALT_HUMAN_DECISION 중단 -> max_retries_per_task/max_cost_usd 가드 내 worker.run_task() & verify_task_independently() 실행 -> --platform auto|claude|chatgpt|gemini|offline 지원 및 JSON 결과(stop_reason, completed_tasks, halted_tasks, turns_executed, total_cost_usd) 출력.
-
-3. 검증 명령 (전부 exit 0 통과 필수)
+1. 실행 및 검증할 항목 (미작성 시 loop.py, workers.py, cost_logger.py, sample_tasks/를 먼저 구성)
    - python3 todo-loop/loop.py --platform claude
-   - python3 -m unittest discover -s todo-loop/tests -p "test_*.py" -v`,
+   - python3 -m unittest discover -s todo-loop/tests -p "test_*.py" -v
+
+2. 출력 요구사항
+   - completed_tasks(CALC-001~004), stop_reason, turns_executed, total_cost_usd 및 Stall/롤백 테스트 통과 결과를 출력할 것.`,
         kicker: 'CH10 · HANDS-ON LAB',
-        heading: '제10장 실습: <span class="ha">아우터 루프</span> 실행 &amp; Stall/Rollback 검증',
+        heading: '제10장 실습: <span class="hl">아우터 루프</span> &amp; 7대 중단 조건 실행',
         duration: '',
-        missionTitle: 'CALC-001~004 아우터 루프 완주 및 7대 완료/중단 조건 테스트',
+        missionTitle: 'todo-loop/ 폴더에 5단계 루프·예산 제어기 작성 후 AI CLI로 완주 결과 출력',
         steps: [
-          '<code>AGENT_PLATFORM=gemini python3 todo-loop/loop.py --platform gemini</code><br>실행 후 5단계 상태 전이와 <code>CALC-001~004</code> 결과를 확인.',
-          '<code>tests/test_todo_loop.py</code><br>동일 오류 반복(Stall) 시 자동 중단과 선택적 되돌림 케이스를 검증.',
-          '<code>docs/ARCHITECTURE.md</code><br>아우터 루프 설계 사양과 실제 구현 흐름을 비교.',
+          '<code>sample_tasks/tasks_contract.json</code> · <code>calc_verifier.py</code><br><code>CALC-001~004</code> 계약 명세와 결정적 검증 함수를 작성.',
+          '<code>loop.py</code> · <code>workers.py</code> · <code>cost_logger.py</code><br>5단계 상태 전이, 7대 완료/중단 조건, 토큰 비용 로거를 구현.',
+          '<code>todo-loop/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 <code>all_tasks_completed</code>와 비용 JSON을 출력.',
         ],
         runCmd: 'python3 todo-loop/loop.py --platform claude\npython3 -m unittest discover -s todo-loop/tests -p "test_*.py" -v',
-        answerLabel: '모범 답안 열기 (Tree + 7대 조건)',
-        answerType: 'Tree + Output',
-        answerSummary: '<code>loop.py</code>는 상태 불변 또는 동일 에러 시그니처가 2회 연속 발생하면 즉시 <code>STALL_HALT</code>로 전환해 무한 토큰 소모를 차단합니다.',
+        answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
+        answerType: 'Tree + JSON',
+        answerSummary: '<code>todo-loop/</code>에서 AI CLI가 아우터 루프를 구동해 <code>CALC-001~004</code> 완료 내역, 중단 사유, 누적 비용 JSON을 출력합니다.',
         tree: `todo-loop/
 ├── loop.py · workers.py · cost_logger.py · models.py
-├── sample_tasks/ (calc_verifier.py, tasks_contract.json)
+├── sample_tasks/ (tasks_contract.json, calc_verifier.py)
 └── tests/test_todo_loop.py`,
-        codeCaption: 'loop.py 실행 및 7대 조건 출력 요약',
-        answerCode: `[DISCOVER -> PLAN -> EXECUTE -> VERIFY -> COMPLETE]
-Tasks done: CALC-001, CALC-002, CALC-003, CALC-004 (4/4)
-Conditions: exit_zero=True, quality=True, stability_streak=2, stall_detected=False`,
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (loop.py --platform claude)',
+        answerCode: `{
+  "stop_reason": "all_tasks_completed",
+  "completed_tasks": ["CALC-001", "CALC-002", "CALC-003", "CALC-004"],
+  "halted_tasks": [],
+  "turns_executed": 4,
+  "total_cost_usd": 0.0024
+}`,
       });
     },
   });

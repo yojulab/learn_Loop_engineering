@@ -100,52 +100,43 @@ litellm_settings:
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch11',
-        userPrompt: `[LiteLLM 무코드 프록시 & Langfuse Save as Prompt 모범 답안 재현 프롬프트]
-LiteLLM 무코드 관측 프록시, Trace->Prompt 승격(trace_to_prompt.py), 라벨 기반 프롬프트 조회(fetch_prompt.py), 3종 Eval 및 회귀 비교 모범 답안을 아래 명세에 맞게 구현하고 검증해줘.
+        userPrompt: `[실습 결과 실행 프롬프트 — support-assistant/ 폴더에서 AI CLI에 입력]
+현재 support-assistant 폴더에서 Trace->Prompt 승격, 프롬프트 Fetch, 3종 Eval 회귀 비교를 실행해 출력해줘.
 
-1. 생성할 파일 구조
-   - support-assistant/litellm_proxy/ (litellm_config.yaml, zero_code_proxy_demo.py, client_claude.py, client_chatgpt.py, client_gemini.py)
-   - support-assistant/langfuse_ops.py (LangfuseOpsClient: HTTP v2 API 연동 및 오프라인 JSONL 폴백)
-   - support-assistant/trace_to_prompt.py , fetch_prompt.py , seed_prompts.py , prompting.py
-   - support-assistant/evaluator.py , regression_compare.py
-   - support-assistant/tests/test_support_assistant.py
-
-2. 핵심 구현 명세
-   - trace_to_prompt.py: extract_prompt_template_from_trace(trace_entry, variable_mapping) 및 promote_trace_as_prompt()로 Trace input의 샘플 값을 {{var}} 변수로 승격해 Prompt 자산 등록(--demo --json 지원).
-   - fetch_prompt.py & prompting.py: fetch_and_compile_prompt(ops, prompt_name, ticket, label="production")로 production 라벨 프롬프트를 가져와 SupportTicket 변수로 컴파일(--demo --json 지원).
-   - evaluator.py & regression_compare.py: evaluate_rule_based(), evaluate_reference_and_judge(), evaluate_safety_policy(), run_three_evals()와 compare_prompt_versions(dataset, "production", "candidate", ops) 회귀 비교.
-   - tests/test_support_assistant.py: 외부 키 없이 로컬 Mock HTTP v2 서버로 Trace 조회·Prompt 등록·라벨 Fetch·3종 Eval을 모두 검증.
-
-3. 검증 명령 (전부 exit 0 통과 필수)
+1. 실행 및 검증할 항목 (미작성 시 trace_to_prompt.py, fetch_prompt.py, evaluator.py, regression_compare.py를 먼저 구성)
    - python3 support-assistant/trace_to_prompt.py --demo --json
    - python3 support-assistant/fetch_prompt.py --demo --json
-   - python3 -m unittest discover -s support-assistant/tests -p "test_*.py" -v`,
+   - python3 support-assistant/regression_compare.py
+   - python3 -m unittest discover -s support-assistant/tests -p "test_*.py" -v
+
+2. 출력 요구사항
+   - 승격된 {{var}} 프롬프트 템플릿, production 라벨 컴파일 결과, v1 vs v2 회귀 점수 비교 JSON을 출력할 것.`,
         kicker: 'CH11 · HANDS-ON LAB (25분)',
-        heading: '제11장 실습: <span class="hb">Save as Prompt</span> + <code>fetch_prompt</code> + 3종 Eval',
+        heading: '제11장 실습: <span class="hl">Save as Prompt</span> &amp; 3종 Eval 출력',
         duration: '25분',
-        missionTitle: 'LiteLLM 트레이스 기반 프롬프트 등록, Fetch 및 회귀 평가 완주',
+        missionTitle: 'support-assistant/ 폴더에 프록시·Eval 작성 후 AI CLI로 회귀 평가 출력',
         steps: [
-          '<code>support-assistant/trace_to_prompt.py --demo --json</code><br>Trace 입력 페이로드에서 프롬프트를 추출해 Langfuse 자산으로 등록.',
-          '<code>support-assistant/fetch_prompt.py --demo --json</code><br><code>production</code> 라벨 버전을 조회해 Mustache 변수 렌더링을 확인.',
-          '<code>litellm_proxy/zero_code_proxy_demo.py</code> · <code>test_support_assistant.py</code><br>무코드 프록시 데모와 Mock HTTP v2 · 3종 Eval 통합 테스트를 실행.',
+          '<code>litellm_proxy/</code> · <code>langfuse_ops.py</code><br>무코드 프록시(<code>OPENAI_BASE_URL</code>)와 Langfuse v2 API/오프라인 폴백 클라이언트를 구성.',
+          '<code>trace_to_prompt.py</code> · <code>fetch_prompt.py</code> · <code>evaluator.py</code> · <code>regression_compare.py</code><br>Trace 승격, 라벨 조회, 3종 Eval(규칙·참조/Judge·안전) 회귀 비교기를 작성.',
+          '<code>support-assistant/ 에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 프롬프트 컴파일 및 버전별 <code>avg_score</code>·<code>pass_rate</code>를 출력.',
         ],
-        runCmd: 'python3 support-assistant/trace_to_prompt.py --demo --json\npython3 support-assistant/fetch_prompt.py --demo --json\npython3 -m unittest discover -s support-assistant/tests -p "test_*.py" -v',
-        answerLabel: '모범 답안 열기 (Tree + Mock API/Eval)',
-        answerType: 'Tree + Python',
-        answerSummary: '실제 Langfuse 서버가 없어도 로컬 Mock v2 API + JSONL 폴백으로 Trace 추출 → Prompt 승격 → Fetch → 3종 Eval 회귀 비교까지 끝까지 검증됩니다.',
+        runCmd: 'python3 support-assistant/trace_to_prompt.py --demo --json\npython3 support-assistant/fetch_prompt.py --demo --json\npython3 support-assistant/regression_compare.py\npython3 -m unittest discover -s support-assistant/tests -p "test_*.py" -v',
+        answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
+        answerType: 'Tree + JSON',
+        answerSummary: '<code>support-assistant/</code>에서 AI CLI가 프롬프트 승격·컴파일과 <code>production</code> vs <code>candidate</code> 3종 Eval 회귀 비교 결과를 출력합니다.',
         tree: `support-assistant/
-├── litellm_proxy/ (litellm_config.yaml, zero_code_proxy_demo.py, client_*.py)
-├── trace_to_prompt.py                 # Save as Prompt CLI/모듈
-├── fetch_prompt.py                    # 라벨 기반 Prompt Fetch + {{var}}
-├── seed_prompts.py · prompting.py · langfuse_ops.py
-├── evaluator.py · regression_compare.py  # 3종 Eval & 회귀 비교
-└── tests/test_support_assistant.py    # Mock HTTP v2 통합 테스트`,
-        codeCaption: 'trace_to_prompt -> fetch_prompt -> run_evals 핵심 흐름',
-        answerCode: `# 1) Trace payload -> Prompt (Save as Prompt)
-promoted = extract_prompt_from_trace(trace_payload, name="support-reply", label="production")
-# 2) Fetch & render Mustache variables
-rendered = render_mustache(fetched["prompt"], {"customer_query": "환불 문의"})
-# 3) Run 3-tier Evals -> pass_rate >= 0.85 PASS`,
+├── litellm_proxy/ (litellm_config.yaml, zero_code_proxy_demo.py, cli_openai_bridge.py)
+├── langfuse_ops.py · cli_litellm_eval.py · seed_langfuse_dashboard.py
+├── trace_to_prompt.py · fetch_prompt.py · prompting.py
+├── evaluator.py · regression_compare.py
+└── tests/test_support_assistant.py`,
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (승격 + 회귀 비교)',
+        answerCode: `// trace_to_prompt.py -> production 승격 완료 ({{ticket_id}}, {{product}})
+// regression_compare.py:
+{
+  "production": {"version": 1.0, "avg_score": 0.483, "pass_rate": 0.333},
+  "candidate":  {"version": 2.0, "avg_score": 0.872, "pass_rate": 1.0}
+}`,
       });
     },
   });
@@ -258,50 +249,48 @@ $ python3 ch11/support-assistant/regression_compare.py`,
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch12',
-        userPrompt: `[Stage 1~4 준비도 진단 & 통합 게이트 모범 답안 재현 프롬프트]
-4계층 12대 스택 치트시트(README.md), Stage 1~4 성숙도 진단기(stage_readiness_check.py), 전 단원 통합 검증 게이트(verify_chapters.py --all) 모범 답안을 아래 명세에 맞게 구현하고 검증해줘.
+        userPrompt: `[실습 결과 실행 프롬프트 — 프로젝트 루트/에필로그 폴더에서 AI CLI에 입력]
+현재 저장소의 Stage 1~4 도입 성숙도를 진단하고 전체 통합 검증 게이트 실행 결과를 출력해줘.
 
-1. 생성할 파일 구조
-   - README.md (4계층 12대 스택 한눈에 보기 치트시트 & Stage 1~4 점진적 도입 로드맵)
-   - stage_readiness_check.py
-   - tests/test_stage_readiness.py
-   - scripts/verify_chapters.py (--all 옵션으로 루트·플랫폼·전체 모듈·웹 PPT 통합 검증)
-
-2. 핵심 구현 명세 (stage_readiness_check.py)
-   - inspect_stages(repo_root): 저장소의 stage_1_foundation(AGENTS.md/CLAUDE.md/verify_chapters.py), stage_2_role_separation(permissions.py/rubric.py), stage_3_outer_loop(loop.py/cost_logger.py), stage_4_llmops(evaluator.py/langfuse_ops.py) 존재 여부를 점검해 {"repo_root", "stages": {...}, "completed_stages": 4, "total_stages": 4}를 반환할 것.
-   - CLI 옵션: --path, --format (text|json) 지원.
-
-3. 검증 명령 (전부 exit 0 통과 필수)
+1. 실행 및 검증할 항목 (미작성 시 stage_readiness_check.py와 tests/test_stage_readiness.py를 먼저 구성)
    - python3 stage_readiness_check.py --format json
    - python3 -m unittest discover -s tests -p "test_*.py" -v
-   - python3 scripts/verify_chapters.py --all`,
+   - python3 scripts/verify_chapters.py --all
+
+2. 출력 요구사항
+   - Stage 1~4 완료 상태(completed_stages: 4/4) JSON과 verify_chapters.py --all 전체 통과 요약(71/71 PASS)을 출력할 것.`,
         kicker: 'CH12 · FINAL CAPSTONE LAB (15분)',
-        heading: '최종 실습: <span class="hl">Stage 1~4</span> 진단 &amp; 전 단원 통합 게이트',
+        heading: '제12장 실습: <span class="hl">Stage 1~4 성숙도</span> 진단 &amp; 통합 게이트',
         duration: '15분',
-        missionTitle: '도입 성숙도 진단(stage_readiness_check.py) 및 전 단원 100% 검증 완주',
+        missionTitle: '에필로그 폴더에 Stage 1~4 진단기 작성 후 AI CLI로 전체 게이트 결과 출력',
         steps: [
-          '<code>stage_readiness_check.py --format json</code><br>실행 후 현재 저장소의 Stage 1~4 도입 성숙도를 점검.',
-          '<code>python3 scripts/verify_chapters.py --all</code><br>루트·플랫폼·전체 모듈·웹 PPT 통합 검증 게이트를 실행.',
-          '<code>git status</code> · <code>docs/index.html</code><br>워킹트리 클린 상태와 GitHub Pages 웹 PPT 렌더링을 최종 확인.',
+          '<code>README.md</code> · <code>stage_readiness_check.py</code><br>4계층 치트시트와 Stage 1~4 파일 기반 성숙도 진단 CLI를 작성.',
+          '<code>tests/test_stage_readiness.py</code><br>각 Stage 누락/완비 시나리오를 검증하는 단위 테스트를 구성.',
+          '<code>프로젝트 루트에서 AI CLI 실행</code><br>단축키 A 프롬프트를 입력해 <code>completed_stages: 4/4</code> 및 <code>71/71 PASS</code>를 출력.',
         ],
         runCmd: 'python3 stage_readiness_check.py --format json\npython3 scripts/verify_chapters.py --all',
-        answerLabel: '모범 답안 열기 (Tree + 최종 검증 결과)',
-        answerType: 'Tree + Final Gate',
-        answerSummary: 'Stage 1~4 체크리스트가 모두 충족되면 <code>verify_chapters.py --all</code>이 전 단원·플랫폼·웹 PPT 검사를 한 번에 PASS로 마칩니다.',
+        answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
+        answerType: 'Tree + JSON',
+        answerSummary: 'AI CLI가 <code>stage_readiness_check.py</code>와 <code>verify_chapters.py --all</code>을 순차 실행해 전 단원 100% PASS 성숙도 리포트를 출력합니다.',
         tree: `learn_Loop_engineering/
-├── docs/                  # GitHub Pages 5시간 웹 PPT + ARCHITECTURE.md
+├── docs/                  # GitHub Pages 웹 PPT 포털
 ├── platforms/             # claude / chatgpt / gemini 어댑터
 ├── scripts/verify_chapters.py
 ├── README.md              # 4계층 치트시트
 ├── stage_readiness_check.py
 └── tests/test_stage_readiness.py`,
-        codeCaption: '최종 통합 게이트 기대 출력',
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (Stage 1~4 + 71/71 PASS)',
         answerCode: `{
-  "current_stage": 4,
-  "stage_1_to_4_ready": true,
-  "platforms_verified": ["claude", "chatgpt", "gemini"]
+  "stages": {
+    "stage_1_foundation": true,
+    "stage_2_role_separation": true,
+    "stage_3_outer_loop": true,
+    "stage_4_llmops": true
+  },
+  "completed_stages": 4,
+  "total_stages": 4
 }
-=== verify_chapters (all) [PASS] ... ===`,
+=== verify_chapters (all) [PASS] (71/71) ===`,
       });
     },
   });
@@ -336,8 +325,8 @@ $ python3 ch11/support-assistant/regression_compare.py`,
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'capstone',
-        userPrompt: `[3세대 에이전트 퍼스트 체험 실습: 다중 프로젝트 관리 루프에이전트 구축 프롬프트]
-사용자 목표를 자율적으로 판단·실행하는 3세대 에이전트 퍼스트 도구를 활용하여, 다음 5대 핵심 아키텍처 원칙에 따라 다중 프로젝트 관리 루프에이전트(learn_LLM_Engineering) 구조를 구축하고 검증해줘.
+        userPrompt: `[3세대 에이전트 퍼스트 체험 실습 — 신규 프로젝트 폴더에서 AI CLI에 입력]
+사용자 목표를 자율적으로 판단·실행하는 3세대 에이전트 퍼스트 도구를 활용하여, 다음 5대 핵심 아키텍처 원칙에 따라 다중 프로젝트 관리 루프에이전트(learn_LLM_Engineering) 구조를 구축하고 실행 결과를 출력해줘.
 
 1. 호스트-컨테이너 분리:
    - 호스트 환경에서 복수 Docker 컨테이너를 통합 제어하는 어댑터 패턴 기반의 단일 에이전틱 오케스트레이션 상태 머신(run.py 및 orchestrator/) 구축.
@@ -350,28 +339,23 @@ $ python3 ch11/support-assistant/regression_compare.py`,
 
 4. 5단계 운영 루프 & 계층별 선택적 롤백 (Selective Rollback):
    - DISCOVER(발견) -> PLAN(계획) -> EXECUTE(실행) -> VERIFY(검증) -> ITERATE(반복) 5단계 운영.
-   - 검증 실패 시 전체 재시작 대신 실패 원인 계층별로 롤백: 구현/테스트 오류는 EXECUTE(07_IMPL_CODE), 계획/범위 모호성은 PLAN(05_PLAN_TASKS), 요구사항 결함은 DISCOVER(01_INTAKE_SPEC)로 선택적 되돌림.
-   - 7대 완료·중단 조건(종료코드 0, 린트/테스트 통과, N회 연속 성공, 동일 오류 Stall 감지 차단, 비가역 작업 docs/HALT).
+   - 검증 실패 시 실패 원인 계층별 롤백: 구현/테스트 오류 -> EXECUTE(07_IMPL_CODE), 계획/범위 모호성 -> PLAN(05_PLAN_TASKS), 요구사항 결함 -> DISCOVER(01_INTAKE_SPEC).
 
-5. 통합 제어 표준화:
-   - 컨테이너 제어 올인원 스크립트(run_port.sh) 및 프로젝트 레지스트리(project.yaml)를 표준화해 단일 명령으로 개발·배포·에이전트 실행 환경을 제어.
-
-검증 명령 (전부 exit 0 통과 필수)
-- python3 stage_readiness_check.py --format json
-- python3 scripts/verify_chapters.py --all`,
+5. 통합 제어 표준화 & 결과 출력:
+   - run_port.sh, project.yaml 표준화 후 생성된 디렉터리 구조와 상태 전이 시뮬레이션, 검증 명령(stage_readiness_check.py --format json, scripts/verify_chapters.py --all) 통과 결과를 출력할 것.`,
         kicker: 'CAPSTONE · AGENT-FIRST HANDS-ON (자율 체험)',
         heading: '체험 실습: 3세대 에이전트 퍼스트 <span class="hl">다중 프로젝트 관리 루프에이전트</span>',
         duration: '자율 실습',
-        missionTitle: '사용자 목표 입력 → 스스로 판단·작업 수행하는 3세대 루프에이전트 체험',
+        missionTitle: '신규 프로젝트 폴더에서 3세대 AI CLI에 5대 원칙 프롬프트 입력 → 루프에이전트 구축·결과 출력',
         steps: [
-          '<code>3세대 에이전트 퍼스트 도구 실행</code><br>Claude Code, ChatGPT/Codex, Gemini/Antigravity 등 자율 실행 환경에서 목표 기반 작업 시작.',
-          '<code>5대 핵심 아키텍처 원칙 기반 루프에이전트 구축</code><br>호스트-컨테이너 분리, 7종 파일 매개 협업, Maker×Checker 1:1 격리, 선택적 롤백, <code>run_port.sh</code>·<code>project.yaml</code> 표준화 구현.',
-          '<code>learn_LLM_Engineering 구조 및 검증 게이트 확인</code><br>생성된 상태 머신·문서 허브(<code>CLIENT_BRIEF.md</code>~<code>REVIEW.md</code>)와 검증 명령 통과 여부를 점검.',
+          '<code>3세대 에이전트 퍼스트 도구 실행</code><br>신규 작업 폴더에서 Claude Code, ChatGPT/Codex, Gemini/Antigravity 등 자율 실행 CLI 기동.',
+          '<code>5대 핵심 아키텍처 원칙 프롬프트 입력</code><br>호스트-컨테이너 분리, 7종 파일 매개 협업, Maker×Checker 1:1 격리, 선택적 롤백, <code>run_port.sh</code>·<code>project.yaml</code> 표준화를 지시.',
+          '<code>구축된 구조 및 검증 결과 출력 확인</code><br>생성된 상태 머신·문서 허브(<code>CLIENT_BRIEF.md</code>~<code>REVIEW.md</code>)와 검증 게이트 통과 결과를 확인.',
         ],
         runCmd: 'python3 stage_readiness_check.py --format json\npython3 scripts/verify_chapters.py --all',
-        answerLabel: '루프에이전트 아키텍처 & 구조 확인 (클릭하여 열기)',
+        answerLabel: '루프에이전트 아키텍처 & AI CLI 결과 확인 (클릭하여 열기)',
         answerType: 'Tree + Architecture',
-        answerSummary: '3세대 에이전트 퍼스트 도구는 모호한 사용자 목표를 받아 스스로 판단하며, 호스트-컨테이너 분리·파일 매개 협업·Maker×Checker 분리·선택적 롤백 구조를 완결합니다.',
+        answerSummary: '3세대 에이전트 퍼스트 도구는 모호한 사용자 목표를 받아 스스로 판단하며, 호스트-컨테이너 분리·파일 매개 협업·Maker×Checker 분리·선택적 롤백 구조를 완결해 출력합니다.',
         tree: `learn_LLM_Engineering/
 ├── AGENTS.md / project.yaml   # 프로젝트 레지스트리 & 하네스 규칙
 ├── run.py                     # 단일 에이전틱 오케스트레이션 상태 머신

@@ -341,46 +341,38 @@
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch00',
-        userPrompt: `[환경 진단 & 플랫폼 어댑터 모범 답안 재현 프롬프트]
-루트 지침서와 3대 플랫폼 공용 어댑터, 프롤로그 스택 진단기 및 단위 테스트를 아래 명세에 맞게 구현하고 검증해줘.
+        userPrompt: `[실습 결과 실행 프롬프트 — 프로젝트 루트 폴더에서 AI CLI에 입력]
+현재 프로젝트 폴더의 4계층 12대 스택 환경과 플랫폼 어댑터 동작을 점검하고 실습 결과를 출력해줘.
 
-1. 디렉터리 & 파일 구조
-   - 루트 지침서: AGENTS.md (100줄 이하 목차형), CLAUDE.md, CHATGPT.md, GEMINI.md
-   - 플랫폼 어댑터: platforms/base.py , platforms/adapter_claude.py , platforms/adapter_chatgpt.py , platforms/adapter_gemini.py , platforms/tests/test_platforms.py
-   - 프롤로그 진단기: stack_check.py , tests/test_stack_check.py
-
-2. 핵심 구현 명세 (표준 라이브러리만 사용)
-   - platforms/base.py: AGENT_PLATFORM 환경 변수 또는 인자로 get_adapter("claude"|"chatgpt"|"gemini")를 반환하고, API 키 미설정 시 deterministic offline 시뮬레이터로 안전 폴백할 것.
-   - stack_check.py: FOUR_LAYERS_12_ELEMENTS 상수에 4계층(지식과 기억·행동과 도구·표준과 확장·위임과 검증) 12대 스택을 정의하고, Python 3.13+ 버전, sqlite3 FTS5 모듈 가용성, Git/Node 런타임, 3대 플랫폼 어댑터 준비 상태를 점검할 것.
-   - CLI 옵션: --json 지원 시 {"python_version", "sqlite_fts5": true, "platforms_supported": ["claude", "chatgpt", "gemini"], "layers_count": 4, "elements_count": 12, "overall_ready": true} 형태로 출력할 것.
-
-3. 검증 명령 (전부 exit 0 통과 필수)
+1. 실행할 항목 (미작성 시 4계층 12대 스택 진단기 stack_check.py와 platforms/ 어댑터를 먼저 구성)
    - python3 stack_check.py --json
-   - python3 -m unittest discover -s tests -p "test_*.py" -v
-   - python3 -m unittest discover -s platforms/tests -p "test_*.py" -v`,
+   - AGENT_PLATFORM=offline python3 agent_check.py --json
+   - python3 -m unittest discover -s platforms/tests -p "test_*.py" -v
+
+2. 출력 요구사항
+   - Python 버전, sqlite3 FTS5 가용성, 4계층(4)/12대 요소(12), overall_ready: true 여부와 플랫폼 폴백 응답 JSON을 요약 출력할 것.`,
         kicker: 'CH00 PROLOGUE · HANDS-ON LAB',
         heading: '프롤로그 실습: 4계층 스택 진단 & <span class="hl">플랫폼 감지</span>',
         duration: '',
-        missionTitle: '컨테이너 런타임, SQLite FTS5, 3대 플랫폼 어댑터 상태 점검',
+        missionTitle: '프로젝트 루트에서 12대 스택 진단기 & 플랫폼 어댑터 작성 후 AI CLI로 실행',
         steps: [
-          '<code>stack_check.py</code> · <code>--json</code><br>일반 모드와 JSON 모드로 실행해 12대 스택 준비 상태를 확인.',
-          '<code>AGENT_PLATFORM=claude|chatgpt|gemini</code><br>환경 변수를 전환해 3대 플랫폼 어댑터 로드를 검증.',
-          '<code>tests/test_repo_root.py</code><br>테스트를 실행해 <code>AGENTS.md</code> 100줄 제한 및 레거시 부재를 확인.',
+          '<code>AGENTS.md</code> · <code>platforms/</code><br>루트 지침서(100줄 이하)와 3대 플랫폼 공용 어댑터(<code>base.py</code>)를 구성.',
+          '<code>stack_check.py</code> · <code>agent_check.py</code><br>4계층 12대 스택 진단기와 폴백 실행기를 작성해 프로젝트 폴더에 배치.',
+          '<code>AI CLI에 단축키 A 프롬프트 입력</code><br><code>claude</code>·<code>agy</code>·<code>codex</code>에서 프롬프트를 입력해 <code>overall_ready: true</code> JSON 결과를 출력.',
         ],
         runCmd: 'python3 stack_check.py --json\npython3 -m unittest discover -s platforms/tests -p "test_*.py" -v',
-        answerLabel: '모범 답안 열기 (Tree + 실행 결과)',
+        answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
         answerType: 'Tree + JSON',
-        answerSummary: '<code>stack_check.py</code>는 Python 3.13+, SQLite FTS5, Git, Node 런타임 및 4계층 디렉터리 존재 여부를 점검하고 <code>overall_ready: true</code>를 반환합니다.',
+        answerSummary: '프로젝트 루트에서 AI CLI에 프롬프트를 입력하면 <code>stack_check.py</code>와 어댑터 테스트를 실행해 <code>overall_ready: true</code> 결과를 출력합니다.',
         tree: `learn_Loop_engineering/
 ├── AGENTS.md (<= 100줄) · CLAUDE.md · CHATGPT.md · GEMINI.md
 ├── platforms/
 │   ├── base.py (get_adapter)
-│   ├── adapter_claude.py
-│   ├── adapter_chatgpt.py
-│   └── adapter_gemini.py
+│   ├── adapter_claude.py · adapter_chatgpt.py · adapter_gemini.py
 ├── stack_check.py
+├── agent_check.py
 └── tests/test_stack_check.py`,
-        codeCaption: 'stack_check.py --json 핵심 출력 예시',
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (stack_check.py --json)',
         answerCode: `{
   "python_version": "3.13.16",
   "sqlite_fts5": true,
