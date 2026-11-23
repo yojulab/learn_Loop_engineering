@@ -3,5 +3,5 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 *.pyc
-dockers/.env
+!dockers/.env
 dockers/volumes/
