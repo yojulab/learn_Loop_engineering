@@ -10,7 +10,7 @@
     theme: 'night',
     dots: true,
     noChrome: true,
-    title: '혼자서 프로젝트 5개 돌리는 개발자의 비밀: 루프 엔지니어링 (5시간 과정)',
+    title: '감으로 고치는 AI는 버려라: 데이터 기반 루프 엔지니어링 마스터 (5시간 과정)',
     notes: '총 300분(5시간) 실전 강의. 각 단원(ch00~ch12)의 이론을 익힌 뒤, 바로 다음 한 페이지에서 실습 미션과 클릭 토글 모범 답안을 확인합니다.',
     build(el, A) {
       const tag = h('div', 'row abs', el);
@@ -34,8 +34,8 @@
 
       const hero = h('div', 'abs', el);
       hero.style.cssText = 'left:110px;top:210px;width:1280px';
-      h('div', 'h1', hero, '혼자서 프로젝트 5개 돌리는<br>개발자의 비밀: <span class="hl">루프 엔지니어링</span>').style.cssText = 'font-size:66px;line-height:1.18';
-      h('div', 'b1', hero, '<b>프롬프트 노가다는 끝났다</b> — 1인 멀티 프로젝트를 자동화하는 AI 설계·관측·개선 루프의 모든 것<br>배포(Launch)·관측(Observe)·평가(Evaluate)·개선(Improve) <b>데이터 기반 루프</b>를 한 화면에서 완주').style.cssText = 'margin-top:26px;color:#AEB8D3';
+      h('div', 'h1', hero, '감으로 고치는 AI는 버려라:<br>데이터 기반 <span class="hl">루프 엔지니어링 마스터</span>').style.cssText = 'font-size:66px;line-height:1.18';
+      h('div', 'b1', hero, '<b>3세대 에이전트 퍼스트</b>부터 실무 3대 Eval·LangGraph·Langfuse까지,<br>5시간 만에 끝내는 <b>1인 멀티 프로젝트 실전 아키텍처</b>').style.cssText = 'margin-top:26px;color:#AEB8D3';
       A(hero, 'up', 0.12, { dur: 0.55 });
 
       const w = win(el, { x: 110, y: 635, w: 1700, h: 280, dark: true, title: 'quickstart.sh — 키보드 조작 & 컨테이너 환경' });
