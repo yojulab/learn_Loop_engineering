@@ -105,6 +105,8 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertNotIn("KeyN", engine_js)
         self.assertNotIn("메모 (N)", engine_js)
         self.assertNotIn("k === 'n'", engine_js)
+        self.assertNotIn("'모범답안 (A)'", engine_js)
+        self.assertIn("toggleCurrentAnswer()", engine_js)
 
     def test_lab_steps_linebreak_imperative_and_block_layout(self) -> None:
         css = (DOCS_DIR / "deck.css").read_text(encoding="utf-8")

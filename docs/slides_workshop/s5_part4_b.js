@@ -37,7 +37,7 @@
       const T = title(el, 'CH11 · ZERO-CODE OBSERVABILITY', '<span class="hl">LiteLLM 프록시</span> 무코드 관측으로 LLM 호출 → <span class="hb">Langfuse</span> 수집', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
-      const w1 = win(el, { x: 100, y: 225, w: 920, h: 720, dark: true, title: 'ch11/support-assistant/litellm_proxy/litellm_config.yaml' });
+      const w1 = win(el, { x: 100, y: 225, w: 920, h: 720, dark: true, title: 'ch11-eval-and-llmops/litellm_proxy/litellm_config.yaml' });
       w1.body.innerHTML = `<pre class="code-block" style="background:transparent;border:0;padding:0;font-size:21px"><code>model_list:
   - model_name: gpt-4o-mini
     litellm_params: { model: openai/gpt-4o-mini, api_key: os.environ/OPENAI_API_KEY }
@@ -197,7 +197,7 @@ def eval_code_rules(reply: str) -> bool:
           `# Langfuse Trace -> Golden Dataset & 회귀 비교 예시
 1) Langfuse에서 score < 0.7 Trace 필터링 & 전문가 교정 답변 작성
 2) loop-triage-benchmark Dataset 추가 후 회귀 게이트 실행:
-$ python3 ch11/support-assistant/regression_compare.py`,
+$ python3 ch11-eval-and-llmops/regression_compare.py`,
         ],
       ];
 

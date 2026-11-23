@@ -53,7 +53,7 @@ python3 ch06-subagents-workflow/dynamic_workflow.py \
   --platform gemini --json
 
 # 검색 확장 Quote CLI:
-python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
+python3 ch06-subagents-workflow/quote_cli.py --search "harness" --json</code></pre>`;
       A(w2.el, 'up', 0.2, { dur: 0.45 });
     },
   });
@@ -204,7 +204,7 @@ python3 ch06/quote-cli/quote_cli.py --search "harness" --json</code></pre>`;
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
-      c1.innerHTML = `<div class="h3">RSS Wiki 앱 (<code>ch08/rss-wiki/</code>)</div>
+      c1.innerHTML = `<div class="h3">RSS Wiki 앱 (<code>ch08-inner-ralph-loop/</code>)</div>
       <ul class="lab-steps" style="margin-top:18px">
         <li><code>db.py</code><br>SQLite <code>FTS5</code> 가상 테이블 기반 전문 검색 인덱스를 구축.</li>
         <li><code>collector.py</code><br>로컬 샘플 피드를 파싱하고 중복을 제거해 저장.</li>

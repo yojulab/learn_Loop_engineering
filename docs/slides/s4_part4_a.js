@@ -148,7 +148,7 @@
     chap: 'ch10 실습 & 답안',
     theme: 'paper',
     title: 'ch10 실습: 5단계 아우터 루프 & Stall/Rollback 검증',
-    notes: 'ch10/todo-loop/loop.py를 실행해 CALC-001~004 완주, 선택적 되돌림, Stall 감지를 확인합니다.',
+    notes: 'ch10-outer-loop/loop.py를 실행해 CALC-001~004 완주, 선택적 되돌림, Stall 감지를 확인합니다.',
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch10',

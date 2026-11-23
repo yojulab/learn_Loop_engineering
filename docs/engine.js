@@ -307,7 +307,6 @@
       ['Home', () => { location.href = 'index.html'; }],
       ['교육 정보 ↗', () => { window.open('https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing', '_blank', 'noopener'); }],
       ['목차 (O)', () => toggleOverview()],
-      ['모범답안 (A)', () => toggleCurrentAnswer()],
       ['발표자 창 (P)', () => openPresenter()],
     ];
     items.forEach(([label, fn]) => {

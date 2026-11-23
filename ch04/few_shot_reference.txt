@@ -1,1 +1,0 @@
-../ch04-context-engineering/few_shot_reference.txt

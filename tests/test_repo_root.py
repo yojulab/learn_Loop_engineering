@@ -64,14 +64,10 @@ class TestRepoRoot(unittest.TestCase):
                     hits.append(str(fpath.relative_to(REPO_ROOT)))
         self.assertEqual(hits, [], f"Legacy marker found in: {hits}")
 
-    def test_existing_symlinks_are_valid(self) -> None:
+    def test_symlink_compat_folders_removed(self) -> None:
         for ch_idx in range(1, 12):
             compat_dir = REPO_ROOT / f"ch{ch_idx:02d}"
-            if not compat_dir.exists():
-                continue
-            for entry in compat_dir.rglob("*"):
-                if entry.is_symlink():
-                    self.assertTrue(entry.exists(), f"Broken symlink: {entry}")
+            self.assertFalse(compat_dir.exists(), f"Deprecated symlink folder must not exist: {compat_dir.name}")
 
 
 

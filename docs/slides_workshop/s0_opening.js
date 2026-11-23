@@ -275,8 +275,8 @@
       const w = win(el, { x: 100, y: 600, w: 1720, h: 365, dark: true, title: 'platforms/base.py — 플랫폼 자동 감지 & 100% 오프라인 폴백' });
       w.body.innerHTML = `<div class="term"><span class="p">$</span>AGENT_PLATFORM=claude python3 ch06-subagents-workflow/dynamic_workflow.py --platform claude --json
 <span class="o">-> claude (키 미설정 시 deterministic offline 시뮬레이터로 자동 폴백)</span>
-<span class="p">$</span>AGENT_PLATFORM=chatgpt python3 ch10/todo-loop/loop.py --platform chatgpt
-<span class="p">$</span>AGENT_PLATFORM=gemini python3 ch11/support-assistant/fetch_prompt.py --demo --json
+<span class="p">$</span>AGENT_PLATFORM=chatgpt python3 ch10-outer-loop/loop.py --platform chatgpt
+<span class="p">$</span>AGENT_PLATFORM=gemini python3 ch11-eval-and-llmops/fetch_prompt.py --demo --json
 <span class="ok">[OK] claude / chatgpt / gemini 3종 모두 API 키 없이 동일 테스트 스위트 통과</span></div>`;
       A(w.el, 'up', 0.34, { dur: 0.45 });
     },

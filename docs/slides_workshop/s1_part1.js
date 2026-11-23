@@ -31,7 +31,7 @@
     chap: 'ch01 에이전트 루프',
     theme: 'paper',
     title: 'ch01: 바이브 코딩 vs 에이전틱 코딩 & 5단계 루프',
-    notes: '도서 호환 경로 ch01/quote-cli/와 정식 경로 ch01-agentic-coding/quote-cli/가 심볼릭 링크로 연결되어 있습니다.',
+    notes: '도서 호환 경로 ch01-agentic-coding/와 정식 경로 ch01-agentic-coding/quote-cli/가 심볼릭 링크로 연결되어 있습니다.',
     build(el, A) {
       const T = title(el, 'CH01 · AGENTIC CODING LOOP', '바이브 코딩과 <span class="hb">에이전틱 코딩</span>의 결정적 차이', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
@@ -58,7 +58,7 @@
         <li><code>--seed &lt;숫자&gt;</code><br>결정론적 시드 기반 랜덤 명언을 추출.</li>
         <li><code>interactive_demo.py</code><br>REPL 대화형 루프 데모를 실행해 입력 흐름을 점검.</li>
       </ul>
-      <div class="answer-hint" style="margin-top:28px">호환 경로: <code>ch01/quote-cli/</code> → <code>ch01-agentic-coding/quote-cli/</code> (동일 코드)</div>`;
+      <div class="answer-hint" style="margin-top:28px">호환 경로: <code>ch01-agentic-coding/</code> → <code>ch01-agentic-coding/quote-cli/</code> (동일 코드)</div>`;
       A(c2, 'up', 0.2, { dur: 0.45 });
     },
   });
@@ -132,15 +132,15 @@
       const T = title(el, 'CH02 · MCP & HOOKS', '<span class="hl">MCP</span> 도구 프로토콜 + 결정론적 <span class="hl">Hooks</span> 가드레일', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
-      const w1 = win(el, { x: 100, y: 225, w: 840, h: 720, dark: true, title: 'ch02/quote-mcp/hooks/block_dangerous_bash.py' });
+      const w1 = win(el, { x: 100, y: 225, w: 840, h: 720, dark: true, title: 'ch02-mcp-and-hooks/hooks/block_dangerous_bash.py' });
       w1.body.innerHTML = `<div class="term"><span class="o"># PreToolUse 훅: 위험 명령어 차단 (exit code 2)</span>
 DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+push\\s+--force"]
 
 <span class="p">$</span>echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' | \\
-  python3 ch02/quote-mcp/hooks/block_dangerous_bash.py
+  python3 ch02-mcp-and-hooks/hooks/block_dangerous_bash.py
 <span class="er">[BLOCKED exit=2] 위험한 셸 명령이 감지되어 실행을 차단했습니다.</span>
 <span class="p">$</span>echo '{"tool_name":"Bash","tool_input":{"command":"pytest -q"}}' | \\
-  python3 ch02/quote-mcp/hooks/block_dangerous_bash.py
+  python3 ch02-mcp-and-hooks/hooks/block_dangerous_bash.py
 <span class="ok">[ALLOW exit=0]</span></div>`;
       A(w1.el, 'up', 0.12, { dur: 0.45 });
 
@@ -150,7 +150,7 @@ DANGEROUS_PATTERNS = [r"\\brm\\s+-rf\\b", r":\\(\\)\\{:\\|:&\\};:", r"git\\s+pus
         <li><code>mcp_config_claude.json</code> · <code>chatgpt</code> · <code>gemini</code><br>3대 플랫폼 전용 MCP/Tool 설정 파일을 분리 제공.</li>
         <li><code>hooks/platform_hook_bridge.py</code><br>플랫폼별 훅 페이로드를 표준 내부 포맷으로 정규화.</li>
         <li><code>audit_logger.py</code><br>PostToolUse 단계에서 도구 실행 감사 로그를 기록.</li>
-        <li><code>ch04/quote-cli</code> → <code>ch02-mcp-and-hooks/quote-mcp</code><br>도서 제2장 오타 경로 호환용 심볼릭 링크를 유지.</li>
+        <li><code>ch02-mcp-and-hooks</code> → <code>ch02-mcp-and-hooks/quote-mcp</code><br>도서 제2장 오타 경로 호환용 심볼릭 링크를 유지.</li>
       </ul>`;
       A(c2, 'up', 0.22, { dur: 0.45 });
     },

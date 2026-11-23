@@ -34,7 +34,6 @@ class ChapterSpec:
     required_files: tuple[str, ...] = ()
     test_dirs: tuple[str, ...] = ()
     cli_commands: tuple[tuple[str, ...], ...] = ()
-    symlinks: tuple[tuple[str, str], ...] = ()
 
 
 @dataclass
@@ -111,7 +110,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             ("ch01-agentic-coding/quote_cli.py", "--all"),
             ("ch01-agentic-coding/quote_cli.py", "--tag", "engineering"),
         ),
-        symlinks=(("ch01/quote-cli", "ch01-agentic-coding"),),
     ),
     ChapterSpec(
         chapter_id="ch02",
@@ -132,17 +130,8 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "mcp_config_chatgpt.json",
             "mcp_config_gemini.json",
             "hooks/platform_hook_bridge.py",
-            "../ch04/quote-cli/README.md",
         ),
         test_dirs=("ch02-mcp-and-hooks/tests",),
-        symlinks=(
-            ("ch02/quote-mcp", "ch02-mcp-and-hooks"),
-            ("ch04/quote-cli/main.py", "ch02-mcp-and-hooks/main.py"),
-            ("ch04/quote-cli/quotes.json", "ch02-mcp-and-hooks/quotes.json"),
-            ("ch04/quote-cli/.mcp.json", "ch02-mcp-and-hooks/.mcp.json"),
-            ("ch04/quote-cli/.claude", "ch02-mcp-and-hooks/.claude"),
-            ("ch04/quote-cli/cli", "ch01-agentic-coding"),
-        ),
     ),
     ChapterSpec(
         chapter_id="ch03",
@@ -178,7 +167,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "skills_gemini.md",
         ),
         test_dirs=("ch03-skills/tests",),
-        symlinks=(("ch03/github-workflow-skills", "ch03-skills"),),
     ),
     ChapterSpec(
         chapter_id="ch04",
@@ -203,11 +191,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             ("ch04-context-engineering/context_budget.py",),
             ("ch04-context-engineering/context_budget.py", "--json"),
         ),
-        symlinks=(
-            ("ch04/prompt_template.txt", "ch04-context-engineering/prompt_template.txt"),
-            ("ch04/few_shot_reference.txt", "ch04-context-engineering/few_shot_reference.txt"),
-            ("ch04/claude_working_guidelines.md", "ch04-context-engineering/claude_working_guidelines.md"),
-        ),
     ),
     ChapterSpec(
         chapter_id="ch05",
@@ -227,7 +210,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "tests/test_memory_pattern.py",
         ),
         test_dirs=("ch05-rag-and-memory/tests",),
-        symlinks=(("ch05/memory_pattern", "ch05-rag-and-memory"),),
     ),
     ChapterSpec(
         chapter_id="ch06",
@@ -245,7 +227,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "tests/test_quote_cli_search.py",
         ),
         test_dirs=("ch06-subagents-workflow/tests",),
-        symlinks=(("ch06/quote-cli", "ch06-subagents-workflow"),),
     ),
     ChapterSpec(
         chapter_id="ch07",
@@ -261,7 +242,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "tests/test_harness_templates.py",
         ),
         test_dirs=("ch07-harness-engineering/tests",),
-        symlinks=(("ch07/harness-templates", "ch07-harness-engineering"),),
     ),
     ChapterSpec(
         chapter_id="ch08",
@@ -282,7 +262,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "tests/test_rss_wiki.py",
         ),
         test_dirs=("ch08-inner-ralph-loop/tests",),
-        symlinks=(("ch08/rss-wiki", "ch08-inner-ralph-loop"),),
     ),
     ChapterSpec(
         chapter_id="ch09",
@@ -297,7 +276,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "tests/test_orchestration_harness.py",
         ),
         test_dirs=("ch09-orchestration/tests",),
-        symlinks=(("ch09/harness", "ch09-orchestration"),),
     ),
     ChapterSpec(
         chapter_id="ch10",
@@ -314,7 +292,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "tests/test_todo_loop.py",
         ),
         test_dirs=("ch10-outer-loop/tests",),
-        symlinks=(("ch10/todo-loop", "ch10-outer-loop"),),
     ),
     ChapterSpec(
         chapter_id="ch11",
@@ -347,7 +324,6 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             ("ch11-eval-and-llmops/trace_to_prompt.py", "--demo", "--json"),
             ("ch11-eval-and-llmops/fetch_prompt.py", "--demo", "--json"),
         ),
-        symlinks=(("ch11/support-assistant", "ch11-eval-and-llmops"),),
     ),
     ChapterSpec(
         chapter_id="ch12",
@@ -423,28 +399,6 @@ def verify_legacy_removed(repo_root: Path) -> CheckResult:
         details={"issues": issues, "token_hits": token_hits},
     )
 
-
-def verify_symlinks(repo_root: Path, specs: list[ChapterSpec]) -> CheckResult:
-    """선택된 단원의 호환 심볼릭 링크/브릿지가 유효하게 연결되어 있는지 검증한다."""
-    errors: list[str] = []
-    checked: list[str] = []
-    for spec in specs:
-        for link_rel, target_rel in spec.symlinks:
-            link_path = repo_root / link_rel
-            expected_target = (repo_root / target_rel).resolve()
-            checked.append(link_rel)
-            if not link_path.exists():
-                errors.append(f"missing link/target: {link_rel} -> {target_rel}")
-                continue
-            if link_path.resolve() != expected_target:
-                errors.append(
-                    f"link mismatch for {link_rel}: resolves to {link_path.resolve()}, expected {expected_target}"
-                )
-    return CheckResult(
-        name="symlinks",
-        passed=len(errors) == 0,
-        details={"checked": checked, "errors": errors},
-    )
 
 
 def _run_test_dir(repo_root: Path, test_dir_rel: str, runner: list[str]) -> CheckResult:
@@ -534,10 +488,6 @@ def _verify_single_chapter(repo_root: Path, spec: ChapterSpec, runner: list[str]
         )
     )
 
-    if spec.symlinks:
-        sym_res = verify_symlinks(repo_root, [spec])
-        sym_res.name = f"{spec.chapter_id}:symlinks"
-        results.append(sym_res)
 
     for cmd_args in spec.cli_commands:
         script_path = repo_root / cmd_args[0]
