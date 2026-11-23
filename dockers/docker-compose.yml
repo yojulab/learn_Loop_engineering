@@ -1,5 +1,6 @@
-# Loop Engineering 실습 환경: Langfuse(관측) + PostgreSQL + 앱 컨테이너(Claude CLI · Python)
-#  - Langfuse 웹 UI용 포트(${LANGFUSE_PORT:-30000}:3000)만 게시하며, app·db_postgres 포트는 비공개입니다. 컨테이너 간 통신은 내부 네트워크, 접속은 `docker compose exec app bash`.
+# Loop Engineering 실습 환경: Langfuse(관측) + PostgreSQL + LiteLLM Proxy + 앱 컨테이너(Claude CLI · Python)
+#  - Langfuse 웹 UI(${LANGFUSE_PORT:-30000}:3000)와 LiteLLM Proxy(${LITELLM_PORT:-4000}:4000) 포트를 게시하며, app·db_postgres 포트는 비공개입니다.
+#  - 컨테이너 간 통신은 내부 네트워크, 앱 접속은 `docker compose exec app bash`.
 #  - 볼륨 경로, 계정, 키는 모두 .env 에서 설정합니다. (cp .env.example .env)
 services:
   # Langfuse 전용 PostgreSQL (Langfuse v2 는 PostgreSQL 만 필요)
@@ -44,6 +45,26 @@ services:
       LANGFUSE_INIT_USER_NAME: ${LANGFUSE_INIT_USER_NAME:-Admin}
       LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_INIT_USER_PASSWORD:-admin123456}
 
+  # LiteLLM Multi-Platform Zero-Code Proxy (Claude · ChatGPT · Gemini · Ollama -> Langfuse)
+  litellm-proxy:
+    image: docker.litellm.ai/berriai/litellm:${LITELLM_IMAGE_TAG:-main-latest}
+    container_name: ${PROJECT_NAME:-learn_loop_engineering}_litellm_proxy
+    ports:
+      - "${LITELLM_PORT:-4000}:4000"
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml:ro
+    command: ["--config", "/app/config.yaml", "--port", "4000", "--host", "0.0.0.0"]
+    depends_on:
+      - langfuse
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-litellm-local}
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-pk-lf-loop-engineering-public}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-sk-lf-loop-engineering-secret}
+      LANGFUSE_HOST: ${LANGFUSE_HOST:-http://langfuse:3000}
+
   # 실습 앱 컨테이너: Python 3.13 + Claude Code CLI + Antigravity CLI + langfuse SDK
   #  - 이미지 빌드 시 /apps/learn_Loop_engineering 에 저장소를 git clone 하며,
   #    기동 시 entrypoint.sh 가 로컬 볼륨(/apps)에 소스를 동기화하고 Langfuse 준비 후 ch11 seed_prompts.py 및 seed_langfuse_dashboard.py 를 자동 실행합니다.
@@ -60,6 +81,7 @@ services:
       - ${APP_PROJECTS_DIR:-./apps}:/apps
     depends_on:
       - langfuse
+      - litellm-proxy
     stdin_open: true
     tty: true
     command: ["sleep", "infinity"]
