@@ -85,6 +85,8 @@ from langfuse_ops import LangfuseOpsClient  # noqa: E402
 from seed_prompts import seed_default_prompts  # noqa: E402
 
 ops = LangfuseOpsClient(store_dir="/tmp/langfuse_seed_store", host=host, public_key=pk, secret_key=sk)
+for _m in ("gemini-cli", "claude-cli"):
+    ops.ensure_custom_model(_m, f"(?i)^({_m}|openai/{_m})$", input_price=0.0000001, output_price=0.0000004)
 
 def _has_label(name: str, label: str) -> bool:
     try:
@@ -125,18 +127,20 @@ else:
 PY
 }
 
-start_agy_bridge() {
-  local bridge="${APP_DIR}/ch11-eval-and-llmops/support-assistant/litellm_proxy/agy_openai_bridge.py"
-  if [ -f "${bridge}" ]; then
-    if ! pgrep -f "agy_openai_bridge.py" >/dev/null 2>&1; then
-      nohup python3 "${bridge}" --host 0.0.0.0 --port "${AGY_BRIDGE_PORT:-4010}" >/tmp/agy_bridge.log 2>&1 &
-      echo "[entrypoint] agy_openai_bridge 백그라운드 기동 완료 (port=${AGY_BRIDGE_PORT:-4010})"
-    fi
+start_cli_bridges() {
+  local proxy_dir="${APP_DIR}/ch11-eval-and-llmops/support-assistant/litellm_proxy"
+  if [ -f "${proxy_dir}/gemini_openai_bridge.py" ] && ! pgrep -f "gemini_openai_bridge.py" >/dev/null 2>&1; then
+    nohup python3 "${proxy_dir}/gemini_openai_bridge.py" --host 0.0.0.0 --port "${GEMINI_BRIDGE_PORT:-4010}" >/tmp/gemini_bridge.log 2>&1 &
+    echo "[entrypoint] gemini_openai_bridge 백그라운드 기동 완료 (port=${GEMINI_BRIDGE_PORT:-4010})"
+  fi
+  if [ -f "${proxy_dir}/claude_openai_bridge.py" ] && ! pgrep -f "claude_openai_bridge.py" >/dev/null 2>&1; then
+    nohup python3 "${proxy_dir}/claude_openai_bridge.py" --host 0.0.0.0 --port "${CLAUDE_BRIDGE_PORT:-4011}" >/tmp/claude_bridge.log 2>&1 &
+    echo "[entrypoint] claude_openai_bridge 백그라운드 기동 완료 (port=${CLAUDE_BRIDGE_PORT:-4011})"
   fi
 }
 
 ensure_app_source_on_volume
-start_agy_bridge
+start_cli_bridges
 seed_ch11_prompts
 
 exec "$@"

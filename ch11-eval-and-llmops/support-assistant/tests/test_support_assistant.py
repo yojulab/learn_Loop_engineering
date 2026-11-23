@@ -242,47 +242,58 @@ class TestSupportAssistant(unittest.TestCase):
         self.assertEqual(data_cus["topic"], "결제장애")
         self.assertEqual(data_cus["models"], ["gemini-2.5-flash", "gpt-4o-mini"])
 
-    def test_agy_bridge_and_litellm_eval_no_api_key(self) -> None:
-        import os, threading
-        from agy_litellm_eval import run_agy_litellm_eval
-        from agy_openai_bridge import start_bridge_server
+    def test_gemini_and_claude_cli_bridges_and_eval_no_api_key(self) -> None:
+        import os
+        import threading
+        from cli_litellm_eval import run_cli_litellm_eval
+        from cli_openai_bridge import start_bridge_server
 
-        def mock_runner(prompt: str, model: str | None, timeout: int) -> tuple[int, str, str]:
-            return (
-                0,
-                "결제 오류 확인 후 다음 단계 안내: 영수증 번호 회신 시 3일 이내 환불 처리됩니다.",
-                "",
-            )
-
-        srv = start_bridge_server(host="127.0.0.1", port=0, runner=mock_runner)
-        port = srv.server_address[1]
-        t = threading.Thread(target=srv.serve_forever, daemon=True)
-        t.start()
-        try:
-            with tempfile.TemporaryDirectory() as tmp:
-                old_env = {k: os.environ.pop(k, None) for k in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "LANGFUSE_HOST", "LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY")}
-                try:
-                    res = run_agy_litellm_eval(
-                        query="결제 오류 환불 문의",
-                        proxy_url=f"http://127.0.0.1:{port}/v1",
-                        store_dir=tmp,
-                        trace_id="trace-agy-test-001",
+        for provider, model_id in (("gemini", "gemini-cli"), ("claude", "claude-cli")):
+            def _make_runner(pv: str):
+                def mock_runner(prompt: str, model: str | None, timeout: int) -> tuple[int, str, str]:
+                    return (
+                        0,
+                        f"[{pv}] 결제 오류 확인 후 다음 단계 안내: 영수증 번호 회신 시 3일 이내 환불 처리됩니다.",
+                        "",
                     )
-                    self.assertEqual(res["trace_id"], "trace-agy-test-001")
-                    self.assertTrue(res["eval"]["safety_passed"])
-                    self.assertGreaterEqual(res["eval"]["rule_score"], 0.9)
-                    self.assertGreaterEqual(res["eval"]["total_score"], 0.8)
-                    scores_path = Path(tmp) / "scores.jsonl"
-                    self.assertTrue(scores_path.is_file())
-                    score_lines = [json.loads(ln) for ln in scores_path.read_text(encoding="utf-8").splitlines() if ln.strip()]
-                    self.assertEqual({s["name"] for s in score_lines}, {"eval_rule_score", "eval_judge_score", "eval_safety_passed", "eval_total_score"})
-                finally:
-                    for k, v in old_env.items():
-                        if v is not None:
-                            os.environ[k] = v
-        finally:
-            srv.shutdown()
-            srv.server_close()
+                return mock_runner
+
+            srv = start_bridge_server(provider=provider, host="127.0.0.1", port=0, runner=_make_runner(provider))
+            port = srv.server_address[1]
+            t = threading.Thread(target=srv.serve_forever, daemon=True)
+            t.start()
+            try:
+                with tempfile.TemporaryDirectory() as tmp:
+                    old_env = {
+                        k: os.environ.pop(k, None)
+                        for k in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "LANGFUSE_HOST", "LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY")
+                    }
+                    try:
+                        tid = f"trace-{provider}-test-001"
+                        res = run_cli_litellm_eval(
+                            model=model_id,
+                            query="결제 오류 환불 문의",
+                            proxy_url=f"http://127.0.0.1:{port}/v1",
+                            store_dir=tmp,
+                            trace_id=tid,
+                        )
+                        self.assertEqual(res["trace_id"], tid)
+                        self.assertEqual(res["model"], model_id)
+                        self.assertTrue(res["observation_id"])
+                        self.assertTrue(res["eval"]["safety_passed"])
+                        self.assertGreaterEqual(res["eval"]["helpfulness"], 0.9)
+                        self.assertGreaterEqual(res["eval"]["total_score"], 0.8)
+                        scores_path = Path(tmp) / "scores.jsonl"
+                        score_lines = [json.loads(ln) for ln in scores_path.read_text(encoding="utf-8").splitlines() if ln.strip()]
+                        self.assertEqual({s["name"] for s in score_lines}, {"accuracy", "helpfulness", "eval_safety_passed", "eval_total_score"})
+                        self.assertTrue(all(s["observation_id"] == res["observation_id"] for s in score_lines))
+                    finally:
+                        for k, v in old_env.items():
+                            if v is not None:
+                                os.environ[k] = v
+            finally:
+                srv.shutdown()
+                srv.server_close()
 
 if __name__ == "__main__":
     unittest.main()

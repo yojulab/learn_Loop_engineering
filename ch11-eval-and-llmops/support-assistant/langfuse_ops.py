@@ -191,24 +191,26 @@ class LangfuseOpsClient:
         value: float,
         data_type: str = "NUMERIC",
         comment: str = "",
+        observation_id: str | None = None,
     ) -> None:
         if self.remote_enabled:
-            self._http_json(
-                "POST",
-                "/api/public/scores",
-                {
-                    "traceId": trace_id,
-                    "name": name,
-                    "value": float(value),
-                    "dataType": data_type,
-                    **({"comment": comment} if comment else {}),
-                },
-            )
+            payload: dict[str, Any] = {
+                "traceId": trace_id,
+                "name": name,
+                "value": float(value),
+                "dataType": data_type,
+            }
+            if observation_id:
+                payload["observationId"] = observation_id
+            if comment:
+                payload["comment"] = comment
+            self._http_json("POST", "/api/public/scores", payload)
             return
 
         scores_file = self.store_dir / "scores.jsonl"
         entry = {
             "trace_id": trace_id,
+            "observation_id": observation_id,
             "name": name,
             "value": float(value),
             "data_type": data_type,
@@ -216,6 +218,36 @@ class LangfuseOpsClient:
         }
         with scores_file.open("a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+    def ensure_custom_model(
+        self,
+        model_name: str,
+        match_pattern: str,
+        input_price: float = 0.0000001,
+        output_price: float = 0.0000004,
+        unit: str = "TOKENS",
+    ) -> dict[str, Any]:
+        """Langfuse /api/public/models 에 커스텀 모델 가격/패턴을 멱등 등록합니다."""
+        if not self.remote_enabled:
+            return {"modelName": model_name, "mode": "offline-fallback"}
+        try:
+            existing = self._http_json("GET", "/api/public/models?limit=100").get("data", [])
+            for item in existing:
+                if item.get("modelName") == model_name:
+                    return item
+            return self._http_json(
+                "POST",
+                "/api/public/models",
+                {
+                    "modelName": model_name,
+                    "matchPattern": match_pattern,
+                    "unit": unit,
+                    "inputPrice": input_price,
+                    "outputPrice": output_price,
+                },
+            )
+        except Exception as exc:
+            return {"modelName": model_name, "error": str(exc)}
 
     def list_traces(self, limit: int = 20) -> list[dict[str, Any]]:
         if self.remote_enabled:

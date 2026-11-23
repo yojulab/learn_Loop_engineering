@@ -1,10 +1,15 @@
-# LiteLLM Multi-Platform Zero-Code Proxy 설정 (Antigravity CLI · Claude · ChatGPT · Gemini · Ollama)
+# LiteLLM Multi-Platform Zero-Code Proxy 설정 (Gemini CLI · Claude CLI · API · Ollama)
 model_list:
-  - model_name: agy-cli
+  - model_name: gemini-cli
     litellm_params:
-      model: openai/agy-cli
-      api_base: os.environ/AGY_BRIDGE_BASE_URL
-      api_key: dummy-agy-key
+      model: openai/gemini-cli
+      api_base: os.environ/GEMINI_BRIDGE_BASE_URL
+      api_key: dummy-gemini-key
+  - model_name: claude-cli
+    litellm_params:
+      model: openai/claude-cli
+      api_base: os.environ/CLAUDE_BRIDGE_BASE_URL
+      api_key: dummy-claude-key
   - model_name: claude-sonnet
     litellm_params:
       model: anthropic/claude-sonnet-4-5

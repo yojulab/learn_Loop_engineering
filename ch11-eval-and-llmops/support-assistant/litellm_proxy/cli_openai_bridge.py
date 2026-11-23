@@ -1,8 +1,8 @@
-"""agy_openai_bridge.py — Antigravity CLI (`agy -p`) OpenAI 호환 HTTP 브리지.
+"""cli_openai_bridge.py — Gemini(`agy -p`) / Claude(`claude -p`) OpenAI 호환 HTTP 브리지 공통 코어.
 
 OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY 없이도 LiteLLM Proxy가
-`agy -p` (OAuth 로그인된 Antigravity CLI)를 통해 LLM 응답을 생성할 수 있도록
-표준 `/v1/chat/completions` 및 `/v1/models` 엔드포인트를 제공합니다.
+로그인된 CLI(`agy -p` 또는 `claude -p`)를 통해 응답을 생성할 수 있도록
+표준 `/v1/chat/completions`, `/v1/models`, `/health` 엔드포인트를 제공합니다.
 """
 
 from __future__ import annotations
@@ -20,25 +20,47 @@ from typing import Any, Callable
 
 RunnerFn = Callable[[str, str | None, int], tuple[int, str, str]]
 
+CLI_SPECS: dict[str, dict[str, Any]] = {
+    "gemini": {
+        "binary": "agy",
+        "model_id": "gemini-cli",
+        "owned_by": "antigravity-gemini",
+        "extra_args": ["--output-format", "text", "--disable-slash-commands"],
+    },
+    "claude": {
+        "binary": "claude",
+        "model_id": "claude-cli",
+        "owned_by": "anthropic-claude-code",
+        "extra_args": ["--output-format", "text"],
+    },
+}
 
-def default_agy_runner(prompt: str, model: str | None = None, timeout: int = 120) -> tuple[int, str, str]:
-    agy_bin = shutil.which("agy")
-    if not agy_bin:
-        return 127, "", "agy CLI binary not found on PATH"
 
-    cmd = [agy_bin, "-p", prompt, "--output-format", "text", "--disable-slash-commands"]
-    if model and model not in {"agy-cli", "openai/agy-cli", "default"}:
-        cmd.extend(["--model", model])
+def make_cli_runner(provider: str) -> RunnerFn:
+    spec = CLI_SPECS[provider]
+    binary = str(spec["binary"])
+    extra_args = list(spec["extra_args"])
 
-    proc = subprocess.run(
-        cmd,
-        stdin=subprocess.DEVNULL,
-        capture_output=True,
-        text=True,
-        timeout=timeout,
-        check=False,
-    )
-    return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
+    def _run(prompt: str, model: str | None = None, timeout: int = 120) -> tuple[int, str, str]:
+        bin_path = shutil.which(binary)
+        if not bin_path:
+            return 127, "", f"{binary} CLI binary not found on PATH"
+
+        cmd = [bin_path, "-p", prompt, *extra_args]
+        if model and model not in {spec["model_id"], f"openai/{spec['model_id']}", "default"}:
+            cmd.extend(["--model", model])
+
+        proc = subprocess.run(
+            cmd,
+            stdin=subprocess.DEVNULL,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            check=False,
+        )
+        return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
+
+    return _run
 
 
 def format_messages_as_prompt(messages: list[dict[str, Any]]) -> str:
@@ -53,27 +75,31 @@ def format_messages_as_prompt(messages: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
-def invoke_agy_completion(
+def invoke_cli_completion(
+    provider: str,
     messages: list[dict[str, Any]],
-    model: str = "agy-cli",
+    model: str | None = None,
     *,
     runner: RunnerFn | None = None,
     timeout: int = 120,
     allow_fallback: bool = False,
 ) -> tuple[int, dict[str, Any]]:
+    spec = CLI_SPECS[provider]
+    default_model_id = str(spec["model_id"])
+    resolved_model = model or default_model_id
     prompt = format_messages_as_prompt(messages)
-    run_fn = runner or default_agy_runner
-    cli_model = None if model in {"agy-cli", "openai/agy-cli"} else model
+    run_fn = runner or make_cli_runner(provider)
+    cli_model = None if resolved_model in {default_model_id, f"openai/{default_model_id}"} else resolved_model
 
     rc, stdout, stderr = run_fn(prompt, cli_model, timeout)
     if rc == 0 and stdout:
         prompt_tokens = max(1, len(prompt.split()))
         completion_tokens = max(1, len(stdout.split()))
         return 200, {
-            "id": f"chatcmpl-agy-{uuid.uuid4().hex[:12]}",
+            "id": f"chatcmpl-{provider}-{uuid.uuid4().hex[:12]}",
             "object": "chat.completion",
             "created": int(time.time()),
-            "model": model,
+            "model": resolved_model,
             "choices": [
                 {
                     "index": 0,
@@ -91,16 +117,16 @@ def invoke_agy_completion(
     detail = stderr or stdout or f"exit={rc}"
     if allow_fallback:
         fallback_text = (
-            f"[agy-offline-fallback] 요청을 접수했습니다. "
-            f"다음 단계 안내: 입력하신 문의({prompt[:80]})를 담당 부서에서 확인 후 처리하겠습니다."
+            f"[{provider}-cli-fallback] 결제 오류 확인을 도와드리겠습니다. "
+            f"다음 단계 안내: 영수증 번호와 결제 시각을 회신해 주시면 영업일 기준 3일 이내 환불 처리됩니다."
         )
         prompt_tokens = max(1, len(prompt.split()))
         completion_tokens = max(1, len(fallback_text.split()))
         return 200, {
-            "id": f"chatcmpl-agy-fb-{uuid.uuid4().hex[:10]}",
+            "id": f"chatcmpl-{provider}-fb-{uuid.uuid4().hex[:10]}",
             "object": "chat.completion",
             "created": int(time.time()),
-            "model": model,
+            "model": resolved_model,
             "choices": [
                 {
                     "index": 0,
@@ -116,23 +142,31 @@ def invoke_agy_completion(
             "bridge_fallback_reason": detail,
         }
 
-    status = 401 if "Authentication required" in detail else 502
+    low = detail.lower()
+    is_auth = "authentication required" in low or "login" in low or "not logged in" in low or "unauthorized" in low
+    status = 401 if is_auth else 502
     return status, {
         "error": {
-            "message": f"agy CLI execution failed (exit={rc}): {detail}",
-            "type": "agy_cli_error",
+            "message": f"{spec['binary']} CLI execution failed (exit={rc}): {detail}",
+            "type": f"{provider}_cli_error",
             "code": "authentication_required" if status == 401 else "cli_error",
         }
     }
 
 
 def make_handler(
+    provider: str,
     *,
     runner: RunnerFn | None = None,
     timeout: int = 120,
     allow_fallback: bool = False,
 ) -> type[BaseHTTPRequestHandler]:
-    class AgyBridgeHandler(BaseHTTPRequestHandler):
+    spec = CLI_SPECS[provider]
+    binary = str(spec["binary"])
+    model_id = str(spec["model_id"])
+    owned_by = str(spec["owned_by"])
+
+    class CliBridgeHandler(BaseHTTPRequestHandler):
         def _send_json(self, code: int, payload: dict[str, Any]) -> None:
             raw = json.dumps(payload, ensure_ascii=False).encode("utf-8")
             self.send_response(code)
@@ -143,14 +177,14 @@ def make_handler(
 
         def do_GET(self) -> None:  # noqa: N802
             if self.path in {"/health", "/health/liveliness"}:
-                self._send_json(200, {"status": "ok", "cli": "agy", "available": bool(shutil.which("agy"))})
+                self._send_json(200, {"status": "ok", "provider": provider, "cli": binary, "available": bool(shutil.which(binary))})
                 return
             if self.path in {"/v1/models", "/models"}:
                 self._send_json(
                     200,
                     {
                         "object": "list",
-                        "data": [{"id": "agy-cli", "object": "model", "owned_by": "antigravity"}],
+                        "data": [{"id": model_id, "object": "model", "owned_by": owned_by}],
                     },
                 )
                 return
@@ -169,8 +203,9 @@ def make_handler(
                 return
 
             messages = body.get("messages") or []
-            model = str(body.get("model") or "agy-cli")
-            code, resp = invoke_agy_completion(
+            model = str(body.get("model") or model_id)
+            code, resp = invoke_cli_completion(
+                provider=provider,
                 messages=messages,
                 model=model,
                 runner=runner,
@@ -182,10 +217,11 @@ def make_handler(
         def log_message(self, format: str, *args: Any) -> None:  # noqa: A002
             return
 
-    return AgyBridgeHandler
+    return CliBridgeHandler
 
 
 def start_bridge_server(
+    provider: str = "gemini",
     host: str = "0.0.0.0",
     port: int = 4010,
     *,
@@ -193,37 +229,38 @@ def start_bridge_server(
     timeout: int = 120,
     allow_fallback: bool = False,
 ) -> ThreadingHTTPServer:
-    handler = make_handler(runner=runner, timeout=timeout, allow_fallback=allow_fallback)
+    handler = make_handler(provider, runner=runner, timeout=timeout, allow_fallback=allow_fallback)
     return ThreadingHTTPServer((host, port), handler)
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="OpenAI-compatible HTTP bridge for Antigravity CLI (agy -p)")
-    parser.add_argument("--host", default=os.getenv("AGY_BRIDGE_HOST", "0.0.0.0"))
-    parser.add_argument("--port", type=int, default=int(os.getenv("AGY_BRIDGE_PORT", "4010")))
-    parser.add_argument("--timeout", type=int, default=int(os.getenv("AGY_BRIDGE_TIMEOUT", "120")))
+def run_bridge_cli(default_provider: str, default_port: int) -> None:
+    parser = argparse.ArgumentParser(description=f"OpenAI-compatible HTTP bridge for {default_provider} CLI")
+    parser.add_argument("--provider", choices=sorted(CLI_SPECS), default=default_provider)
+    parser.add_argument("--host", default=os.getenv("CLI_BRIDGE_HOST", "0.0.0.0"))
+    parser.add_argument("--port", type=int, default=default_port)
+    parser.add_argument("--timeout", type=int, default=int(os.getenv("CLI_BRIDGE_TIMEOUT", "120")))
     parser.add_argument(
         "--allow-fallback",
         action="store_true",
-        default=os.getenv("AGY_BRIDGE_ALLOW_FALLBACK", "0") == "1",
-        help="agy 미인증/오류 시 offline-fallback 응답 반환",
+        default=os.getenv("CLI_BRIDGE_ALLOW_FALLBACK", "0") == "1",
+        help="CLI 미인증/오류 시 offline-fallback 응답 반환",
     )
     args = parser.parse_args()
 
     server = start_bridge_server(
+        provider=args.provider,
         host=args.host,
         port=args.port,
         timeout=args.timeout,
         allow_fallback=args.allow_fallback,
     )
-    print(f"[agy_openai_bridge] listening on http://{args.host}:{args.port}/v1 (allow_fallback={args.allow_fallback})", flush=True)
+    print(
+        f"[{args.provider}_openai_bridge] listening on http://{args.host}:{args.port}/v1 (allow_fallback={args.allow_fallback})",
+        flush=True,
+    )
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         pass
     finally:
         server.server_close()
-
-
-if __name__ == "__main__":
-    main()
