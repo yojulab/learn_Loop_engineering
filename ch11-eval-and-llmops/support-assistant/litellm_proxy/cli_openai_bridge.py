@@ -50,15 +50,18 @@ def make_cli_runner(provider: str) -> RunnerFn:
         if model and model not in {spec["model_id"], f"openai/{spec['model_id']}", "default"}:
             cmd.extend(["--model", model])
 
-        proc = subprocess.run(
-            cmd,
-            stdin=subprocess.DEVNULL,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-            check=False,
-        )
-        return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
+        try:
+            proc = subprocess.run(
+                cmd,
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                check=False,
+            )
+            return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
+        except subprocess.TimeoutExpired:
+            return 124, "", f"{binary} CLI timed out after {timeout}s (authentication or response timeout)"
 
     return _run
 
