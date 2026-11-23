@@ -1,8 +1,15 @@
-# Loop Engineering — 『2026 모던 AI 에이전트 스택』 전 단원 실습 저장소
+# 혼자서 프로젝트 5개 돌리는 개발자의 비밀: 루프 엔지니어링
+
+> **프롬프트 노가다는 끝났다 — 1인 멀티 프로젝트를 자동화하는 AI 설계·관측·개선 루프의 모든 것**
+>
+> 🔗 **웹 PPT 바로가기**: [https://yojulab.github.io/learn_Loop_engineering/](https://yojulab.github.io/learn_Loop_engineering/)  
+> ([프롤로그 PPT](https://yojulab.github.io/learn_Loop_engineering/prologue.html) · [메인 5시간 강의 PPT](https://yojulab.github.io/learn_Loop_engineering/lecture.html) · [카툰 심화 워크숍 PPT](https://yojulab.github.io/learn_Loop_engineering/workshop.html))
+
+감으로 프롬프트만 고치다 실패하는 패턴을 깨고, **배포(Launch) · 관측(Observe) · 평가(Evaluate) · 개선(Improve)** 의 데이터 기반 루프로 전환하여 1인이 멀티 프로젝트를 자동화하는 실전 아키텍처와 전 단원(`ch00`~`ch12`) 실습 코드를 제공합니다.
 
 ## 1. 단원 학습 목표 & 12대 스택 4계층 맵
 
-- **학습 목표 1**: LLM을 감싸는 **4계층 12대 요소**의 구조와 각 계층 간 책임을 한눈에 이해한다.
+- **학습 목표 1**: 감에 의존하는 프롬프팅을 넘어 **배포(Launch)·관측(Observe)·평가(Evaluate)·개선(Improve)** 루프와 이를 뒷받침하는 **4계층 12대 요소**의 책임을 이해한다.
 - **학습 목표 2**: 프롬프트·컨텍스트·RAG·메모리(1계층), 에이전트 루프·MCP·훅(2계층), 지침 파일·스킬·하네스(3계층), 서브에이전트·오케스트레이션·Eval/LLMOps(4계층)를 실행 가능한 코드로 검증한다.
 - **학습 목표 3**: 외부 API 키나 네트워크 없이도 컨테이너 내부에서 결정론적 오프라인 테스트와 CLI 실습을 재현한다.
 - **학습 목표 4**: 도서 본문 내 `💻 Git 예제` 경로(`ch01/`~`ch11/`)와 정식 단원 디렉터리(`ch00-prologue/`~`ch12-epilogue/`)를 동일한 인터페이스로 탐색한다.
@@ -117,13 +124,13 @@ python3 ch11/support-assistant/seed_langfuse_dashboard.py \
 | **ChatGPT / Codex** | `AGENTS.md`, `CHATGPT.md` | `platforms/adapter_chatgpt.py`, `*_chatgpt.*` | `AGENT_PLATFORM=chatgpt python3 ch10/todo-loop/loop.py --platform chatgpt` |
 | **Gemini / Antigravity** | `GEMINI.md` | `platforms/adapter_gemini.py`, `*_gemini.*` | `AGENT_PLATFORM=gemini python3 ch10/todo-loop/loop.py --platform gemini` |
 
-### 5시간 과정 Web PPT (GitHub Pages: `docs/`)
+### Web PPT (GitHub Pages: `docs/`)
 
-- **경로**: [`docs/index.html`](docs/index.html) (발표자 대시보드: [`docs/presenter.html`](docs/presenter.html))
+- **배포 URL**: [https://yojulab.github.io/learn_Loop_engineering/](https://yojulab.github.io/learn_Loop_engineering/)
+- **분기 덱**: [`docs/index.html`](docs/index.html) (Home) · [`docs/prologue.html`](docs/prologue.html) (프롤로그 4장) · [`docs/lecture.html`](docs/lecture.html) (5시간 메인 39장) · [`docs/workshop.html`](docs/workshop.html) (카툰 워크숍 39장) · [`docs/presenter.html`](docs/presenter.html) (발표자 창)
 - **최종 목적 아키텍처**: `LangGraph`(상태 기반 에이전트 오케스트레이션) + `LiteLLM Proxy` + `Langfuse`(Trace 모니터링 · Eval · Save as Prompt 버전 개선 루프)
-- **구성**: `ch00`~`ch12` 전 단원(총 300분) 이론 슬라이드 + **단원별 실습 미션과 클릭 토글(`<details>`) 모범 답안(Tree + 코드/CLI) 한 페이지 배치**
-- **GitHub Pages 배포**: 저장소 `Settings → Pages → Source`에서 `main` 또는 `develop` 브랜치의 `/docs` 폴더 선택 (`.nojekyll` 포함, 100% 상대 경로)
-- **로컬 미리보기**: `python3 -m http.server 8080 --directory docs` 후 브라우저에서 `http://localhost:8080` 접속 (단축키 `A`: 모범답안 토글, `O`: 목차, `P`: 발표자 창, `F`: 전체 화면, `?print`: PDF 인쇄)
+- **구성**: `ch00`~`ch12` 전 단원 이론 슬라이드 + **단원별 실습 미션과 클릭 토글(`<details>`) 모범 답안 & 해결 프롬프트 한 페이지 배치**
+- **로컬 미리보기**: `python3 -m http.server 8080 --directory docs` 후 브라우저에서 `http://localhost:8080` 접속 (단축키 `A`: 모범답안·프롬프트 토글, `O`: 목차, `P`: 발표자 창, `F`: 전체 화면)
 
 ## 5. 핵심 체크리스트
 

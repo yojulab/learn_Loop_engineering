@@ -141,7 +141,9 @@ class WebPptDocsTests(unittest.TestCase):
             txt = js.read_text(encoding="utf-8")
             self.assertNotIn("hermes", txt.lower(), f"슬라이드 내 Hermes 잔존 문구 발견: {js.name}")
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("# Loop Engineering", readme)
+        self.assertIn("# 혼자서 프로젝트 5개 돌리는 개발자의 비밀: 루프 엔지니어링", readme)
+        self.assertIn("프롬프트 노가다는 끝났다", readme)
+        self.assertIn("https://yojulab.github.io/learn_Loop_engineering/", readme)
         self.assertNotIn("Hermes", readme)
 
         s0 = (DOCS_DIR / "slides/s0_opening.js").read_text(encoding="utf-8")

@@ -10,7 +10,7 @@
     theme: 'night',
     dots: true,
     noChrome: true,
-    title: '모던 AI 에이전트 스택 & Loop Engineering (카툰 심화 워크숍)',
+    title: '혼자서 프로젝트 5개 돌리는 개발자의 비밀: 루프 엔지니어링 (카툰 심화 워크숍)',
     notes: '카툰 스토리텔링과 함께 12대 AI 에이전트 스택의 이론·실습·모범 답안을 완주하는 심화 워크숍 웹 PPT입니다.',
     build(el, A) {
       const tag = h('div', 'row abs', el);
@@ -24,8 +24,8 @@
 
       const hero = h('div', 'abs', el);
       hero.style.cssText = 'left:100px;top:175px;width:1060px';
-      h('div', 'h1', hero, '모던 AI 에이전트 스택<br><span class="hl">Loop Engineering</span>');
-      h('div', 'b1', hero, '프롤로그(ch00)부터 LLMOps·로드맵(ch12)까지 —<br>카툰 인사이트 · 단원별 실습 · 클릭형 모범 답안을 <b>한 화면에서</b> 완주하는 워크숍 웹 PPT').style.cssText = 'margin-top:24px;color:#AEB8D3';
+      h('div', 'h1', hero, '혼자서 프로젝트 5개 돌리는<br>개발자의 비밀: <span class="hl">루프 엔지니어링</span>').style.cssText = 'font-size:60px;line-height:1.18';
+      h('div', 'b1', hero, '<b>프롬프트 노가다는 끝났다</b> — 1인 멀티 프로젝트를 자동화하는 AI 설계·관측·개선 루프의 모든 것<br>배포(Launch)·관측(Observe)·평가(Evaluate)·개선(Improve) 카툰 인사이트 &amp; 실전 워크숍').style.cssText = 'margin-top:22px;color:#AEB8D3;font-size:24px';
       A(hero, 'up', 0.12, { dur: 0.55 });
 
       const qrBox = h('div', 'row abs', el);
