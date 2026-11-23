@@ -87,6 +87,12 @@
     ta.remove();
   }
 
+  /* 프롬프트 복사 시 [...] 안내 블록 제외 정제 */
+  function stripPromptBrackets(text) {
+    if (!text) return '';
+    return String(text).replace(/\[[^\]]*\]\s*/g, '').trim();
+  }
+
   /* 단원별 실습 + 클릭 토글 모범 답안 한 페이지 빌더 */
   function buildLabSlide(el, A, spec) {
     const T = title(el, spec.kicker, spec.heading, { y: 60 });
@@ -107,9 +113,10 @@
     const pActions = h('div', 'lab-prompt-actions', pHead);
     const copyBtn = h('button', 'btn-copy-prompt no-advance', pActions, '📋 프롬프트 복사');
     copyBtn.type = 'button';
+    copyBtn.title = 'AI CLI 입력용 프롬프트 복사 ([...] 안내 태그 제외)';
     copyBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      copyTextToClipboard(promptText, copyBtn);
+      copyTextToClipboard(stripPromptBrackets(promptText), copyBtn);
     });
     const closeABtn = h('button', 'btn-lab-a btn-lab-a-close no-advance', pActions, '[A] 원상태');
     closeABtn.type = 'button';

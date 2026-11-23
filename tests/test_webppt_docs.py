@@ -310,5 +310,22 @@ class WebPptDocsTests(unittest.TestCase):
                 items = [line.strip() for line in pe_m.group(1).splitlines() if line.strip().startswith("'")]
                 self.assertGreaterEqual(len(items), 3, f"{deck_sub} 사용자 입력 프롬프트 예시 3개 미만: {items}")
 
+    def test_prompt_copy_strips_brackets_and_preserves_clean_prompt(self) -> None:
+        ui_txt = (DOCS_DIR / "ui.js").read_text(encoding="utf-8")
+        self.assertIn("function stripPromptBrackets(text)", ui_txt)
+        self.assertIn("copyTextToClipboard(stripPromptBrackets(promptText), copyBtn)", ui_txt)
+        for deck_sub in ("slides", "slides_workshop"):
+            slides_text = "\n".join(
+                (DOCS_DIR / f"{deck_sub}/{name}").read_text(encoding="utf-8")
+                for name in ("s0_opening.js", "s1_part1.js", "s2_part2.js", "s3_part3.js", "s4_part4_a.js", "s5_part4_b.js")
+            )
+            prompts = re.findall(r"userPrompt:\s*`([^`]+)`", slides_text)
+            self.assertEqual(len(prompts), 14, f"{deck_sub} userPrompt 개수 불일치")
+            for p in prompts:
+                cleaned = re.sub(r"\[[^\]]*\]\s*", "", p).strip()
+                self.assertNotIn("[", cleaned, f"{deck_sub} 프롬프트에 대괄호 잔존: {cleaned}")
+                self.assertNotIn("]", cleaned, f"{deck_sub} 프롬프트에 대괄호 잔존: {cleaned}")
+                self.assertGreater(len(cleaned), 20, f"{deck_sub} 프롬프트 본문 누락 또는 너무 짧음: {cleaned}")
+
 if __name__ == "__main__":
     unittest.main()
