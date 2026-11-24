@@ -249,6 +249,7 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertNotIn("PDF 인쇄", (DOCS_DIR / "engine.js").read_text(encoding="utf-8"))
         self.assertIn("사전 필요 지식", home)
         self.assertIn("DevOps", home)
+        self.assertIn("Prompt Engineering", home)
         self.assertIn("home-prereq-row", home)
         self.assertIn('class="home-html"', home)
         self.assertLess(home.find("home-qr-row"), home.find("home-prereq-row"))
