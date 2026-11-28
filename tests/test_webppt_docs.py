@@ -230,6 +230,9 @@ class WebPptDocsTests(unittest.TestCase):
     def test_home_portal_and_dedicated_prologue_ppt(self) -> None:
         home = (DOCS_DIR / "index.html").read_text(encoding="utf-8")
         self.assertIn("Let's AX.", home)
+        self.assertIn("혼자서 프로젝트 17개 돌리는 개발자의 비밀: 루프 엔지니어링", home)
+        self.assertIn("프롬프트 수작업은 끝났다", home)
+        self.assertNotIn("22년 차 대형 SI 아키텍트", home)
         self.assertIn("https://github.com/yojulab/learn_Loop_engineering", home)
         self.assertLess(
             home.find("https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing"),
