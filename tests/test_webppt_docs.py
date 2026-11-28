@@ -229,7 +229,12 @@ class WebPptDocsTests(unittest.TestCase):
 
     def test_home_portal_and_dedicated_prologue_ppt(self) -> None:
         home = (DOCS_DIR / "index.html").read_text(encoding="utf-8")
-        self.assertIn("Let's AX with Cartoons.", home)
+        self.assertIn("Let's AX.", home)
+        self.assertIn("https://github.com/yojulab/learn_Loop_engineering", home)
+        self.assertLess(
+            home.find("https://docs.google.com/spreadsheets/d/14zBhkMpG3YPLJtSmYtaeiQcTokBrZbKhKZw8965DnEI/edit?usp=sharing"),
+            home.find("https://github.com/yojulab/learn_Loop_engineering"),
+        )
         self.assertIn("assets/profile_ohsanghun.jpg", home)
         self.assertIn("assets/qr_linkedin.svg", home)
         self.assertIn("assets/qr_facebook.svg", home)
