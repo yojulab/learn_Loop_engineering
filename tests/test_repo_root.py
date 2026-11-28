@@ -72,8 +72,9 @@ class TestRepoRoot(unittest.TestCase):
 
 
     def test_all_chapters_have_ai_docs_folders_and_prompt_examples(self) -> None:
+        self.assertFalse((REPO_ROOT / "ch05-rag-and-memory").exists(), "제5장 디렉터리가 완전히 삭제되어야 합니다.")
         chapters = sorted(p for p in REPO_ROOT.glob("ch*-*") if p.is_dir())
-        self.assertEqual(len(chapters), 13)
+        self.assertEqual(len(chapters), 12)
         for cdir in chapters:
             with self.subTest(chapter=cdir.name):
                 for doc in ("AGENTS.md", "CLAUDE.md", "GEMINI.md", "README.md"):

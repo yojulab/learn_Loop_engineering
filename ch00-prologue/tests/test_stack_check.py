@@ -17,13 +17,14 @@ import stack_check  # noqa: E402
 
 
 class TestStackCheck(unittest.TestCase):
-    def test_four_layers_twelve_elements_structure(self) -> None:
-        elements = stack_check.FOUR_LAYERS_12_ELEMENTS
-        self.assertEqual(len(elements), 12)
+    def test_four_layers_eleven_elements_structure(self) -> None:
+        elements = stack_check.FOUR_LAYERS_ELEMENTS
+        self.assertEqual(len(elements), 11)
         layers = {e["layer_index"] for e in elements}
         self.assertEqual(layers, {1, 2, 3, 4})
         indices = [e["element_index"] for e in elements]
-        self.assertEqual(indices, list(range(1, 13)))
+        self.assertEqual(indices, list(range(1, 12)))
+        self.assertTrue(all(e["chapter"] != "ch05" for e in elements))
 
     def test_check_python_runtime(self) -> None:
         rt = stack_check.check_python_runtime()
@@ -40,15 +41,15 @@ class TestStackCheck(unittest.TestCase):
     def test_check_repo_layers(self) -> None:
         repo = stack_check.check_repo_layers(REPO_ROOT)
         self.assertTrue(repo["prologue_present"])
-        self.assertEqual(len(repo["elements"]), 12)
+        self.assertEqual(len(repo["elements"]), 11)
         self.assertTrue(repo["root_docs"]["README.md"])
 
     def test_format_report_text_and_json(self) -> None:
         text = stack_check.format_report(as_json=False, root=REPO_ROOT)
-        self.assertIn("4계층 12대 요소", text)
+        self.assertIn("4계층 11대 요소", text)
         raw_json = stack_check.format_report(as_json=True, root=REPO_ROOT)
         parsed = json.loads(raw_json)
-        self.assertEqual(parsed["elements_count"], 12)
+        self.assertEqual(parsed["elements_count"], 11)
         self.assertEqual(parsed["layers_count"], 4)
 
     def test_cli_execution_exit_zero(self) -> None:
@@ -60,7 +61,7 @@ class TestStackCheck(unittest.TestCase):
         )
         self.assertEqual(proc.returncode, 0, proc.stderr)
         data = json.loads(proc.stdout)
-        self.assertEqual(data["elements_count"], 12)
+        self.assertEqual(data["elements_count"], 11)
 
 
 if __name__ == "__main__":

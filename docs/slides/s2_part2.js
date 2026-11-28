@@ -9,14 +9,14 @@
     chap: 'Part 2 시작',
     theme: 'ink',
     dots: true,
-    title: 'Part 2 · 지식과 기억 (ch04 ~ ch05, 45분)',
-    notes: 'Part 2는 프롬프트·컨텍스트 엔지니어링(ch04)과 Agentic RAG·지속 메모리(ch05)를 다룹니다.',
+    title: 'Part 2 · 지식과 컨텍스트 (ch04, 25분)',
+    notes: 'Part 2는 프롬프트·컨텍스트 엔지니어링과 4대 지침 층위(ch04)를 다룹니다.',
     build(el, A) {
       const box = h('div', 'abs', el);
       box.style.cssText = 'left:120px;top:300px;width:1500px';
-      chip(box, 'PART 2 · 45분', { bg: 'rgba(124,92,255,.28)', fg: '#C7B8FF' });
-      h('div', 'h1', box, '모델이 무엇을 알고 기억할지<br><span class="hv">컨텍스트와 메모리</span> 설계').style.cssText = 'margin-top:24px';
-      h('div', 'b1', box, 'ch04 7항목 프롬프트 &amp; 컨텍스트 예산 · ch05 Agentic RAG &amp; TASKS/JOURNAL').style.cssText = 'margin-top:28px;color:#AEB8D3';
+      chip(box, 'PART 2 · 25분', { bg: 'rgba(124,92,255,.28)', fg: '#C7B8FF' });
+      h('div', 'h1', box, '모델이 무엇을 알고 집중할지<br><span class="hv">프롬프트와 컨텍스트</span> 설계').style.cssText = 'margin-top:24px';
+      h('div', 'b1', box, 'ch04 7항목 프롬프트 · 컨텍스트 예산 관리 · 4대 층위 지침').style.cssText = 'margin-top:28px;color:#AEB8D3';
       A(box, 'up', 0, { dur: 0.5 });
     },
   });
@@ -103,93 +103,6 @@
   "usage_ratio": 0.855,
   "compression_recommended": true,
   "warning": "Context usage >= 75%: compact or /clear with TASKS.md"
-}`,
-      });
-    },
-  });
-
-  // ch05 이론
-  DECK.slide({
-    id: 'ch05-theory',
-    part: 'p2',
-    chap: 'ch05 RAG & Memory',
-    theme: 'paper',
-    title: 'ch05: Agentic RAG (하이브리드 검색+자기비평) & 지속 메모리',
-    notes: '단순 Top-K 벡터 검색은 문맥이 끊기거나 근거가 부실해도 답을 만듭니다. Agentic RAG와 파일 기반 메모리(TASKS.md/JOURNAL.md)를 결합합니다.',
-    build(el, A) {
-      const T = title(el, 'CH05 · AGENTIC RAG & MEMORY', '단순 검색을 넘는 <span class="hl">Agentic RAG</span> &amp; 3단 기억 계층', { y: 64 });
-      A(T.t, 'up', 0, { dur: 0.4 });
-
-      const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
-      c1.innerHTML = `<div class="h3">Agentic RAG 파이프라인 (<code>agentic_rag.py</code>)</div>
-      <ul class="lab-steps" style="margin-top:18px">
-        <li><b>Query Rewrite</b><br>모호한 사용자 질의를 핵심 검색 키워드로 확장.</li>
-        <li><b>Hybrid + RRF</b><br>TF-IDF 코사인 유사도와 키워드 점수를 Reciprocal Rank Fusion으로 결합.</li>
-        <li><b>Self-Critique</b><br>근거 신뢰도가 기준 미달이면 재검색 루프를 실행.</li>
-      </ul>`;
-      A(c1, 'up', 0.1, { dur: 0.45 });
-
-      const c2 = card(el, { x: 980, y: 230, w: 840, h: 720, pad: 34 });
-      c2.innerHTML = `<div class="h3">파일 기반 지속 메모리 (<code>memory_manager.py</code>)</div>
-      <div class="col" style="gap:16px;margin-top:20px">
-        <div style="padding:18px;border-radius:14px;background:var(--green-l)"><b>Working Memory (작업 목록)</b> → <code>TASKS.md</code> (체크리스트 상태 유지)</div>
-        <div style="padding:18px;border-radius:14px;background:var(--blue-l)"><b>Episodic Memory (작업 일지)</b> → <code>JOURNAL.md</code> (시도·오류·결정 누적)</div>
-        <div style="padding:18px;border-radius:14px;background:var(--violet-l)"><b>Semantic Memory (지식 베이스)</b> → <code>KNOWLEDGE.md</code> / <code>CLAUDE/CHATGPT/GEMINI</code> 동기화</div>
-      </div>`;
-      A(c2, 'up', 0.2, { dur: 0.45 });
-    },
-  });
-
-  // ch05 실습 + 모범 답안
-  DECK.slide({
-    id: 'ch05-lab',
-    part: 'p2',
-    chap: 'ch05 실습 & 답안',
-    theme: 'white',
-    title: 'ch05 실습: Agentic RAG 검색 재순위화 & 지속 메모리 기록',
-    notes: 'agentic_rag.py로 쿼리 재작성·RRF 검색을 실행하고 memory_manager.py로 세션 간 상태 영속화를 확인합니다.',
-    build(el, A) {
-      buildLabSlide(el, A, {
-        id: 'ch05',
-        userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
-현재 챕터 폴더에서 AGENTS.md · CLAUDE.md · GEMINI.md 지침에 따라 Agentic RAG 발췌 검색과 지속 메모리(TASKS.md, JOURNAL.md) 상태를 조회해 출력해줘.
-
-1) 프롬프트 1 (Agentic RAG 발췌 검색): python3 agentic_rag.py 를 실행해 corpus/ 문서 대상 질의 재작성 및 상위 발췌 결과를 출력해줘.
-2) 프롬프트 2 (지속 메모리 상태 조회): python3 memory_manager.py --status --json 으로 TASKS.md 완료/대기 건수와 JOURNAL.md 기록 상태를 출력해줘.
-3) 프롬프트 3 (단위 테스트 검증): python3 -m unittest discover -s tests -p "test_*.py" -v 를 실행해 발췌 상한 및 상태 전이 테스트를 검증해줘.`,
-        kicker: 'CH05 · HANDS-ON LAB (25분)',
-        heading: '제5장 실습: <span class="hv">Agentic RAG</span> &amp; 지속 메모리 실행',
-        duration: '25분',
-        missionTitle: '챕터 루트에 RAG·지속 메모리 구성 후 AI CLI 프롬프트로 조회 결과 출력',
-        steps: [
-          '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서, <code>corpus/</code> 4종 문서, <code>agentic_rag.py</code>, <code>memory_manager.py</code>를 배치.',
-          '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br><code>TASKS.md</code> · <code>JOURNAL.md</code>가 있는 챕터 루트로 이동해 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속.',
-          '<code>사용자 입력 프롬프트로 RAG·메모리 검증</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 RAG 검색 결과와 메모리 상태 JSON을 확인.',
-        ],
-        promptExamples: [
-          '1) "python3 agentic_rag.py를 실행해 corpus/ 대상 하이브리드 검색 상위 발췌 결과를 보여줘."',
-          '2) "python3 memory_manager.py --status --json으로 TASKS.md와 JOURNAL.md 상태를 출력해줘."',
-          '3) "tests/test_memory_pattern.py 단위 테스트를 실행해 발췌 길이 상한과 상태 전이를 검증해줘."',
-        ],
-        runCmd: 'python3 agentic_rag.py\npython3 memory_manager.py --status --json\npython3 -m unittest discover -s tests -p "test_*.py" -v',
-        answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
-        answerType: 'Tree + JSON',
-        answerSummary: '챕터 루트에서 AI CLI가 <code>corpus/</code> Agentic RAG 검색과 <code>TASKS.md</code>/<code>JOURNAL.md</code> 상태를 함께 조회·검증합니다.',
-        tree: `project/
-├── AGENTS.md · CLAUDE.md · GEMINI.md
-├── .claude/rules/rag-memory.md · .gemini/settings.json
-├── corpus/ (01~04_*.md)      # 외부 지식 저장소 (RAG)
-├── agentic_rag.py            # Query Rewrite + Top-K 발췌 검색
-├── memory_manager.py         # --status --json 지속 메모리 관리
-├── TASKS.md · JOURNAL.md     # 세션 간 지속 상태 파일
-└── tests/test_memory_pattern.py`,
-        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (RAG 검색 + 메모리 상태)',
-        answerCode: `{"query": "컨텍스트 오염 방어", "top_doc": "01_context_budget.md", "rrf_score": 0.0328}
-{
-  "tasks_total": 3,
-  "tasks_done": 1,
-  "tasks_pending": 2,
-  "journal_entries": 1
 }`,
       });
     },

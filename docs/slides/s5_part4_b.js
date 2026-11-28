@@ -218,7 +218,7 @@ $ python3 ch11-eval-and-llmops/regression_compare.py`,
     part: 'p4b',
     chap: 'ch12 에필로그 & 로드맵',
     theme: 'white',
-    title: 'ch12: 12대 스택 한눈에 보기 & 팀 도입 4단계(Stage 1~4)',
+    title: 'ch12: 11대 스택 한눈에 보기 & 팀 도입 4단계(Stage 1~4)',
     notes: '모든 스택을 첫날부터 한꺼번에 도입하지 말고 Stage 1부터 점진적으로 성숙도를 높여야 합니다.',
     build(el, A) {
       const T = title(el, 'CH12 · EPILOGUE & ADOPTION ROADMAP', '한 번에 다 도입하지 마라 — <span class="hl">Stage 1~4</span> 점진적 도입 전략', { y: 64 });
@@ -227,7 +227,7 @@ $ python3 ch11-eval-and-llmops/regression_compare.py`,
       const stages = [
         ['Stage 1 · 개인 루프', 'ch01 · ch04', '단일 에이전트 CLI + 7항목 프롬프트 + AGENTS.md 규칙서', '#D5F2E6', '#0B8A5F'],
         ['Stage 2 · 도구와 안전', 'ch02 · ch03 · ch07', 'MCP 연결 + PreToolUse 가드레일 + 팀 Skills + 아키텍처 린터', '#DCE6FF', '#1E4FD0'],
-        ['Stage 3 · 기억과 위임', 'ch05 · ch06 · ch08', 'Agentic RAG + TASKS/JOURNAL 메모리 + 서브에이전트 + Ralph Loop', '#E6E0FF', '#4D2FD0'],
+        ['Stage 3 · 위임과 자율 루프', 'ch06 · ch08', '서브에이전트 역할 분리 + 동적 병렬 워크플로 + Ralph Loop(/goal)', '#E6E0FF', '#4D2FD0'],
         ['Stage 4 · 합의와 LLMOps', 'ch09 · ch10 · ch11', 'Maker!=Checker 블라인드 합의 + 아우터 루프 + LiteLLM/Langfuse Eval', '#FDEFD3', '#9A5B00'],
       ];
       stages.forEach(([s, ch, bd, bg, fg], i) => {
@@ -256,7 +256,7 @@ $ python3 ch11-eval-and-llmops/regression_compare.py`,
 
 1) 프롬프트 1 (Stage 1~4 성숙도 진단): python3 stage_readiness_check.py --format json 을 실행해 completed_stages: 4/4 달성 여부를 출력해줘.
 2) 프롬프트 2 (진단기 단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 Stage 누락/완비 시나리오를 검증해줘.
-3) 프롬프트 3 (전 단원 통합 게이트): python3 scripts/verify_chapters.py --all 을 실행해 전 단원 71/71 PASS 요약을 출력해줘.`,
+3) 프롬프트 3 (전 단원 통합 게이트): python3 scripts/verify_chapters.py --all 을 실행해 전 단원 통합 게이트 PASS 요약을 출력해줘.`,
         kicker: 'CH12 · FINAL CAPSTONE LAB (15분)',
         heading: '제12장 실습: <span class="hl">Stage 1~4 성숙도</span> 진단 &amp; 통합 게이트',
         duration: '15분',
@@ -264,12 +264,12 @@ $ python3 ch11-eval-and-llmops/regression_compare.py`,
         steps: [
           '<code>AGENTS.md</code> · <code>CLAUDE.md</code> · <code>GEMINI.md</code> · <code>.claude/</code> · <code>.gemini/</code><br>챕터 루트에 AI 지침서, 4계층 치트시트(<code>README.md</code>), <code>stage_readiness_check.py</code>를 배치.',
           '<code>해당 챕터 폴더 이동 후 AI CLI 접속</code><br>챕터 루트에서 <code>claude</code> · <code>agy</code> · <code>codex</code>로 접속해 도입 체크리스트 지침을 로드.',
-          '<code>사용자 입력 프롬프트로 최종 게이트 검증</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 <code>completed_stages: 4/4</code> 및 <code>71/71 PASS</code>를 확인.',
+          '<code>사용자 입력 프롬프트로 최종 게이트 검증</code><br>아래 프롬프트 예시 3선(또는 단축키 A)을 입력해 <code>completed_stages: 4/4</code> 및 통합 게이트 <code>PASS</code>를 확인.',
         ],
         promptExamples: [
           '1) "python3 stage_readiness_check.py --format json으로 Stage 1~4 성숙도(4/4)를 진단해줘."',
           '2) "tests/test_stage_readiness.py 단위 테스트를 실행해 Stage별 판정 로직을 검증해줘."',
-          '3) "verify_chapters.py --all을 실행해 전 단원 통합 게이트 71/71 PASS 리포트를 출력해줘."',
+          '3) "verify_chapters.py --all을 실행해 전 단원 통합 게이트 PASS 리포트를 출력해줘."',
         ],
         runCmd: 'python3 stage_readiness_check.py --format json\npython3 scripts/verify_chapters.py --all',
         answerLabel: '모범 답안 열기 (Tree + AI CLI 실행 결과)',
@@ -281,7 +281,7 @@ $ python3 ch11-eval-and-llmops/regression_compare.py`,
 ├── README.md                  # 4계층 아키텍처 치트시트 & 프롬프트 예시 3선
 ├── stage_readiness_check.py   # Stage 1~4 성숙도 진단 CLI
 └── tests/test_stage_readiness.py`,
-        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (Stage 1~4 + 71/71 PASS)',
+        codeCaption: 'AI CLI 프롬프트 입력 후 기대 출력 (Stage 1~4 + 통합 게이트 PASS)',
         answerCode: `{
   "stages": {
     "stage_1_foundation": true,
@@ -292,7 +292,7 @@ $ python3 ch11-eval-and-llmops/regression_compare.py`,
   "completed_stages": 4,
   "total_stages": 4
 }
-=== verify_chapters (all) [PASS] (71/71) ===`,
+=== verify_chapters (all) [PASS] (56/56) ===`,
       });
     },
   });

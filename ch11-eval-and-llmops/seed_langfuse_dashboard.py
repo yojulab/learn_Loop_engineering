@@ -209,7 +209,7 @@ def seed_to_langfuse(
             start_time=ev["t_start"],
             end_time=ev["t_span_end"],
             input={"query": ev["input"]["query"]},
-            output={"hits": 3, "top_doc": "02_agentic_rag.md"},
+            output={"hits": 3, "top_doc": "02_refund_policy.md"},
         )
         gen = trace.generation(
             name="llm-response",

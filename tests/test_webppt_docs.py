@@ -64,10 +64,12 @@ class WebPptDocsTests(unittest.TestCase):
             (DOCS_DIR / f"slides/{name}").read_text(encoding="utf-8")
             for name in ("s0_opening.js", "s1_part1.js", "s2_part2.js", "s3_part3.js", "s4_part4_a.js", "s5_part4_b.js")
         )
-        for i in range(13):
+        for i in (0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12):
             chap = f"ch{i:02d}"
             self.assertRegex(slides_text, rf"id:\s*'{chap}-lab'", f"{chap} 실습+모범답안 슬라이드 누락")
             self.assertIn(f"id: '{chap}',", slides_text, f"{chap} buildLabSlide 호출 누락")
+        self.assertNotIn("ch05-theory", slides_text)
+        self.assertNotIn("ch05-lab", slides_text)
 
         ui_js = (DOCS_DIR / "ui.js").read_text(encoding="utf-8")
         self.assertIn("h('details', 'answer-toggle'", ui_js)
@@ -118,7 +120,7 @@ class WebPptDocsTests(unittest.TestCase):
         )
         # 모든 실습 스텝 문자열이 <br> 줄바꿈을 포함하고 ~한다./본다. 대신 명령형 종결을 사용
         step_blocks = re.findall(r"steps:\s*\[(.*?)\]", slides_text, re.DOTALL)
-        self.assertGreaterEqual(len(step_blocks), 13)
+        self.assertGreaterEqual(len(step_blocks), 12)
         for block in step_blocks:
             items = re.findall(r"'([^']+)'", block)
             self.assertGreaterEqual(len(items), 3)
@@ -282,10 +284,11 @@ class WebPptDocsTests(unittest.TestCase):
         w_all = "\n".join(f.read_text(encoding="utf-8") for f in sorted(w_dir.glob("*.js")))
         for forbidden in ("5시간", "300분", "75분", "65분", "45분", "40분", "5-HOUR"):
             self.assertNotIn(forbidden, w_all, f"워크숍 덱에 시간 문구 잔존: {forbidden}")
+        self.assertFalse((DOCS_DIR / "assets/cartoons/cap_05_in.jpg").exists(), "제5장 카툰 이미지가 삭제되어야 합니다.")
+        self.assertNotIn("ch05", w_all, "워크숍 덱에 ch05 문구 잔존")
         for img in (
             "cap_00_in.jpg",
             "cap_01_in.jpg",
-            "cap_05_in.jpg",
             "cap_07_in.jpg",
             "cap_09_in.jpg",
             "cap_11_in.jpg",
@@ -305,7 +308,7 @@ class WebPptDocsTests(unittest.TestCase):
                 for name in ("s0_opening.js", "s1_part1.js", "s2_part2.js", "s3_part3.js", "s4_part4_a.js", "s5_part4_b.js")
             )
             blocks = re.findall(r"buildLabSlide\(el,\s*A,\s*\{(.*?)\n\s*\}\);", slides_text, re.DOTALL)
-            self.assertEqual(len(blocks), 14, f"{deck_sub} 실습 슬라이드 개수 불일치")
+            self.assertEqual(len(blocks), 13, f"{deck_sub} 실습 슬라이드 개수 불일치")
             for block in blocks:
                 pe_m = re.search(r"promptExamples:\s*\[(.*?)\]", block, re.DOTALL)
                 self.assertIsNotNone(pe_m, f"{deck_sub} promptExamples 누락: {block[:80]}")
@@ -323,7 +326,7 @@ class WebPptDocsTests(unittest.TestCase):
                 for name in ("s0_opening.js", "s1_part1.js", "s2_part2.js", "s3_part3.js", "s4_part4_a.js", "s5_part4_b.js")
             )
             prompts = re.findall(r"userPrompt:\s*`([^`]+)`", slides_text)
-            self.assertEqual(len(prompts), 14, f"{deck_sub} userPrompt 개수 불일치")
+            self.assertEqual(len(prompts), 13, f"{deck_sub} userPrompt 개수 불일치")
             for p in prompts:
                 cleaned = re.sub(r"\[[^\]]*\]\s*", "", p).strip()
                 self.assertNotIn("[", cleaned, f"{deck_sub} 프롬프트에 대괄호 잔존: {cleaned}")

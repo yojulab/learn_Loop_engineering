@@ -1,4 +1,4 @@
-"""프롤로그: 2026 모던 AI 에이전트 4계층 12대 스택 환경 및 저장소 진단 CLI."""
+"""프롤로그: 2026 모던 AI 에이전트 4계층 11대 스택 환경 및 저장소 진단 CLI."""
 
 from __future__ import annotations
 
@@ -11,10 +11,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
-FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
+FOUR_LAYERS_ELEMENTS: tuple[dict[str, Any], ...] = (
     {
         "layer_index": 1,
-        "layer_name": "지식과 기억",
+        "layer_name": "지식과 컨텍스트",
         "element_index": 1,
         "id": "prompt_engineering",
         "name": "구조화된 프롬프트 & Few-shot",
@@ -24,7 +24,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
     },
     {
         "layer_index": 1,
-        "layer_name": "지식과 기억",
+        "layer_name": "지식과 컨텍스트",
         "element_index": 2,
         "id": "context_engineering",
         "name": "컨텍스트 엔지니어링 & 예산 관리",
@@ -33,19 +33,9 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
         "description": "컨텍스트 윈도우 점유율 계산, 오염 방지 및 /compact·/clear 기준",
     },
     {
-        "layer_index": 1,
-        "layer_name": "지식과 기억",
-        "element_index": 3,
-        "id": "rag_and_memory",
-        "name": "Agentic RAG & 지속 Memory",
-        "chapter": "ch05",
-        "canonical_dir": "ch05-rag-and-memory",
-        "description": "Top-K/발췌 필터링 검색과 TASKS.md·JOURNAL.md 파일 기반 기억 지속",
-    },
-    {
         "layer_index": 2,
         "layer_name": "행동과 도구",
-        "element_index": 4,
+        "element_index": 3,
         "id": "agent_loop_cli",
         "name": "에이전트 코딩 루프 & CLI",
         "chapter": "ch01",
@@ -55,7 +45,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
     {
         "layer_index": 2,
         "layer_name": "행동과 도구",
-        "element_index": 5,
+        "element_index": 4,
         "id": "mcp_protocol",
         "name": "MCP (Model Context Protocol)",
         "chapter": "ch02",
@@ -65,7 +55,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
     {
         "layer_index": 2,
         "layer_name": "행동과 도구",
-        "element_index": 6,
+        "element_index": 5,
         "id": "hooks_guardrails",
         "name": "훅(Hooks) 실행 제어",
         "chapter": "ch02",
@@ -75,7 +65,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
     {
         "layer_index": 3,
         "layer_name": "표준과 확장",
-        "element_index": 7,
+        "element_index": 6,
         "id": "layered_instructions",
         "name": "4대 층위 상시 지침",
         "chapter": "ch04",
@@ -85,7 +75,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
     {
         "layer_index": 3,
         "layer_name": "표준과 확장",
-        "element_index": 8,
+        "element_index": 7,
         "id": "skills_modules",
         "name": "온디맨드 스킬(Skills)",
         "chapter": "ch03",
@@ -95,7 +85,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
     {
         "layer_index": 3,
         "layer_name": "표준과 확장",
-        "element_index": 9,
+        "element_index": 8,
         "id": "harness_engineering",
         "name": "하네스 엔지니어링",
         "chapter": "ch07",
@@ -105,7 +95,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
     {
         "layer_index": 4,
         "layer_name": "위임과 검증",
-        "element_index": 10,
+        "element_index": 9,
         "id": "subagents_workflow",
         "name": "서브에이전트 & 동적 워크플로",
         "chapter": "ch06",
@@ -115,7 +105,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
     {
         "layer_index": 4,
         "layer_name": "위임과 검증",
-        "element_index": 11,
+        "element_index": 10,
         "id": "loops_and_orchestration",
         "name": "이너·아우터 루프 & 3-Agent 오케스트레이션",
         "chapter": "ch08-ch10",
@@ -125,7 +115,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
     {
         "layer_index": 4,
         "layer_name": "위임과 검증",
-        "element_index": 12,
+        "element_index": 11,
         "id": "eval_and_llmops",
         "name": "Eval & LLMOps 관측/회귀",
         "chapter": "ch11-ch12",
@@ -133,6 +123,7 @@ FOUR_LAYERS_12_ELEMENTS: tuple[dict[str, Any], ...] = (
         "description": "프롬프트 버전 라벨, 3종 Eval, 오프라인 Trace, Stage 1~4 진단",
     },
 )
+FOUR_LAYERS_12_ELEMENTS = FOUR_LAYERS_ELEMENTS
 
 DEFAULT_PACKAGE_SPECS: tuple[tuple[str, str, str], ...] = (
     ("pydantic", "pydantic", "core"),
@@ -207,13 +198,13 @@ def check_installed_packages() -> dict[str, Any]:
 
 
 def check_repo_layers(root: str | Path | None = None) -> dict[str, Any]:
-    """저장소 루트 문서 및 4계층 12대 요소 단원 디렉터리 준비 상태를 점검한다."""
+    """저장소 루트 문서 및 4계층 11대 요소 단원 디렉터리 준비 상태를 점검한다."""
     repo_root = Path(root) if root is not None else Path(__file__).resolve().parent.parent
     root_docs = ["README.md", "AGENTS.md", "CLAUDE.md", "GEMINI.md", "docs/ARCHITECTURE.md"]
     root_doc_status = {rel: (repo_root / rel).is_file() for rel in root_docs}
 
     elements_status = []
-    for elem in FOUR_LAYERS_12_ELEMENTS:
+    for elem in FOUR_LAYERS_ELEMENTS:
         target_dir = repo_root / elem["canonical_dir"]
         elements_status.append({
             "layer_index": elem["layer_index"],
@@ -246,13 +237,13 @@ def check_repo_layers(root: str | Path | None = None) -> dict[str, Any]:
 
 
 def format_report(as_json: bool = False, root: str | Path | None = None) -> str:
-    """런타임·패키지·저장소 4계층 12대 요소 점검 결과를 JSON 또는 텍스트로 반환한다."""
+    """런타임·패키지·저장소 4계층 11대 요소 점검 결과를 JSON 또는 텍스트로 반환한다."""
     payload = {
         "runtime": check_python_runtime(),
         "packages": check_installed_packages(),
         "repo_layers": check_repo_layers(root),
-        "elements_count": len(FOUR_LAYERS_12_ELEMENTS),
-        "layers_count": len({e["layer_index"] for e in FOUR_LAYERS_12_ELEMENTS}),
+        "elements_count": len(FOUR_LAYERS_ELEMENTS),
+        "layers_count": len({e["layer_index"] for e in FOUR_LAYERS_ELEMENTS}),
     }
     if as_json:
         return json.dumps(payload, ensure_ascii=False, indent=2)
@@ -262,14 +253,14 @@ def format_report(as_json: bool = False, root: str | Path | None = None) -> str:
     repo = payload["repo_layers"]
 
     lines = [
-        "=== 2026 모던 AI 에이전트 스택 (4계층 12대 요소) 환경 진단 ===",
+        "=== 2026 모던 AI 에이전트 스택 (4계층 11대 요소) 환경 진단 ===",
         f"Python: {rt['python_version']} (supported={rt['python_supported']}) | "
         f"SQLite: {rt['sqlite_version']} (FTS5={rt['sqlite_fts5_enabled']})",
         f"Core missing: {pkg['core_missing'] or 'None'} | "
         f"Offline adapter targets: {pkg['offline_fallback_needed'] or 'None'}",
         f"Repo root: {repo['repo_root']}",
         "",
-        "[4계층 12대 요소 매핑 현황]",
+        "[4계층 11대 요소 매핑 현황]",
     ]
     for elem in repo["elements"]:
         mark = "READY" if elem["present"] else "PENDING"
@@ -282,7 +273,7 @@ def format_report(as_json: bool = False, root: str | Path | None = None) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="프롤로그: 4계층 12대 AI 에이전트 스택 환경 진단 CLI",
+        description="프롤로그: 4계층 11대 AI 에이전트 스택 환경 진단 CLI",
     )
     parser.add_argument("--json", action="store_true", help="JSON 형식으로 출력")
     parser.add_argument("--root", default=None, help="점검할 저장소 루트 경로")

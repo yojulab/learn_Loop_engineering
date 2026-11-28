@@ -95,13 +95,13 @@
     chap: 'eBook 프롤로그 요약',
     theme: 'paper',
     title: 'eBook 프롤로그: 프롬프트를 넘어 시스템을 엔지니어링하라',
-    notes: 'eBook 프롤로그의 핵심 메시지(프롬프트 → 12대 스택 4계층 시스템 엔지니어링 → 탐험 순서)를 정리한 페이지입니다.',
+    notes: 'eBook 프롤로그의 핵심 메시지(프롬프트 → 11대 스택 4계층 시스템 엔지니어링 → 탐험 순서)를 정리한 페이지입니다.',
     build(el, A) {
-      const T = title(el, 'EBOOK PROLOGUE SUMMARY', '프롬프트를 넘어 <span class="hb">12대 스택 4계층</span> 시스템을 엔지니어링하라', { y: 56 });
+      const T = title(el, 'EBOOK PROLOGUE SUMMARY', '프롬프트를 넘어 <span class="hb">11대 스택 4계층</span> 시스템을 엔지니어링하라', { y: 56 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const layers = [
-        ['1계층 · 지식과 기억', 'RAG · Context · Memory', '답변 전 외부 지식을 찾고(RAG), 현재 시야(Context)와 세션 간 기억(Memory)을 유지', '#E6E0FF', '#4D2FD0'],
+        ['1계층 · 지식과 컨텍스트', 'Prompt · Context · Instructions', '7항목 구조화 프롬프트(Prompt), 현재 시야·예산(Context), 4대 층위 지침(Instructions)을 정밀 통제', '#E6E0FF', '#4D2FD0'],
         ['2계층 · 행동과 도구', 'Agent · Agentic AI · Tools', '단발 응답을 넘어 계획·결정·자기 수정 루프와 외부 함수(Tools)로 직접 행동', '#DCE6FF', '#1E4FD0'],
         ['3계층 · 표준과 확장', 'MCP · Skills · Hooks', '개방형 도구 표준(MCP), 온디맨드 노하우(Skills), 정해진 시점 강제 트리거(Hooks)', '#D5F2E6', '#0B8A5F'],
         ['4계층 · 위임과 검증', 'Subagents · Orchestration · Eval', '역할 분리 위임(Subagents), 다단계 조율(Orchestration), 동작·품질 측정(Eval)', '#FDEFD3', '#9A5B00'],
@@ -115,7 +115,7 @@
       });
 
       const foot = card(el, { x: 100, y: 870, w: 1720, h: 95, pad: 22 });
-      foot.innerHTML = `<div class="b3" style="color:var(--ink)"><b>탐험 순서:</b> Part 1(행동과 표준: Agent·MCP·Hooks·Skills) → Part 2(지식과 기억: Context·RAG·Memory) → Part 3~4(위임과 검증: Subagents·Loop·Orchestration·Eval)</div>`;
+      foot.innerHTML = `<div class="b3" style="color:var(--ink)"><b>탐험 순서:</b> Part 1(행동과 표준: Agent·MCP·Hooks·Skills) → Part 2(지식과 컨텍스트: Prompt·Context·지침) → Part 3~4(위임과 검증: Subagents·Loop·Orchestration·Eval)</div>`;
       A(foot, 'up', 0.42, { dur: 0.4 });
     },
   });

@@ -11,7 +11,7 @@
     dots: true,
     noChrome: true,
     title: '카툰으로 배우는 1인 N프로젝트 운영체제: 루프 엔지니어링 (카툰 심화 워크숍)',
-    notes: '카툰 스토리텔링과 함께 12대 AI 에이전트 스택의 이론·실습·모범 답안을 완주하는 심화 워크숍 웹 PPT입니다.',
+    notes: '카툰 스토리텔링과 함께 11대 AI 에이전트 스택의 이론·실습·모범 답안을 완주하는 심화 워크숍 웹 PPT입니다.',
     build(el, A) {
       const tag = h('div', 'row abs', el);
       tag.style.cssText = 'left:100px;top:85px;width:1060px;gap:12px;flex-wrap:wrap';
@@ -195,26 +195,26 @@
     },
   });
 
-  // 3. 커리큘럼 로드맵 + 4계층 12대 스택
+  // 3. 커리큘럼 로드맵 + 4계층 11대 스택
   DECK.slide({
     id: 'timetable',
     part: 'opening',
     chap: '전체 로드맵',
     theme: 'paper',
-    title: '커리큘럼 로드맵 & 4계층 12대 스택',
+    title: '커리큘럼 로드맵 & 4계층 11대 스택',
     notes: '총 6블록으로 구성되어 있으며, 각 단원마다 실습+모범답안 슬라이드가 1:1로 배치되어 있습니다.',
     build(el, A) {
-      const T = title(el, 'WORKSHOP CURRICULUM', '커리큘럼 로드맵 & <span class="hl">4계층 12대 스택</span>', { y: 64 });
+      const T = title(el, 'WORKSHOP CURRICULUM', '커리큘럼 로드맵 & <span class="hl">4계층 11대 스택</span>', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const c1 = card(el, { x: 100, y: 225, w: 940, h: 740, pad: 30 });
-      c1.innerHTML = `<div class="h4" style="margin-bottom:16px">워크숍 모듈 구성 (13개 챕터)</div>
+      c1.innerHTML = `<div class="h4" style="margin-bottom:16px">워크숍 모듈 구성 (12개 챕터)</div>
       <table class="tbl tbl-timetable">
         <thead><tr><th>블록</th><th>단원 범위</th><th>핵심 주제 & 실습</th><th>모듈</th></tr></thead>
         <tbody>
-          <tr><td><b>Intro</b></td><td><code>ch00</code></td><td>4계층 12대 스택 &amp; Any-Platform 환경 진단</td><td><b>1개</b></td></tr>
+          <tr><td><b>Intro</b></td><td><code>ch00</code></td><td>4계층 11대 스택 &amp; Any-Platform 환경 진단</td><td><b>1개</b></td></tr>
           <tr><td><b>Part 1</b></td><td><code>ch01 ~ ch03</code></td><td>에이전트 루프 · MCP &amp; Hooks · 3단계 Skills</td><td><b>3개</b></td></tr>
-          <tr><td><b>Part 2</b></td><td><code>ch04 ~ ch05</code></td><td>7항목 프롬프트 · 컨텍스트 예산 · Agentic RAG &amp; Memory</td><td><b>2개</b></td></tr>
+          <tr><td><b>Part 2</b></td><td><code>ch04</code></td><td>7항목 프롬프트 · 컨텍스트 예산 · 4대 층위 지침</td><td><b>1개</b></td></tr>
           <tr><td><b>Part 3</b></td><td><code>ch06 ~ ch08</code></td><td>서브에이전트 · 하네스 가드레일 · Ralph Loop &amp; <code>/goal</code></td><td><b>3개</b></td></tr>
           <tr><td><b>Part 4A</b></td><td><code>ch09 ~ ch10</code></td><td>3-Agent 블라인드 합의 · 5단계 아우터 루프</td><td><b>2개</b></td></tr>
           <tr><td><b>Part 4B</b></td><td><code>ch11 ~ ch12</code></td><td>LiteLLM + Langfuse Save as Prompt · Eval · Stage 1~4</td><td><b>2개</b></td></tr>
@@ -226,20 +226,20 @@
       c2.innerHTML = `<div class="h4" style="margin-bottom:18px">LLM을 감싸는 4계층(Layer 1~4)</div>
       <div class="col" style="gap:16px">
         <div style="padding:18px 20px;border-radius:16px;background:var(--violet-l)">
-          <div class="cap" style="color:var(--violet)">Layer 1 · 지식과 기억 (ch04, ch05)</div>
-          <div class="b3" style="color:var(--ink);margin-top:4px">① 프롬프트·컨텍스트 · ② Agentic RAG · ③ 지속 Memory</div>
+          <div class="cap" style="color:var(--violet)">Layer 1 · 지식과 컨텍스트 (ch04)</div>
+          <div class="b3" style="color:var(--ink);margin-top:4px">① 7항목 프롬프트 엔지니어링 · ② 컨텍스트 예산 관리</div>
         </div>
         <div style="padding:18px 20px;border-radius:16px;background:var(--blue-l)">
           <div class="cap" style="color:var(--blue-d)">Layer 2 · 행동과 도구 (ch01, ch02)</div>
-          <div class="b3" style="color:var(--ink);margin-top:4px">④ 에이전트 루프 · ⑤ MCP · ⑥ Hooks 가드레일</div>
+          <div class="b3" style="color:var(--ink);margin-top:4px">③ 에이전트 루프 · ④ MCP · ⑤ Hooks 가드레일</div>
         </div>
         <div style="padding:18px 20px;border-radius:16px;background:var(--green-l)">
           <div class="cap" style="color:var(--green-d)">Layer 3 · 표준과 확장 (ch03, ch04, ch07)</div>
-          <div class="b3" style="color:var(--ink);margin-top:4px">⑦ 상시 지침 · ⑧ 온디맨드 Skills · ⑨ 하네스 린터</div>
+          <div class="b3" style="color:var(--ink);margin-top:4px">⑥ 상시 지침 · ⑦ 온디맨드 Skills · ⑧ 하네스 린터</div>
         </div>
         <div style="padding:18px 20px;border-radius:16px;background:var(--amber-l)">
           <div class="cap" style="color:#9A5B00">Layer 4 · 위임과 검증 (ch06, ch08~11)</div>
-          <div class="b3" style="color:var(--ink);margin-top:4px">⑩ 서브에이전트 · ⑪ 이너/아우터 루프 · ⑫ Eval/LLMOps</div>
+          <div class="b3" style="color:var(--ink);margin-top:4px">⑨ 서브에이전트 · ⑩ 이너/아우터 루프 · ⑪ Eval/LLMOps</div>
         </div>
       </div>`;
       A(c2, 'up', 0.2, { dur: 0.45 });
@@ -290,7 +290,7 @@
     theme: 'ink',
     dots: true,
     title: '저장소 구조 & GitHub Pages(docs/) 구성',
-    notes: '도서 호환 심볼릭 링크(ch01~ch11)와 정식 디렉터리(ch00-prologue~ch12-epilogue), 그리고 docs/ 웹 PPT가 공존합니다.',
+    notes: '정식 단원 디렉터리(ch00-prologue~ch12-epilogue, 제5장 제외)와 docs/ 웹 PPT가 함께 구성되어 있습니다.',
     build(el, A) {
       const T = title(el, 'REPOSITORY MAP', '저장소 구조 & <span class="hl">GitHub Pages</span> 정적 번들', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
@@ -302,12 +302,11 @@
 ├── scripts/verify_chapters.py  # 전 단원 &amp; 웹 PPT 통합 검증
 ├── docs/                       # GitHub Pages 루트 (상대경로 100%)
 │   ├── .nojekyll               # Jekyll 우회
-│   ├── ARCHITECTURE.md         # 4계층 12대 스택 설계서 보존
+│   ├── ARCHITECTURE.md         # 4계층 11대 스택 설계서 보존
 │   ├── index.html / presenter.html
 │   ├── deck.css / engine.js / ui.js
 │   └── slides/ (00_manifest, s0..s5)
-├── ch00-prologue/ ~ ch12-epilogue/  # 정식 단원 코드
-└── ch01/ ~ ch11/               # 도서 『💻 Git 예제』 호환 심볼릭 링크</code></pre>`;
+└── ch00-prologue/ ~ ch12-epilogue/  # 정식 단원 코드 (제5장 제외)</code></pre>`;
       A(w1.el, 'up', 0.12, { dur: 0.45 });
 
       const c2 = card(el, { x: 980, y: 225, w: 840, h: 735, pad: 34 });
@@ -336,15 +335,15 @@
     part: 'opening',
     chap: 'ch00 실습 & 답안',
     theme: 'paper',
-    title: 'ch00 실습: 4계층 12대 스택 & Any-Platform 환경 진단',
+    title: 'ch00 실습: 4계층 11대 스택 & Any-Platform 환경 진단',
     notes: '수강생들에게 stack_check.py와 verify_chapters.py를 먼저 실행하게 한 뒤, 우측 모범 답안을 클릭해 구조와 JSON 출력을 확인하게 합니다.',
     build(el, A) {
       buildLabSlide(el, A, {
         id: 'ch00',
         userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
-현재 챕터 폴더의 AGENTS.md · CLAUDE.md · GEMINI.md 지침을 확인하고 4계층 12대 스택 환경 및 플랫폼 어댑터 진단 결과를 출력해줘.
+현재 챕터 폴더의 AGENTS.md · CLAUDE.md · GEMINI.md 지침을 확인하고 4계층 11대 스택 환경 및 플랫폼 어댑터 진단 결과를 출력해줘.
 
-1) 프롬프트 1 (스택 진단): python3 stack_check.py --json 을 실행해 Python 버전, SQLite FTS5 지원, 4계층(4)/12대 요소(12) 준비 상태를 요약해줘.
+1) 프롬프트 1 (스택 진단): python3 stack_check.py --json 을 실행해 Python 버전, SQLite FTS5 지원, 4계층(4)/11대 요소(11) 준비 상태를 요약해줘.
 2) 프롬프트 2 (플랫폼 점검): AGENT_PLATFORM=offline python3 agent_check.py --json 으로 claude/chatgpt/gemini 오프라인 폴백 응답을 확인해줘.
 3) 프롬프트 3 (단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 를 실행해 전체 테스트 통과 여부를 출력해줘.`,
         kicker: 'CH00 PROLOGUE · HANDS-ON LAB',
@@ -357,7 +356,7 @@
           '<code>사용자 입력 프롬프트로 진단 결과 출력</code><br>아래 3가지 프롬프트 예시(또는 단축키 A 통합 프롬프트)를 입력해 JSON 결과를 확인.',
         ],
         promptExamples: [
-          '1) "현재 폴더의 stack_check.py --json을 실행해 4계층 12대 스택과 FTS5 준비 상태를 요약해줘."',
+          '1) "현재 폴더의 stack_check.py --json을 실행해 4계층 11대 스택과 FTS5 준비 상태를 요약해줘."',
           '2) "agent_check.py로 claude·chatgpt·gemini·offline 폴백 동작을 점검하고 JSON으로 보여줘."',
           '3) "tests/ 단위 테스트를 전체 실행해 모든 항목이 OK인지 검증 리포트를 출력해줘."',
         ],
@@ -377,7 +376,7 @@
   "sqlite_fts5": true,
   "platforms_supported": ["claude", "chatgpt", "gemini"],
   "layers_count": 4,
-  "elements_count": 12,
+  "elements_count": 11,
   "overall_ready": true
 }`,
       });
