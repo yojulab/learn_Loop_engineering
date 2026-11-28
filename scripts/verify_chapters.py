@@ -1,4 +1,4 @@
-"""전 단원(ch00~ch12) 구조, 심볼릭 링크, 레거시 부재, CLI, 단위 테스트 통합 검증 러너."""
+"""전 단원(ch00~ch11) 구조, 심볼릭 링크, 레거시 부재, CLI, 단위 테스트 통합 검증 러너."""
 
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         chapter_id="webppt",
         phase=1,
         canonical_dir="docs",
-        title="5시간 과정 GitHub Pages 웹 PPT (ch00~ch12 실습·모범답안)",
+        title="5시간 과정 GitHub Pages 웹 PPT (ch00~ch11 실습·모범답안)",
         required_files=(
             "ARCHITECTURE.md",
             ".nojekyll",
@@ -193,10 +193,10 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
         ),
     ),
     ChapterSpec(
-        chapter_id="ch06",
+        chapter_id="ch05",
         phase=4,
-        canonical_dir="ch06-subagents-workflow",
-        title="제6장: 서브에이전트와 워크플로",
+        canonical_dir="ch05-subagents-workflow",
+        title="제5장: 서브에이전트와 워크플로",
         required_files=(
             *CHAPTER_AI_FILES,
             "README.md",
@@ -207,13 +207,13 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "tests/test_dynamic_workflow.py",
             "tests/test_quote_cli_search.py",
         ),
-        test_dirs=("ch06-subagents-workflow/tests",),
+        test_dirs=("ch05-subagents-workflow/tests",),
     ),
     ChapterSpec(
-        chapter_id="ch07",
+        chapter_id="ch06",
         phase=4,
-        canonical_dir="ch07-harness-engineering",
-        title="제7장: 하네스 엔지니어링",
+        canonical_dir="ch06-harness-engineering",
+        title="제6장: 하네스 엔지니어링",
         required_files=(
             *CHAPTER_AI_FILES,
             "README.md",
@@ -222,13 +222,13 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "doc_gardening.py",
             "tests/test_harness_templates.py",
         ),
-        test_dirs=("ch07-harness-engineering/tests",),
+        test_dirs=("ch06-harness-engineering/tests",),
     ),
     ChapterSpec(
-        chapter_id="ch08",
+        chapter_id="ch07",
         phase=4,
-        canonical_dir="ch08-inner-ralph-loop",
-        title="제8장: 이너 루프와 랄프 루프",
+        canonical_dir="ch07-inner-ralph-loop",
+        title="제7장: 이너 루프와 랄프 루프",
         required_files=(
             *CHAPTER_AI_FILES,
             "README.md",
@@ -242,13 +242,13 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "goal_evaluator.py",
             "tests/test_rss_wiki.py",
         ),
-        test_dirs=("ch08-inner-ralph-loop/tests",),
+        test_dirs=("ch07-inner-ralph-loop/tests",),
     ),
     ChapterSpec(
-        chapter_id="ch09",
+        chapter_id="ch08",
         phase=5,
-        canonical_dir="ch09-orchestration",
-        title="제9장: 다중 에이전트 오케스트레이션",
+        canonical_dir="ch08-orchestration",
+        title="제8장: 다중 에이전트 오케스트레이션",
         required_files=(
             *CHAPTER_AI_FILES,
             "README.md",
@@ -256,13 +256,13 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "run.py",
             "tests/test_orchestration_harness.py",
         ),
-        test_dirs=("ch09-orchestration/tests",),
+        test_dirs=("ch08-orchestration/tests",),
     ),
     ChapterSpec(
-        chapter_id="ch10",
+        chapter_id="ch09",
         phase=5,
-        canonical_dir="ch10-outer-loop",
-        title="제10장: 아우터 루프 엔지니어링",
+        canonical_dir="ch09-outer-loop",
+        title="제9장: 아우터 루프 엔지니어링",
         required_files=(
             *CHAPTER_AI_FILES,
             "README.md",
@@ -272,13 +272,13 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "cost_logger.py",
             "tests/test_todo_loop.py",
         ),
-        test_dirs=("ch10-outer-loop/tests",),
+        test_dirs=("ch09-outer-loop/tests",),
     ),
     ChapterSpec(
-        chapter_id="ch11",
+        chapter_id="ch10",
         phase=5,
-        canonical_dir="ch11-eval-and-llmops",
-        title="제11장: 평가(Eval)와 LLMOps",
+        canonical_dir="ch10-eval-and-llmops",
+        title="제10장: 평가(Eval)와 LLMOps",
         required_files=(
             *CHAPTER_AI_FILES,
             "README.md",
@@ -299,17 +299,17 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "litellm_proxy/client_gemini.py",
             "tests/test_support_assistant.py",
         ),
-        test_dirs=("ch11-eval-and-llmops/tests",),
+        test_dirs=("ch10-eval-and-llmops/tests",),
         cli_commands=(
-            ("ch11-eval-and-llmops/litellm_proxy/zero_code_proxy_demo.py",),
-            ("ch11-eval-and-llmops/trace_to_prompt.py", "--demo", "--json"),
-            ("ch11-eval-and-llmops/fetch_prompt.py", "--demo", "--json"),
+            ("ch10-eval-and-llmops/litellm_proxy/zero_code_proxy_demo.py",),
+            ("ch10-eval-and-llmops/trace_to_prompt.py", "--demo", "--json"),
+            ("ch10-eval-and-llmops/fetch_prompt.py", "--demo", "--json"),
         ),
     ),
     ChapterSpec(
-        chapter_id="ch12",
+        chapter_id="ch11",
         phase=5,
-        canonical_dir="ch12-epilogue",
+        canonical_dir="ch11-epilogue",
         title="에필로그: 도입 체크리스트 & Stage 1~4 진단",
         required_files=(
             *CHAPTER_AI_FILES,
@@ -317,8 +317,8 @@ CHAPTER_SPECS: tuple[ChapterSpec, ...] = (
             "stage_readiness_check.py",
             "tests/test_stage_readiness.py",
         ),
-        test_dirs=("ch12-epilogue/tests",),
-        cli_commands=(("ch12-epilogue/stage_readiness_check.py", "--format", "json"),),
+        test_dirs=("ch11-epilogue/tests",),
+        cli_commands=(("ch11-epilogue/stage_readiness_check.py", "--format", "json"),),
     ),
 )
 
@@ -565,7 +565,7 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument(
         "--chapter",
         choices=[s.chapter_id for s in CHAPTER_SPECS],
-        help="특정 단원(ch00~ch12)만 검증",
+        help="특정 단원(ch00~ch11)만 검증",
     )
     group.add_argument("--all", action="store_true", help="전체 Phase 및 전 단원 검증")
     parser.add_argument("--json", action="store_true", help="JSON 형식으로 결과 출력")

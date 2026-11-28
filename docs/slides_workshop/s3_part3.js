@@ -8,32 +8,32 @@
     part: 'p3',
     chap: 'Part 3 시작',
     theme: 'green',
-    title: 'Part 3 · 위임과 품질 (ch06 ~ ch08)',
-    notes: 'Part 3은 서브에이전트와 워크플로(ch06), 하네스 엔지니어링(ch07), 이너 루프 & Ralph Loop /goal(ch08)을 다룹니다.',
+    title: 'Part 3 · 위임과 품질 (ch05 ~ ch07)',
+    notes: 'Part 3은 서브에이전트와 워크플로(ch05), 하네스 엔지니어링(ch06), 이너 루프 & Ralph Loop /goal(ch07)을 다룹니다.',
     build(el, A) {
       const box = h('div', 'abs', el);
       box.style.cssText = 'left:100px;top:270px;width:1040px';
       chip(box, 'PART 3', { bg: 'rgba(15,27,61,.18)', fg: '#0F1B3D' });
       h('div', 'h1', box, '역할 위임, 가드레일,<br>그리고 자율 이너 루프').style.cssText = 'margin-top:24px;color:#fff';
-      h('div', 'b1', box, 'ch06 서브에이전트 · ch07 하네스 린터 · ch08 FTS5 + Ralph Loop').style.cssText = 'margin-top:28px;color:#E2FAF0';
+      h('div', 'b1', box, 'ch05 서브에이전트 · ch06 하네스 린터 · ch07 FTS5 + Ralph Loop').style.cssText = 'margin-top:28px;color:#E2FAF0';
       A(box, 'up', 0, { dur: 0.5 });
       const capWrap = h('div', 'abs', el);
       capWrap.style.cssText = 'right:85px;top:90px;width:610px;height:900px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.94);border-radius:24px;padding:16px;box-shadow:0 28px 60px -22px rgba(8,14,34,.55);border:2px solid rgba(255,255,255,.22)';
-      capWrap.innerHTML = `<img src="assets/cartoons/cap_07_in.jpg" alt="Part 3 도입 카툰: 모델은 똑똑한데 실패하는 이유 → 하네스 설계" style="width:100%;height:100%;object-fit:contain;border-radius:14px;display:block">`;
+      capWrap.innerHTML = `<img src="assets/cartoons/cap_06_in.jpg" alt="Part 3 도입 카툰: 모델은 똑똑한데 실패하는 이유 → 하네스 설계" style="width:100%;height:100%;object-fit:contain;border-radius:14px;display:block">`;
       A(capWrap, 'up', 0.16, { dur: 0.5 });
     },
   });
 
-  // ch06 이론
+  // ch05 이론
   DECK.slide({
-    id: 'ch06-theory',
+    id: 'ch05-theory',
     part: 'p3',
-    chap: 'ch06 서브에이전트',
+    chap: 'ch05 서브에이전트',
     theme: 'paper',
-    title: 'ch06: 전문 서브에이전트 위임 & 동적 워크플로',
+    title: 'ch05: 전문 서브에이전트 위임 & 동적 워크플로',
     notes: '하나의 에이전트에게 모든 일을 몰아주면 컨텍스트가 오염됩니다. 역할·도구·모델을 분리한 5종 서브에이전트와 Python 워크플로 오케스트레이션을 봅니다.',
     build(el, A) {
-      const T = title(el, 'CH06 · SUBAGENTS & WORKFLOW', '컨텍스트 격리 기반 <span class="hl">서브에이전트</span> &amp; 동적 파이프라인', { y: 64 });
+      const T = title(el, 'CH05 · SUBAGENTS & WORKFLOW', '컨텍스트 격리 기반 <span class="hl">서브에이전트</span> &amp; 동적 파이프라인', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
@@ -46,37 +46,37 @@
       <div class="answer-hint" style="margin-top:20px">멀티 플랫폼 포팅: <code>agents_chatgpt.json</code> &amp; <code>agents_gemini.json</code> 동시 제공</div>`;
       A(c1, 'up', 0.1, { dur: 0.45 });
 
-      const w2 = win(el, { x: 980, y: 230, w: 840, h: 720, dark: true, title: 'ch06-subagents-workflow/dynamic_workflow.py' });
+      const w2 = win(el, { x: 980, y: 230, w: 840, h: 720, dark: true, title: 'ch05-subagents-workflow/dynamic_workflow.py' });
       w2.body.innerHTML = `<pre class="code-block" style="background:transparent;border:0;padding:0;font-size:21px"><code># --platform claude | chatgpt | gemini 지원
-python3 ch06-subagents-workflow/dynamic_workflow.py \
+python3 ch05-subagents-workflow/dynamic_workflow.py \
   --task-type release_check \
   --platform gemini --json
 
 # 검색 확장 Quote CLI:
-python3 ch06-subagents-workflow/quote_cli.py --search "harness" --json</code></pre>`;
+python3 ch05-subagents-workflow/quote_cli.py --search "harness" --json</code></pre>`;
       A(w2.el, 'up', 0.2, { dur: 0.45 });
     },
   });
 
-  // ch06 실습 + 모범 답안
+  // ch05 실습 + 모범 답안
   DECK.slide({
-    id: 'ch06-lab',
+    id: 'ch05-lab',
     part: 'p3',
-    chap: 'ch06 실습 & 답안',
+    chap: 'ch05 실습 & 답안',
     theme: 'white',
-    title: 'ch06 실습: 플랫폼별 서브에이전트 동적 워크플로 실행',
+    title: 'ch05 실습: 플랫폼별 서브에이전트 동적 워크플로 실행',
     notes: 'quote_agent.py와 dynamic_workflow.py를 claude/chatgpt/gemini 모드로 각각 실행해 봅니다.',
     build(el, A) {
       buildLabSlide(el, A, {
-        id: 'ch06',
+        id: 'ch05',
         userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
 현재 챕터 폴더의 5종 커스텀 서브에이전트(.claude/agents/*.md)와 동적 병렬 워크플로(dynamic_workflow.py), 확장된 quote_cli.py 검색 기능을 교차 검증하고 결과를 출력해줘.
 
 1) 프롬프트 1 (동적 병렬 워크플로): python3 dynamic_workflow.py --task-type api_change --platform gemini --json 을 실행해 선택된 서브에이전트와 병합 요약을 출력해줘.
 2) 프롬프트 2 (확장 Quote CLI 검색): python3 quote_cli.py --search "harness" --json 실행 결과를 확인해줘.
 3) 프롬프트 3 (권한 분리 & 단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 읽기 전용 제약과 검색 테스트 통과 여부를 출력해줘.`,
-        kicker: 'CH06 · HANDS-ON LAB',
-        heading: '제6장 실습: <span class="hl">서브에이전트</span> 병렬 위임 &amp; 교차 검증',
+        kicker: 'CH05 · HANDS-ON LAB',
+        heading: '제5장 실습: <span class="hl">서브에이전트</span> 병렬 위임 &amp; 교차 검증',
         duration: '',
         missionTitle: '챕터 루트에 5종 서브에이전트·워크플로 구성 후 AI CLI로 병렬 위임 출력',
         steps: [
@@ -111,17 +111,17 @@ python3 ch06-subagents-workflow/quote_cli.py --search "harness" --json</code></p
     },
   });
 
-  // ch07 이론
+  // ch06 이론
   DECK.slide({
-    id: 'ch07-theory',
+    id: 'ch06-theory',
     part: 'p3',
-    chap: 'ch07 하네스 엔지니어링',
+    chap: 'ch06 하네스 엔지니어링',
     theme: 'ink',
     dots: true,
-    title: 'ch07: 하네스 엔지니어링 — 목차형 100줄 AGENTS.md & 결정론적 린터',
+    title: 'ch06: 하네스 엔지니어링 — 목차형 100줄 AGENTS.md & 결정론적 린터',
     notes: '말로 주의를 주는 대신(비결정적), 코드와 린터로 규칙을 강제(결정적)하는 것이 하네스 엔지니어링의 핵심입니다.',
     build(el, A) {
-      const T = title(el, 'CH07 · HARNESS ENGINEERING', '말이 아닌 <span class="hl">코드와 구조</span>로 강제하는 하네스 3종 세트', { y: 64 });
+      const T = title(el, 'CH06 · HARNESS ENGINEERING', '말이 아닌 <span class="hl">코드와 구조</span>로 강제하는 하네스 3종 세트', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const items = [
@@ -137,25 +137,25 @@ python3 ch06-subagents-workflow/quote_cli.py --search "harness" --json</code></p
     },
   });
 
-  // ch07 실습 + 모범 답안
+  // ch06 실습 + 모범 답안
   DECK.slide({
-    id: 'ch07-lab',
+    id: 'ch06-lab',
     part: 'p3',
-    chap: 'ch07 실습 & 답안',
+    chap: 'ch06 실습 & 답안',
     theme: 'paper',
-    title: 'ch07 실습: 아키텍처 린터·가드레일·문서 정원가꾸기 실행',
+    title: 'ch06 실습: 아키텍처 린터·가드레일·문서 정원가꾸기 실행',
     notes: 'arch_linter.py, guardrails.py, doc_gardening.py를 실행하고 AGENTS.md 100줄 규정을 확인합니다.',
     build(el, A) {
       buildLabSlide(el, A, {
-        id: 'ch07',
+        id: 'ch06',
         userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
 현재 챕터 폴더의 100줄 이하 AGENTS.md(4대 질문)와 아키텍처 린터·가드레일·문서 정원 가꾸기 도구를 실행해 검증 리포트를 출력해줘.
 
 1) 프롬프트 1 (AST 아키텍처 린터 비교): arch_linter.py 로 samples/valid_app 과 samples/invalid_app 을 각각 검사(--json)해 계층 위반과 수정 가이드를 비교해줘.
 2) 프롬프트 2 (5줄 파괴 명령 가드레일): python3 guardrails.py --cmd "ls -la" --json 과 위험 명령 차단 여부를 점검해줘.
 3) 프롬프트 3 (문서 정원 가꾸기 & 테스트): doc_gardening.py 점검 및 python3 -m unittest discover -s tests -p "test_*.py" -v 실행 결과를 출력해줘.`,
-        kicker: 'CH07 · HANDS-ON LAB',
-        heading: '제7장 실습: <span class="hl">AST 린터</span> &amp; 하네스 가드레일 검증',
+        kicker: 'CH06 · HANDS-ON LAB',
+        heading: '제6장 실습: <span class="hl">AST 린터</span> &amp; 하네스 가드레일 검증',
         duration: '',
         missionTitle: '챕터 루트에 린터·가드레일 구성 후 AI CLI 프롬프트로 위반 탐지 결과 출력',
         steps: [
@@ -191,20 +191,20 @@ python3 ch06-subagents-workflow/quote_cli.py --search "harness" --json</code></p
     },
   });
 
-  // ch08 이론
+  // ch07 이론
   DECK.slide({
-    id: 'ch08-theory',
+    id: 'ch07-theory',
     part: 'p3',
-    chap: 'ch08 이너 & Ralph 루프',
+    chap: 'ch07 이너 & Ralph 루프',
     theme: 'white',
-    title: 'ch08: 이너 루프, Ralph Loop(컨텍스트 초기화) & /goal 평가자',
+    title: 'ch07: 이너 루프, Ralph Loop(컨텍스트 초기화) & /goal 평가자',
     notes: '컨텍스트가 무거워져 모델이 같은 실수를 반복하면, 파일(TASKS/PROGRESS)만 남기고 세션을 새로 시작하는 Ralph Loop가 효과적입니다.',
     build(el, A) {
-      const T = title(el, 'CH08 · INNER & RALPH LOOP', 'SQLite <span class="hb">FTS5 RSS Wiki</span>와 <span class="hl">Ralph Loop</span> 장시간 자율 실행', { y: 64 });
+      const T = title(el, 'CH07 · INNER & RALPH LOOP', 'SQLite <span class="hb">FTS5 RSS Wiki</span>와 <span class="hl">Ralph Loop</span> 장시간 자율 실행', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
-      c1.innerHTML = `<div class="h3">RSS Wiki 앱 (<code>ch08-inner-ralph-loop/</code>)</div>
+      c1.innerHTML = `<div class="h3">RSS Wiki 앱 (<code>ch07-inner-ralph-loop/</code>)</div>
       <ul class="lab-steps" style="margin-top:18px">
         <li><code>db.py</code><br>SQLite <code>FTS5</code> 가상 테이블 기반 전문 검색 인덱스를 구축.</li>
         <li><code>collector.py</code><br>로컬 샘플 피드를 파싱하고 중복을 제거해 저장.</li>
@@ -223,25 +223,25 @@ python3 ch06-subagents-workflow/quote_cli.py --search "harness" --json</code></p
     },
   });
 
-  // ch08 실습 + 모범 답안
+  // ch07 실습 + 모범 답안
   DECK.slide({
-    id: 'ch08-lab',
+    id: 'ch07-lab',
     part: 'p3',
-    chap: 'ch08 실습 & 답안',
+    chap: 'ch07 실습 & 답안',
     theme: 'paper',
-    title: 'ch08 실습: FTS5 검색 DB & goal_evaluator 성공 판정',
+    title: 'ch07 실습: FTS5 검색 DB & goal_evaluator 성공 판정',
     notes: 'RSS Wiki의 FTS5 검색과 /goal 평가기의 종료 조건 판정을 실습합니다.',
     build(el, A) {
       buildLabSlide(el, A, {
-        id: 'ch08',
+        id: 'ch07',
         userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
 현재 챕터 폴더에서 PROMPT.md 목표 기준에 따라 RSS 수집·SQLite FTS5 색인·/goal 독립 목표 달성 판정 결과를 출력해줘.
 
 1) 프롬프트 1 (/goal 독립 목표 판정): python3 goal_evaluator.py 를 실행해 5대 완료 조건(status: "MET", passed_count: 5/5) 달성 JSON을 출력해줘.
 2) 프롬프트 2 (SQLite FTS5 & 수집기 점검): sample_feed.xml 수집 및 FTS5 전문 검색(db.py), 웹 뷰(app.py) 동작을 점검해줘.
 3) 프롬프트 3 (서킷 브레이커 & 단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 3회 연속 실패 BLOCKED 서킷 브레이커와 전체 테스트를 검증해줘.`,
-        kicker: 'CH08 · HANDS-ON LAB',
-        heading: '제8장 실습: <span class="hl">FTS5 RSS Wiki</span> &amp; /goal 판정 출력',
+        kicker: 'CH07 · HANDS-ON LAB',
+        heading: '제7장 실습: <span class="hl">FTS5 RSS Wiki</span> &amp; /goal 판정 출력',
         duration: '',
         missionTitle: '챕터 루트에 SQLite FTS5·목표 판정기 구성 후 AI CLI로 MET 결과 출력',
         steps: [

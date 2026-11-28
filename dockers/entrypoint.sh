@@ -23,15 +23,15 @@ ensure_app_source_on_volume() {
   fi
 }
 
-# 2) Langfuse 인증 API(/api/public/v2/prompts) 준비 대기 후 ch11 seed_prompts.py 자동 실행
-seed_ch11_prompts() {
+# 2) Langfuse 인증 API(/api/public/v2/prompts) 준비 대기 후 ch10 seed_prompts.py 자동 실행
+seed_ch10_prompts() {
   local host="${LANGFUSE_HOST:-}"
   local pk="${LANGFUSE_PUBLIC_KEY:-}"
   local sk="${LANGFUSE_SECRET_KEY:-}"
-  local support_dir="${APP_DIR}/ch11-eval-and-llmops"
+  local support_dir="${APP_DIR}/ch10-eval-and-llmops"
 
   if [ -z "${host}" ] || [ -z "${pk}" ] || [ -z "${sk}" ]; then
-    echo "[entrypoint] LANGFUSE_HOST/KEY 미설정 — ch11 seed_prompts 건너뜀"
+    echo "[entrypoint] LANGFUSE_HOST/KEY 미설정 — ch10 seed_prompts 건너뜀"
     return 0
   fi
 
@@ -78,8 +78,8 @@ if not ready:
     print(f"[entrypoint] ERROR: Langfuse API 준비 타임아웃 ({host}, last={last_err})", file=sys.stderr)
     sys.exit(1)
 
-# 2) Run ch11 seed_prompts idempotently
-support_dir = "/apps/learn_Loop_engineering/ch11-eval-and-llmops"
+# 2) Run ch10 seed_prompts idempotently
+support_dir = "/apps/learn_Loop_engineering/ch10-eval-and-llmops"
 sys.path.insert(0, support_dir)
 from langfuse_ops import LangfuseOpsClient  # noqa: E402
 from seed_prompts import seed_default_prompts  # noqa: E402
@@ -96,20 +96,20 @@ def _has_label(name: str, label: str) -> bool:
         return False
 
 if _has_label("support-answer", "production") and _has_label("support-answer", "candidate"):
-    print("[entrypoint] ch11 seed_prompts: 'support-answer' (production, candidate) 이미 등록됨 — 건너뜀")
+    print("[entrypoint] ch10 seed_prompts: 'support-answer' (production, candidate) 이미 등록됨 — 건너뜀")
 else:
     seed_default_prompts(ops)
     p_prod = ops.get_prompt("support-answer", label="production")
     p_cand = ops.get_prompt("support-answer", label="candidate")
     print(
-        f"[entrypoint] ch11 seed_prompts 등록 완료: "
+        f"[entrypoint] ch10 seed_prompts 등록 완료: "
         f"production=v{p_prod.version}, candidate=v{p_cand.version} -> {host}"
     )
 
-# 3) Run ch11 seed_langfuse_dashboard idempotently so Dashboard / Traces / Scores / Datasets are populated
+# 3) Run ch10 seed_langfuse_dashboard idempotently so Dashboard / Traces / Scores / Datasets are populated
 traces = ops.list_traces(limit=1)
 if traces:
-    print("[entrypoint] ch11 seed_langfuse_dashboard: 기존 트레이스 존재 — 건너뜀")
+    print("[entrypoint] ch10 seed_langfuse_dashboard: 기존 트레이스 존재 — 건너뜀")
 else:
     dashboard_script = os.path.join(support_dir, "seed_langfuse_dashboard.py")
     if os.path.isfile(dashboard_script):
@@ -121,14 +121,14 @@ else:
             check=False,
         )
         if proc.returncode == 0:
-            print(f"[entrypoint] ch11 seed_langfuse_dashboard 적재 완료: {proc.stdout.strip()}")
+            print(f"[entrypoint] ch10 seed_langfuse_dashboard 적재 완료: {proc.stdout.strip()}")
         else:
             print(f"[entrypoint] WARN: seed_langfuse_dashboard 실패: {proc.stderr.strip()}", file=sys.stderr)
 PY
 }
 
 start_cli_bridges() {
-  local proxy_dir="${APP_DIR}/ch11-eval-and-llmops/litellm_proxy"
+  local proxy_dir="${APP_DIR}/ch10-eval-and-llmops/litellm_proxy"
   if [ -f "${proxy_dir}/gemini_openai_bridge.py" ] && ! pgrep -f "gemini_openai_bridge.py" >/dev/null 2>&1; then
     nohup python3 "${proxy_dir}/gemini_openai_bridge.py" --host 0.0.0.0 --port "${GEMINI_BRIDGE_PORT:-4010}" >/tmp/gemini_bridge.log 2>&1 &
     echo "[entrypoint] gemini_openai_bridge 백그라운드 기동 완료 (port=${GEMINI_BRIDGE_PORT:-4010})"
@@ -141,6 +141,6 @@ start_cli_bridges() {
 
 ensure_app_source_on_volume
 start_cli_bridges
-seed_ch11_prompts
+seed_ch10_prompts
 
 exec "$@"

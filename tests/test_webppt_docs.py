@@ -64,12 +64,12 @@ class WebPptDocsTests(unittest.TestCase):
             (DOCS_DIR / f"slides/{name}").read_text(encoding="utf-8")
             for name in ("s0_opening.js", "s1_part1.js", "s2_part2.js", "s3_part3.js", "s4_part4_a.js", "s5_part4_b.js")
         )
-        for i in (0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12):
+        for i in range(12):
             chap = f"ch{i:02d}"
             self.assertRegex(slides_text, rf"id:\s*'{chap}-lab'", f"{chap} 실습+모범답안 슬라이드 누락")
             self.assertIn(f"id: '{chap}',", slides_text, f"{chap} buildLabSlide 호출 누락")
-        self.assertNotIn("ch05-theory", slides_text)
-        self.assertNotIn("ch05-lab", slides_text)
+        self.assertNotIn("ch12-theory", slides_text)
+        self.assertNotIn("ch12-lab", slides_text)
 
         ui_js = (DOCS_DIR / "ui.js").read_text(encoding="utf-8")
         self.assertIn("h('details', 'answer-toggle'", ui_js)
@@ -190,7 +190,7 @@ class WebPptDocsTests(unittest.TestCase):
             id_m = re.search(r"id:\s*'([^']+)'", block)
             chap_hint = id_m.group(1) if id_m else ""
             if chap_hint == "capstone":
-                chap_hint = "ch12"
+                chap_hint = "ch11"
             cmd_m = re.search(r"runCmd:\s*'([^']+)'", block)
             if not cmd_m:
                 continue
@@ -267,8 +267,8 @@ class WebPptDocsTests(unittest.TestCase):
         self.assertIn("html.home-html { overflow-x: hidden; overflow-y: auto;", css_txt)
         self.assertIn("position: absolute;\n  inset: 0;\n  width: 100%;\n  height: 100%;", css_txt)
         s5_txt = (DOCS_DIR / "slides/s5_part4_b.js").read_text(encoding="utf-8")
-        self.assertLess(s5_txt.find("id: 'ch11-lab'"), s5_txt.find("id: 'ch11-eval-methods'"))
-        self.assertLess(s5_txt.find("id: 'ch11-eval-methods'"), s5_txt.find("id: 'ch12-theory'"))
+        self.assertLess(s5_txt.find("id: 'ch10-lab'"), s5_txt.find("id: 'ch10-eval-methods'"))
+        self.assertLess(s5_txt.find("id: 'ch10-eval-methods'"), s5_txt.find("id: 'ch11-theory'"))
         self.assertLess(s5_txt.find("id: 'closing'"), s5_txt.find("id: 'capstone-agent-first'"))
         self.assertIn("height:250px;display:flex;flex-direction:column", s5_txt)
 
@@ -282,17 +282,17 @@ class WebPptDocsTests(unittest.TestCase):
 
         w_dir = DOCS_DIR / "slides_workshop"
         w_all = "\n".join(f.read_text(encoding="utf-8") for f in sorted(w_dir.glob("*.js")))
-        for forbidden in ("5시간", "300분", "75분", "65분", "45분", "40분", "5-HOUR"):
+        for forbidden in ("5시간", "300분", "75분", "65분", "50분", "45분", "40분", "5-HOUR"):
             self.assertNotIn(forbidden, w_all, f"워크숍 덱에 시간 문구 잔존: {forbidden}")
-        self.assertFalse((DOCS_DIR / "assets/cartoons/cap_05_in.jpg").exists(), "제5장 카툰 이미지가 삭제되어야 합니다.")
-        self.assertNotIn("ch05", w_all, "워크숍 덱에 ch05 문구 잔존")
+        self.assertFalse((DOCS_DIR / "assets/cartoons/cap_05_in.jpg").exists(), "구 제5장 카툰 이미지가 삭제되어야 합니다.")
+        self.assertNotIn("ch12", w_all, "워크숍 덱에 구 ch12 문구 잔존")
         for img in (
             "cap_00_in.jpg",
             "cap_01_in.jpg",
-            "cap_07_in.jpg",
-            "cap_09_in.jpg",
-            "cap_11_in.jpg",
-            "cap_12_out.jpg",
+            "cap_06_in.jpg",
+            "cap_08_in.jpg",
+            "cap_10_in.jpg",
+            "cap_11_out.jpg",
         ):
             self.assertTrue((DOCS_DIR / "assets/cartoons" / img).is_file(), f"카툰 이미지 누락: {img}")
             self.assertIn(f"assets/cartoons/{img}", w_all, f"카툰 이미지 미배치: {img}")

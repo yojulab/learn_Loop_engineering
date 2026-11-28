@@ -23,7 +23,6 @@ flowchart LR
 ## 3. 디렉터리 및 소스 파일 구조
 
 - 정식 구현 경로 (챕터 루트): `ch01-agentic-coding/`
-- 도서 `💻 Git 예제` 호환 경로: `ch01/quote-cli/` (`../ch01-agentic-coding` 심볼릭 링크)
 
 ```text
 ch01-agentic-coding/
@@ -73,4 +72,3 @@ python3 -m unittest discover -s tests -p "test_*.py" -v
 
 - [ ] `ch01-agentic-coding/` 루트에 `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.claude/`, `.gemini/`가 존재하는가?
 - [ ] `quote_cli.py`가 `--all`, `--tag`, `--json`, `--seed` 옵션을 정상 처리하는가?
-- [ ] `ch01/quote-cli` 호환 심볼릭 링크가 `ch01-agentic-coding/`으로 깨짐 없이 연결되어 있는가?

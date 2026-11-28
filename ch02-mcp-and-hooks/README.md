@@ -24,9 +24,6 @@ flowchart LR
 ## 3. 디렉터리 및 소스 파일 구조
 
 - 정식 구현 경로 (챕터 루트): `ch02-mcp-and-hooks/`
-- 도서 `💻 Git 예제` 호환 경로:
-  - `ch02/quote-mcp/` (`../ch02-mcp-and-hooks` 심볼릭 링크)
-  - `ch04/quote-cli/` *(제2장 2.5절 본문 표기 오타 호환 브릿지 디렉터리)*
 
 ```text
 ch02-mcp-and-hooks/

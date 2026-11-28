@@ -72,9 +72,12 @@ class TestRepoRoot(unittest.TestCase):
 
 
     def test_all_chapters_have_ai_docs_folders_and_prompt_examples(self) -> None:
-        self.assertFalse((REPO_ROOT / "ch05-rag-and-memory").exists(), "제5장 디렉터리가 완전히 삭제되어야 합니다.")
+        self.assertFalse((REPO_ROOT / "ch05-rag-and-memory").exists(), "삭제된 구 제5장 디렉터리가 존재해서는 안 됩니다.")
+        self.assertFalse((REPO_ROOT / "ch12-epilogue").exists(), "목차 재조절 후 구 ch12 디렉터리가 존재해서는 안 됩니다.")
         chapters = sorted(p for p in REPO_ROOT.glob("ch*-*") if p.is_dir())
         self.assertEqual(len(chapters), 12)
+        expected_prefixes = [f"ch{i:02d}-" for i in range(12)]
+        self.assertEqual([c.name[:5] for c in chapters], expected_prefixes)
         for cdir in chapters:
             with self.subTest(chapter=cdir.name):
                 for doc in ("AGENTS.md", "CLAUDE.md", "GEMINI.md", "README.md"):

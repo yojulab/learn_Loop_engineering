@@ -23,7 +23,6 @@ flowchart LR
 ## 3. 디렉터리 및 소스 파일 구조
 
 - 정식 구현 경로 (챕터 루트): `ch03-skills/`
-- 도서 `💻 Git 예제` 호환 경로: `ch03/github-workflow-skills/` (`../ch03-skills` 심볼릭 링크)
 
 ```text
 ch03-skills/

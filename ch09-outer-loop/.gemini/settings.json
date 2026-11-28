@@ -1,0 +1,10 @@
+{
+  "chapter": "ch09-outer-loop",
+  "title": "제9장: 아우터 루프 엔지니어링 (5단계 루프 & 7대 완료·중단 조건)",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 loop.py --platform claude && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

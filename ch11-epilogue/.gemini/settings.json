@@ -1,0 +1,10 @@
+{
+  "chapter": "ch11-epilogue",
+  "title": "제11장 에필로그: 4계층 아키텍처 치트시트 & Stage 1~4 도입 진단",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 stage_readiness_check.py --format json && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

@@ -88,8 +88,8 @@ FOUR_LAYERS_ELEMENTS: tuple[dict[str, Any], ...] = (
         "element_index": 8,
         "id": "harness_engineering",
         "name": "하네스 엔지니어링",
-        "chapter": "ch07",
-        "canonical_dir": "ch07-harness-engineering",
+        "chapter": "ch06",
+        "canonical_dir": "ch06-harness-engineering",
         "description": "100줄 목차형 AGENTS.md, 아키텍처 린터, 가드레일, 문서 정원가꾸기",
     },
     {
@@ -98,8 +98,8 @@ FOUR_LAYERS_ELEMENTS: tuple[dict[str, Any], ...] = (
         "element_index": 9,
         "id": "subagents_workflow",
         "name": "서브에이전트 & 동적 워크플로",
-        "chapter": "ch06",
-        "canonical_dir": "ch06-subagents-workflow",
+        "chapter": "ch05",
+        "canonical_dir": "ch05-subagents-workflow",
         "description": "읽기 전용/실행형 에이전트 역할 분리 및 병렬 결과 요약 병합",
     },
     {
@@ -108,8 +108,8 @@ FOUR_LAYERS_ELEMENTS: tuple[dict[str, Any], ...] = (
         "element_index": 10,
         "id": "loops_and_orchestration",
         "name": "이너·아우터 루프 & 3-Agent 오케스트레이션",
-        "chapter": "ch08-ch10",
-        "canonical_dir": "ch09-orchestration",
+        "chapter": "ch07-ch09",
+        "canonical_dir": "ch08-orchestration",
         "description": "Ralph 서킷 브레이커, 블라인드 합의, 5단계·7대 조건 장기 루프",
     },
     {
@@ -118,8 +118,8 @@ FOUR_LAYERS_ELEMENTS: tuple[dict[str, Any], ...] = (
         "element_index": 11,
         "id": "eval_and_llmops",
         "name": "Eval & LLMOps 관측/회귀",
-        "chapter": "ch11-ch12",
-        "canonical_dir": "ch11-eval-and-llmops",
+        "chapter": "ch10-ch11",
+        "canonical_dir": "ch10-eval-and-llmops",
         "description": "프롬프트 버전 라벨, 3종 Eval, 오프라인 Trace, Stage 1~4 진단",
     },
 )

@@ -25,7 +25,6 @@ flowchart TB
 ## 3. 디렉터리 및 소스 파일 구조
 
 - 정식 구현 경로 (챕터 루트): `ch04-context-engineering/`
-- 도서 `💻 Git 예제` 호환 경로: `ch04/prompt_template.txt`, `ch04/few_shot_reference.txt`, `ch04/claude_working_guidelines.md`
 
 ```text
 ch04-context-engineering/

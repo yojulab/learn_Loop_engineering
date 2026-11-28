@@ -1,0 +1,10 @@
+{
+  "chapter": "ch06-harness-engineering",
+  "title": "제6장: 모델을 감싸는 안전장치 — 하네스 엔지니어링",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 arch_linter.py --root samples/valid_app --json && python3 guardrails.py --cmd \"ls -la\" --json && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

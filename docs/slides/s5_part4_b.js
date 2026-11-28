@@ -8,32 +8,32 @@
     part: 'p4b',
     chap: 'Part 4B 시작',
     theme: 'paper',
-    title: 'Part 4B · Eval, LLMOps & 실전 로드맵 (ch11 ~ ch12, 40분)',
-    notes: '마지막 블록은 LiteLLM 프록시 + Langfuse Save as Prompt + 3종 Eval(ch11)과 Stage 1~4 도입 전략(ch12)으로 마무리합니다.',
+    title: 'Part 4B · Eval, LLMOps & 실전 로드맵 (ch09 ~ ch10, 45분)',
+    notes: '마지막 블록은 LiteLLM 프록시 + Langfuse Save as Prompt + 3종 Eval(ch10)과 Stage 1~4 도입 전략(ch11)으로 마무리합니다.',
     build(el, A) {
       const box = h('div', 'abs', el);
       box.style.cssText = 'left:120px;top:300px;width:1500px';
-      chip(box, 'PART 4B · 40분', { bg: 'var(--red-l)', fg: 'var(--red)' });
+      chip(box, 'PART 4B · 45분', { bg: 'var(--red-l)', fg: 'var(--red)' });
       h('div', 'h1', box, '관측과 평가(<span class="hr">Eval/LLMOps</span>),<br>그리고 팀 도입 4단계').style.cssText = 'margin-top:24px';
-      h('div', 'b1', box, 'ch11 LiteLLM 무코드 프록시 &amp; Langfuse 프롬프트 승격 · ch12 치트시트 &amp; Stage 1~4').style.cssText = 'margin-top:28px;color:var(--fg2)';
+      h('div', 'b1', box, 'ch10 LiteLLM 무코드 프록시 &amp; Langfuse 프롬프트 승격 · ch11 치트시트 &amp; Stage 1~4').style.cssText = 'margin-top:28px;color:var(--fg2)';
       A(box, 'up', 0, { dur: 0.5 });
     },
   });
 
-  // ch11 이론 (1/2) — LiteLLM 무코드 관측 & Langfuse
+  // ch10 이론 (1/2) — LiteLLM 무코드 관측 & Langfuse
   DECK.slide({
-    id: 'ch11-litellm',
+    id: 'ch10-litellm',
     part: 'p4b',
-    chap: 'ch11 LLMOps & LiteLLM',
+    chap: 'ch10 LLMOps & LiteLLM',
     theme: 'night',
     dots: true,
-    title: 'ch11 (1/2): LiteLLM 프록시 무코드 관측 → Langfuse 프롬프트 업로드',
+    title: 'ch10 (1/2): LiteLLM 프록시 무코드 관측 → Langfuse 프롬프트 업로드',
     notes: '애플리케이션 코드를 수정하지 않고 LiteLLM Proxy를 경유시켜 Claude·ChatGPT·Gemini 호출 로그를 Langfuse Trace로 자동 수집합니다.',
     build(el, A) {
-      const T = title(el, 'CH11 · ZERO-CODE OBSERVABILITY', '<span class="hl">LiteLLM 프록시</span> 무코드 관측으로 LLM 호출 → <span class="hb">Langfuse</span> 수집', { y: 64 });
+      const T = title(el, 'CH10 · ZERO-CODE OBSERVABILITY', '<span class="hl">LiteLLM 프록시</span> 무코드 관측으로 LLM 호출 → <span class="hb">Langfuse</span> 수집', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
-      const w1 = win(el, { x: 100, y: 225, w: 920, h: 720, dark: true, title: 'ch11-eval-and-llmops/litellm_proxy/litellm_config.yaml' });
+      const w1 = win(el, { x: 100, y: 225, w: 920, h: 720, dark: true, title: 'ch10-eval-and-llmops/litellm_proxy/litellm_config.yaml' });
       w1.body.innerHTML = `<pre class="code-block" style="background:transparent;border:0;padding:0;font-size:21px"><code>model_list:
   - model_name: gpt-4o-mini
     litellm_params: { model: openai/gpt-4o-mini, api_key: os.environ/OPENAI_API_KEY }
@@ -58,16 +58,16 @@ litellm_settings:
     },
   });
 
-  // ch11 이론 (2/2) — Save as Prompt & fetch_prompt & 3종 Eval
+  // ch10 이론 (2/2) — Save as Prompt & fetch_prompt & 3종 Eval
   DECK.slide({
-    id: 'ch11-evals',
+    id: 'ch10-evals',
     part: 'p4b',
-    chap: 'ch11 Save as Prompt & Evals',
+    chap: 'ch10 Save as Prompt & Evals',
     theme: 'white',
-    title: 'ch11 (2/2): Trace → "Save as Prompt" → fetch_prompt → 3종 Eval',
+    title: 'ch10 (2/2): Trace → "Save as Prompt" → fetch_prompt → 3종 Eval',
     notes: 'Traces 탭의 입력 페이로드를 Save as Prompt로 프롬프트 자산에 등록하고, 앱에서는 fetch_prompt.py로 production 라벨 버전을 가져와 3종 Eval로 회귀 검증합니다.',
     build(el, A) {
-      const T = title(el, 'CH11 · PROMPT LIFECYCLE & EVALS', 'Trace <span class="hb">"Save as Prompt"</span> 승격 → <code>fetch_prompt</code> → 3종 Eval', { y: 64 });
+      const T = title(el, 'CH10 · PROMPT LIFECYCLE & EVALS', 'Trace <span class="hb">"Save as Prompt"</span> 승격 → <code>fetch_prompt</code> → 3종 Eval', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const flow = [
@@ -89,25 +89,25 @@ litellm_settings:
     },
   });
 
-  // ch11 실습 + 모범 답안
+  // ch10 실습 + 모범 답안
   DECK.slide({
-    id: 'ch11-lab',
+    id: 'ch10-lab',
     part: 'p4b',
-    chap: 'ch11 실습 & 답안',
+    chap: 'ch10 실습 & 답안',
     theme: 'paper',
-    title: 'ch11 실습: Trace 프롬프트 승격, Fetch & 3종 Eval 실행',
+    title: 'ch10 실습: Trace 프롬프트 승격, Fetch & 3종 Eval 실행',
     notes: 'trace_to_prompt.py -> fetch_prompt.py -> run_evals.py 순서로 LLMOps 사이클 전체를 컨테이너 안에서 재현합니다.',
     build(el, A) {
       buildLabSlide(el, A, {
-        id: 'ch11',
+        id: 'ch10',
         userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
 현재 챕터 폴더에서 Trace->Prompt 승격(Save as Prompt), 프롬프트 Fetch, 3종 Eval 회귀 비교를 실행해 출력해줘.
 
 1) 프롬프트 1 (Save as Prompt & Fetch): python3 trace_to_prompt.py --demo --json 과 python3 fetch_prompt.py --demo --json 을 실행해 {{var}} 템플릿 승격과 컴파일 결과를 보여줘.
 2) 프롬프트 2 (3종 Eval 회귀 비교): python3 regression_compare.py 를 실행해 production(v1) vs candidate(v2) 점수와 통과율을 비교해줘.
 3) 프롬프트 3 (무코드 프록시 & 통합 테스트): python3 litellm_proxy/zero_code_proxy_demo.py 와 python3 -m unittest discover -s tests -p "test_*.py" -v 결과를 출력해줘.`,
-        kicker: 'CH11 · HANDS-ON LAB (25분)',
-        heading: '제11장 실습: <span class="hl">Save as Prompt</span> &amp; 3종 Eval 출력',
+        kicker: 'CH10 · HANDS-ON LAB (25분)',
+        heading: '제10장 실습: <span class="hl">Save as Prompt</span> &amp; 3종 Eval 출력',
         duration: '25분',
         missionTitle: '챕터 루트에 프록시·Eval 구성 후 AI CLI 프롬프트로 회귀 평가 출력',
         steps: [
@@ -143,18 +143,18 @@ litellm_settings:
     },
   });
 
-  // ch11 심화 (p.35): 실무에서 활용하는 3가지 평가(Eval) 기법과 알맞은 예시
+  // ch10 심화 (p.35): 실무에서 활용하는 3가지 평가(Eval) 기법과 알맞은 예시
   DECK.slide({
-    id: 'ch11-eval-methods',
+    id: 'ch10-eval-methods',
     part: 'p4b',
-    chap: 'ch11 실무 3대 Eval 기법',
+    chap: 'ch10 실무 3대 Eval 기법',
     theme: 'white',
-    title: 'ch11 심화: 실무에서 활용하는 3가지 평가(Eval) 기법과 예시',
-    notes: 'p.34 ch11 실습 직후, 실무 LLMOps 파이프라인에서 조합하는 3가지 평가(코드 기반 결정론적 평가, LLM-as-a-Judge, 사람 평가 & 운영 피드백)와 실제 예시를 정리합니다.',
+    title: 'ch10 심화: 실무에서 활용하는 3가지 평가(Eval) 기법과 예시',
+    notes: 'p.34 ch10 실습 직후, 실무 LLMOps 파이프라인에서 조합하는 3가지 평가(코드 기반 결정론적 평가, LLM-as-a-Judge, 사람 평가 & 운영 피드백)와 실제 예시를 정리합니다.',
     build(el, A) {
       const T = title(
         el,
-        'CH11 · PRACTICAL 3-TIER EVALUATION METHODS',
+        'CH10 · PRACTICAL 3-TIER EVALUATION METHODS',
         '실무에서 활용하는 <span class="hb">3가지 평가(Eval) 기법</span>과 실전 예시',
         { y: 56 },
       );
@@ -193,7 +193,7 @@ def eval_code_rules(reply: str) -> bool:
           `# Langfuse Trace -> Golden Dataset & 회귀 비교 예시
 1) Langfuse에서 score < 0.7 Trace 필터링 & 전문가 교정 답변 작성
 2) loop-triage-benchmark Dataset 추가 후 회귀 게이트 실행:
-$ python3 ch11-eval-and-llmops/regression_compare.py`,
+$ python3 ch10-eval-and-llmops/regression_compare.py`,
         ],
       ];
 
@@ -212,23 +212,23 @@ $ python3 ch11-eval-and-llmops/regression_compare.py`,
     },
   });
 
-  // ch12 이론
+  // ch11 이론
   DECK.slide({
-    id: 'ch12-theory',
+    id: 'ch11-theory',
     part: 'p4b',
-    chap: 'ch12 에필로그 & 로드맵',
+    chap: 'ch11 에필로그 & 로드맵',
     theme: 'white',
-    title: 'ch12: 11대 스택 한눈에 보기 & 팀 도입 4단계(Stage 1~4)',
+    title: 'ch11: 11대 스택 한눈에 보기 & 팀 도입 4단계(Stage 1~4)',
     notes: '모든 스택을 첫날부터 한꺼번에 도입하지 말고 Stage 1부터 점진적으로 성숙도를 높여야 합니다.',
     build(el, A) {
-      const T = title(el, 'CH12 · EPILOGUE & ADOPTION ROADMAP', '한 번에 다 도입하지 마라 — <span class="hl">Stage 1~4</span> 점진적 도입 전략', { y: 64 });
+      const T = title(el, 'CH11 · EPILOGUE & ADOPTION ROADMAP', '한 번에 다 도입하지 마라 — <span class="hl">Stage 1~4</span> 점진적 도입 전략', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const stages = [
         ['Stage 1 · 개인 루프', 'ch01 · ch04', '단일 에이전트 CLI + 7항목 프롬프트 + AGENTS.md 규칙서', '#D5F2E6', '#0B8A5F'],
-        ['Stage 2 · 도구와 안전', 'ch02 · ch03 · ch07', 'MCP 연결 + PreToolUse 가드레일 + 팀 Skills + 아키텍처 린터', '#DCE6FF', '#1E4FD0'],
-        ['Stage 3 · 위임과 자율 루프', 'ch06 · ch08', '서브에이전트 역할 분리 + 동적 병렬 워크플로 + Ralph Loop(/goal)', '#E6E0FF', '#4D2FD0'],
-        ['Stage 4 · 합의와 LLMOps', 'ch09 · ch10 · ch11', 'Maker!=Checker 블라인드 합의 + 아우터 루프 + LiteLLM/Langfuse Eval', '#FDEFD3', '#9A5B00'],
+        ['Stage 2 · 도구와 안전', 'ch02 · ch03 · ch06', 'MCP 연결 + PreToolUse 가드레일 + 팀 Skills + 아키텍처 린터', '#DCE6FF', '#1E4FD0'],
+        ['Stage 3 · 위임과 자율 루프', 'ch05 · ch07', '서브에이전트 역할 분리 + 동적 병렬 워크플로 + Ralph Loop(/goal)', '#E6E0FF', '#4D2FD0'],
+        ['Stage 4 · 합의와 LLMOps', 'ch08 · ch09 · ch10', 'Maker!=Checker 블라인드 합의 + 아우터 루프 + LiteLLM/Langfuse Eval', '#FDEFD3', '#9A5B00'],
       ];
       stages.forEach(([s, ch, bd, bg, fg], i) => {
         const col = i % 2, row = Math.floor(i / 2);
@@ -240,25 +240,25 @@ $ python3 ch11-eval-and-llmops/regression_compare.py`,
     },
   });
 
-  // ch12 최종 실습 + 모범 답안
+  // ch11 최종 실습 + 모범 답안
   DECK.slide({
-    id: 'ch12-lab',
+    id: 'ch11-lab',
     part: 'p4b',
-    chap: 'ch12 최종 실습 & 답안',
+    chap: 'ch11 최종 실습 & 답안',
     theme: 'paper',
-    title: 'ch12 최종 실습: Stage 1~4 준비도 진단 & 전 단원 통합 검증',
+    title: 'ch11 최종 실습: Stage 1~4 준비도 진단 & 전 단원 통합 검증',
     notes: '마지막 실습에서는 우리 팀의 성숙도 Stage를 진단하고 verify_chapters.py --all 로 전 단원 100% 통과를 확인합니다.',
     build(el, A) {
       buildLabSlide(el, A, {
-        id: 'ch12',
+        id: 'ch11',
         userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
 현재 챕터 폴더에서 저장소의 Stage 1~4 도입 성숙도를 진단하고 전체 통합 검증 게이트 실행 결과를 출력해줘.
 
 1) 프롬프트 1 (Stage 1~4 성숙도 진단): python3 stage_readiness_check.py --format json 을 실행해 completed_stages: 4/4 달성 여부를 출력해줘.
 2) 프롬프트 2 (진단기 단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 Stage 누락/완비 시나리오를 검증해줘.
 3) 프롬프트 3 (전 단원 통합 게이트): python3 scripts/verify_chapters.py --all 을 실행해 전 단원 통합 게이트 PASS 요약을 출력해줘.`,
-        kicker: 'CH12 · FINAL CAPSTONE LAB (15분)',
-        heading: '제12장 실습: <span class="hl">Stage 1~4 성숙도</span> 진단 &amp; 통합 게이트',
+        kicker: 'CH11 · FINAL CAPSTONE LAB (15분)',
+        heading: '제11장 실습: <span class="hl">Stage 1~4 성숙도</span> 진단 &amp; 통합 게이트',
         duration: '15분',
         missionTitle: '챕터 루트에 Stage 1~4 진단기 구성 후 AI CLI로 전체 게이트 결과 출력',
         steps: [

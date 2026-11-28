@@ -8,7 +8,7 @@
 
 - 감으로 프롬프트만 고치는 패턴을 깨고 **배포(Launch) · 관측(Observe) · 평가(Evaluate) · 개선(Improve)** 의 데이터 기반 루프로 전환하는 **정적 웹 PPT 포털**을 제공한다.
 - `index.html`(Home 분기 포털), `prologue.html`(전용 프롤로그 4장), `lecture.html`(5시간 메인 37장), `workshop.html`(카툰 심화 워크숍 37장)을 제공한다.
-- `ch00`~`ch04`, `ch06`~`ch12` 전 단원의 **이론 + 실습 미션 + 클릭 토글(`<details>`) 모범 답안 & 해결 프롬프트**를 한 페이지에 배치한다.
+- `ch00`~`ch10` 전 단원의 **이론 + 실습 미션 + 클릭 토글(`<details>`) 모범 답안 & 해결 프롬프트**를 한 페이지에 배치한다.
 - 기존 [`ARCHITECTURE.md`](ARCHITECTURE.md) 4계층 11대 스택 설계서를 보존하면서 GitHub Pages(`/docs`)에서 무빌드로 즉시 실행한다.
 
 ## 2. 아키텍처 다이어그램
@@ -33,7 +33,7 @@ flowchart LR
 | `docs/prologue.html` / `docs/lecture.html` / `docs/workshop.html` | 프롤로그 · 5시간 강의 · 카툰 워크숍 덱 | 독립 분기 덱 |
 | `docs/deck.css` | 디자인 토큰, 6대 테마, `.lab-grid` | `prefers-reduced-motion` 준수 |
 | `docs/engine.js` / `docs/ui.js` | 슬라이드 렌더러, 키보드 단축키, `<details>` 실습 빌더 | Heading-in-summary 금지 |
-| `docs/slides/` · `docs/slides_workshop/` | 37장 강의·워크숍 슬라이드 & `ch00`~`ch12`(제5장 제외) 실습·답안 | `node --check` 검증 완료 |
+| `docs/slides/` · `docs/slides_workshop/` | 37장 강의·워크숍 슬라이드 & `ch00`~`ch11` 실습·답안 | `node --check` 검증 완료 |
 
 ## 4. 컨테이너 실행 & 테스트 명령어
 
@@ -49,5 +49,5 @@ python3 scripts/verify_chapters.py --chapter webppt
 ## 5. 핵심 체크리스트
 
 - [x] `index.html`, `prologue.html`, `lecture.html`, `workshop.html`의 모든 CSS/JS 경로가 `/`로 시작하지 않는 상대 경로인가?
-- [x] `ch00`~`ch04`, `ch06`~`ch12` 12개 단원 모두 실습과 클릭 토글(`<details>`) 모범 답안이 한 슬라이드에 구성되어 있는가?
+- [x] `ch00`~`ch10` 12개 단원 모두 실습과 클릭 토글(`<details>`) 모범 답안이 한 슬라이드에 구성되어 있는가?
 - [x] 기존 `docs/ARCHITECTURE.md`가 훼손 없이 보존되어 있는가?

@@ -24,7 +24,8 @@ class TestStackCheck(unittest.TestCase):
         self.assertEqual(layers, {1, 2, 3, 4})
         indices = [e["element_index"] for e in elements]
         self.assertEqual(indices, list(range(1, 12)))
-        self.assertTrue(all(e["chapter"] != "ch05" for e in elements))
+        self.assertTrue(all(e["canonical_dir"] != "ch05-rag-and-memory" for e in elements))
+        self.assertTrue(all("ch12" not in e["chapter"] for e in elements))
 
     def test_check_python_runtime(self) -> None:
         rt = stack_check.check_python_runtime()

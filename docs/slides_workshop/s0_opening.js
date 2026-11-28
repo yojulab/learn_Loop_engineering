@@ -102,7 +102,7 @@
           <rect x="284" y="166" width="86" height="44" rx="10" fill="#EFF4FF" stroke="#2F6BFF" stroke-width="1.5"/>
           <text x="327" y="194" text-anchor="middle" font-size="16" font-weight="700" fill="#1E4FD0">Verify</text>
           <text x="68" y="250" font-size="19" font-weight="600" fill="#3A4766">StateGraph 상태 전이 · 분기</text>
-          <text x="68" y="280" font-size="17" font-weight="600" fill="#6A728A" font-family="var(--mono)">ch06 ~ ch10 워크플로</text>
+          <text x="68" y="280" font-size="17" font-weight="600" fill="#6A728A" font-family="var(--mono)">ch05 ~ ch09 워크플로</text>
         </g>
 
         <!-- Arrow 1 -> 2 -->
@@ -215,9 +215,9 @@
           <tr><td><b>Intro</b></td><td><code>ch00</code></td><td>4계층 11대 스택 &amp; Any-Platform 환경 진단</td><td><b>1개</b></td></tr>
           <tr><td><b>Part 1</b></td><td><code>ch01 ~ ch03</code></td><td>에이전트 루프 · MCP &amp; Hooks · 3단계 Skills</td><td><b>3개</b></td></tr>
           <tr><td><b>Part 2</b></td><td><code>ch04</code></td><td>7항목 프롬프트 · 컨텍스트 예산 · 4대 층위 지침</td><td><b>1개</b></td></tr>
-          <tr><td><b>Part 3</b></td><td><code>ch06 ~ ch08</code></td><td>서브에이전트 · 하네스 가드레일 · Ralph Loop &amp; <code>/goal</code></td><td><b>3개</b></td></tr>
-          <tr><td><b>Part 4A</b></td><td><code>ch09 ~ ch10</code></td><td>3-Agent 블라인드 합의 · 5단계 아우터 루프</td><td><b>2개</b></td></tr>
-          <tr><td><b>Part 4B</b></td><td><code>ch11 ~ ch12</code></td><td>LiteLLM + Langfuse Save as Prompt · Eval · Stage 1~4</td><td><b>2개</b></td></tr>
+          <tr><td><b>Part 3</b></td><td><code>ch05 ~ ch07</code></td><td>서브에이전트 · 하네스 가드레일 · Ralph Loop &amp; <code>/goal</code></td><td><b>3개</b></td></tr>
+          <tr><td><b>Part 4A</b></td><td><code>ch08 ~ ch09</code></td><td>3-Agent 블라인드 합의 · 5단계 아우터 루프</td><td><b>2개</b></td></tr>
+          <tr><td><b>Part 4B</b></td><td><code>ch10 ~ ch11</code></td><td>LiteLLM + Langfuse Save as Prompt · Eval · Stage 1~4</td><td><b>2개</b></td></tr>
         </tbody>
       </table>`;
       A(c1, 'up', 0.1, { dur: 0.45 });
@@ -234,11 +234,11 @@
           <div class="b3" style="color:var(--ink);margin-top:4px">③ 에이전트 루프 · ④ MCP · ⑤ Hooks 가드레일</div>
         </div>
         <div style="padding:18px 20px;border-radius:16px;background:var(--green-l)">
-          <div class="cap" style="color:var(--green-d)">Layer 3 · 표준과 확장 (ch03, ch04, ch07)</div>
+          <div class="cap" style="color:var(--green-d)">Layer 3 · 표준과 확장 (ch03, ch04, ch06)</div>
           <div class="b3" style="color:var(--ink);margin-top:4px">⑥ 상시 지침 · ⑦ 온디맨드 Skills · ⑧ 하네스 린터</div>
         </div>
         <div style="padding:18px 20px;border-radius:16px;background:var(--amber-l)">
-          <div class="cap" style="color:#9A5B00">Layer 4 · 위임과 검증 (ch06, ch08~11)</div>
+          <div class="cap" style="color:#9A5B00">Layer 4 · 위임과 검증 (ch05, ch07~10)</div>
           <div class="b3" style="color:var(--ink);margin-top:4px">⑨ 서브에이전트 · ⑩ 이너/아우터 루프 · ⑪ Eval/LLMOps</div>
         </div>
       </div>`;
@@ -273,10 +273,10 @@
       });
 
       const w = win(el, { x: 100, y: 600, w: 1720, h: 365, dark: true, title: 'platforms/base.py — 플랫폼 자동 감지 & 100% 오프라인 폴백' });
-      w.body.innerHTML = `<div class="term"><span class="p">$</span>AGENT_PLATFORM=claude python3 ch06-subagents-workflow/dynamic_workflow.py --platform claude --json
+      w.body.innerHTML = `<div class="term"><span class="p">$</span>AGENT_PLATFORM=claude python3 ch05-subagents-workflow/dynamic_workflow.py --platform claude --json
 <span class="o">-> claude (키 미설정 시 deterministic offline 시뮬레이터로 자동 폴백)</span>
-<span class="p">$</span>AGENT_PLATFORM=chatgpt python3 ch10-outer-loop/loop.py --platform chatgpt
-<span class="p">$</span>AGENT_PLATFORM=gemini python3 ch11-eval-and-llmops/fetch_prompt.py --demo --json
+<span class="p">$</span>AGENT_PLATFORM=chatgpt python3 ch09-outer-loop/loop.py --platform chatgpt
+<span class="p">$</span>AGENT_PLATFORM=gemini python3 ch10-eval-and-llmops/fetch_prompt.py --demo --json
 <span class="ok">[OK] claude / chatgpt / gemini 3종 모두 API 키 없이 동일 테스트 스위트 통과</span></div>`;
       A(w.el, 'up', 0.34, { dur: 0.45 });
     },
@@ -290,7 +290,7 @@
     theme: 'ink',
     dots: true,
     title: '저장소 구조 & GitHub Pages(docs/) 구성',
-    notes: '정식 단원 디렉터리(ch00-prologue~ch12-epilogue, 제5장 제외)와 docs/ 웹 PPT가 함께 구성되어 있습니다.',
+    notes: '정식 단원 디렉터리(ch00-prologue~ch11-epilogue)와 docs/ 웹 PPT가 함께 구성되어 있습니다.',
     build(el, A) {
       const T = title(el, 'REPOSITORY MAP', '저장소 구조 & <span class="hl">GitHub Pages</span> 정적 번들', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
@@ -306,7 +306,7 @@
 │   ├── index.html / presenter.html
 │   ├── deck.css / engine.js / ui.js
 │   └── slides/ (00_manifest, s0..s5)
-└── ch00-prologue/ ~ ch12-epilogue/  # 정식 단원 코드 (제5장 제외)</code></pre>`;
+└── ch00-prologue/ ~ ch11-epilogue/  # 정식 단원 코드</code></pre>`;
       A(w1.el, 'up', 0.12, { dur: 0.45 });
 
       const c2 = card(el, { x: 980, y: 225, w: 840, h: 735, pad: 34 });

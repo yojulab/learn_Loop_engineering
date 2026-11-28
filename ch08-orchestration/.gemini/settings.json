@@ -1,0 +1,10 @@
+{
+  "chapter": "ch08-orchestration",
+  "title": "제8장: 다중 에이전트 오케스트레이션 (3-Agent & 블라인드 합의)",
+  "instructions": [
+    "GEMINI.md",
+    "AGENTS.md",
+    ".gemini/rules.md"
+  ],
+  "verify_command": "python3 run.py --mode sim --platform chatgpt && python3 -m unittest discover -s tests -p \"test_*.py\""
+}

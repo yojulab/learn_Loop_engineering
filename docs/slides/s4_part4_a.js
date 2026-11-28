@@ -9,28 +9,28 @@
     chap: 'Part 4A 시작',
     theme: 'night',
     dots: true,
-    title: 'Part 4A · 합의와 아우터 루프 (ch09 ~ ch10, 45분)',
-    notes: 'Part 4A는 3-Agent 블라인드 합의 오케스트레이션(ch09)과 5단계 아우터 루프(ch10)를 다룹니다.',
+    title: 'Part 4A · 합의와 아우터 루프 (ch07 ~ ch08, 50분)',
+    notes: 'Part 4A는 3-Agent 블라인드 합의 오케스트레이션(ch08)과 5단계 아우터 루프(ch09)를 다룹니다.',
     build(el, A) {
       const box = h('div', 'abs', el);
       box.style.cssText = 'left:120px;top:300px;width:1500px';
-      chip(box, 'PART 4A · 45분', { bg: 'rgba(245,165,36,.2)', fg: '#F5A524' });
+      chip(box, 'PART 4A · 50분', { bg: 'rgba(245,165,36,.2)', fg: '#F5A524' });
       h('div', 'h1', box, '작성자와 검증자의 분리,<br>그리고 <span class="ha">아우터 루프</span> 통제').style.cssText = 'margin-top:24px';
-      h('div', 'b1', box, 'ch09 3-Agent 블라인드 합의 · ch10 5단계 루프 &amp; 7대 중단 조건').style.cssText = 'margin-top:28px;color:#AEB8D3';
+      h('div', 'b1', box, 'ch08 3-Agent 블라인드 합의 · ch09 5단계 루프 &amp; 7대 중단 조건').style.cssText = 'margin-top:28px;color:#AEB8D3';
       A(box, 'up', 0, { dur: 0.5 });
     },
   });
 
-  // ch09 이론
+  // ch08 이론
   DECK.slide({
-    id: 'ch09-theory',
+    id: 'ch08-theory',
     part: 'p4a',
-    chap: 'ch09 3-Agent 오케스트레이션',
+    chap: 'ch08 3-Agent 오케스트레이션',
     theme: 'paper',
-    title: 'ch09: Maker != Checker (Planner · Generator · Evaluator)',
+    title: 'ch08: Maker != Checker (Planner · Generator · Evaluator)',
     notes: '작성자(Maker)가 스스로 채점하면 긍정 편향에 빠집니다. 파일 매개 블라인드 합의와 0~3점 채점표(Rubric)로 편향을 제거합니다.',
     build(el, A) {
-      const T = title(el, 'CH09 · 3-AGENT ORCHESTRATION', '자기 평가 편향을 없애는 <span class="hb">3-Agent</span> &amp; <span class="hl">블라인드 합의</span>', { y: 64 });
+      const T = title(el, 'CH08 · 3-AGENT ORCHESTRATION', '자기 평가 편향을 없애는 <span class="hb">3-Agent</span> &amp; <span class="hl">블라인드 합의</span>', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const roles = [
@@ -52,25 +52,25 @@
     },
   });
 
-  // ch09 실습 + 모범 답안
+  // ch08 실습 + 모범 답안
   DECK.slide({
-    id: 'ch09-lab',
+    id: 'ch08-lab',
     part: 'p4a',
-    chap: 'ch09 실습 & 답안',
+    chap: 'ch08 실습 & 답안',
     theme: 'white',
-    title: 'ch09 실습: 3-Agent 오케스트레이터 & 블라인드 합의 시뮬레이션',
+    title: 'ch08 실습: 3-Agent 오케스트레이터 & 블라인드 합의 시뮬레이션',
     notes: 'orchestrator.py를 실행해 touch 스코프 검증, 블라인드 합의, 0~3점 채점표 판정을 확인합니다.',
     build(el, A) {
       buildLabSlide(el, A, {
-        id: 'ch09',
+        id: 'ch08',
         userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
 현재 챕터 폴더에서 3-Agent(Planner·Generator·Evaluator) 파일 매개 오케스트레이션과 블라인드 합의를 실행해 결과를 출력해줘.
 
 1) 프롬프트 1 (3-Agent 합의 시뮬레이션): python3 run.py --mode sim --platform chatgpt 를 실행해 블라인드 합의와 루브릭 채점 판정 JSON을 출력해줘.
 2) 프롬프트 2 (권한 매트릭스 & 채점표 점검): src/harness/permissions.py 의 역할별 권한 분리와 rubric.py 의 0~3점 채점 기준을 요약해줘.
 3) 프롬프트 3 (HALT 에스컬레이션 & 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 로 3회 합의 불일치 docs/HALT 생성과 전체 테스트를 검증해줘.`,
-        kicker: 'CH09 · HANDS-ON LAB (20분)',
-        heading: '제9장 실습: <span class="hl">3-Agent 합의</span> &amp; 루브릭 채점 출력',
+        kicker: 'CH08 · HANDS-ON LAB (20분)',
+        heading: '제8장 실습: <span class="hl">3-Agent 합의</span> &amp; 루브릭 채점 출력',
         duration: '20분',
         missionTitle: '챕터 루트에 3-Agent 파일 협업·루브릭 구성 후 AI CLI로 합의 결과 출력',
         steps: [
@@ -107,17 +107,17 @@
     },
   });
 
-  // ch10 이론
+  // ch09 이론
   DECK.slide({
-    id: 'ch10-theory',
+    id: 'ch09-theory',
     part: 'p4a',
-    chap: 'ch10 아우터 루프',
+    chap: 'ch09 아우터 루프',
     theme: 'ink',
     dots: true,
-    title: 'ch10: 아우터 루프 5단계, 선택적 되돌림 & 7대 완료·중단 조건',
+    title: 'ch09: 아우터 루프 5단계, 선택적 되돌림 & 7대 완료·중단 조건',
     notes: '이해 부채(Comprehension Debt)를 남기지 않고 장시간 프로젝트를 완주하게 만드는 Outer Loop 구조를 배웁니다.',
     build(el, A) {
-      const T = title(el, 'CH10 · OUTER LOOP ARCHITECTURE', '<span class="hl">5단계 운영 루프</span> · 선택적 되돌림 · <span class="ha">7대 완료/중단 조건</span>', { y: 64 });
+      const T = title(el, 'CH09 · OUTER LOOP ARCHITECTURE', '<span class="hl">5단계 운영 루프</span> · 선택적 되돌림 · <span class="ha">7대 완료/중단 조건</span>', { y: 64 });
       A(T.t, 'up', 0, { dur: 0.4 });
 
       const c1 = card(el, { x: 100, y: 230, w: 840, h: 720, pad: 34 });
@@ -141,25 +141,25 @@
     },
   });
 
-  // ch10 실습 + 모범 답안
+  // ch09 실습 + 모범 답안
   DECK.slide({
-    id: 'ch10-lab',
+    id: 'ch09-lab',
     part: 'p4a',
-    chap: 'ch10 실습 & 답안',
+    chap: 'ch09 실습 & 답안',
     theme: 'paper',
-    title: 'ch10 실습: 5단계 아우터 루프 & Stall/Rollback 검증',
-    notes: 'ch10-outer-loop/loop.py를 실행해 CALC-001~004 완주, 선택적 되돌림, Stall 감지를 확인합니다.',
+    title: 'ch09 실습: 5단계 아우터 루프 & Stall/Rollback 검증',
+    notes: 'ch09-outer-loop/loop.py를 실행해 CALC-001~004 완주, 선택적 되돌림, Stall 감지를 확인합니다.',
     build(el, A) {
       buildLabSlide(el, A, {
-        id: 'ch10',
+        id: 'ch09',
         userPrompt: `[실습 해결용 사용자 프롬프트 — 현재 챕터 루트 폴더에서 AI CLI에 입력]
 현재 챕터 폴더에서 CALC-001~004 계약 태스크를 5단계 아우터 루프로 실행하고 7대 완료·중단 조건 검증 결과를 출력해줘.
 
 1) 프롬프트 1 (5단계 아우터 루프 실행): python3 loop.py --platform claude 를 실행해 completed_tasks, halted_tasks, stop_reason, total_cost_usd 를 출력해줘.
 2) 프롬프트 2 (독립 검증기 & 재시도 점검): sample_tasks/tasks_contract.json 과 calc_verifier.py 의 CALC-002 재시도 및 CALC-003 HALT 조건을 설명해줘.
 3) 프롬프트 3 (비용 로거 & 단위 테스트): python3 -m unittest discover -s tests -p "test_*.py" -v 실행 결과를 출력해줘.`,
-        kicker: 'CH10 · HANDS-ON LAB (25분)',
-        heading: '제10장 실습: <span class="hl">아우터 루프</span> &amp; 7대 중단 조건 실행',
+        kicker: 'CH09 · HANDS-ON LAB (25분)',
+        heading: '제9장 실습: <span class="hl">아우터 루프</span> &amp; 7대 중단 조건 실행',
         duration: '25분',
         missionTitle: '챕터 루트에 5단계 루프·예산 제어기 구성 후 AI CLI로 완주 결과 출력',
         steps: [
